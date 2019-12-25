@@ -1,8 +1,0 @@
-https://en.wikipedia.org/wiki/LoRa  
-https://www.semtech.com/lora/lora-products  
-https://lora-alliance.org/sites/default/files/2018-04/what-is-lorawan.pdf
-https://lora-developers.semtech.com/library/product-documents/
-https://www.semtech.com/uploads/documents/an1200.22.pdf
-https://lora-developers.semtech.com/resources/tools/
-https://www.semtech.com/applications
-https://lora-developers.semtech.com/library/case-studies/
