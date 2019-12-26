@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style>
+
+		h1{fontsize: 16px; text-transform: upper-case; letter-spacing: 2px; text-align: center;}
+
+         script{fontsize: 10px; text-transform: upper-case; letter-spacing: 1px; text-align: center;};
+
+ </style>
+ <h1>Caller</h1>
+ <p id="AgentName" style="font-size: 30px; position: absolute;left: 860px; top: 10px;"></p>
+ <p id="CallerName" style="font-size: 30px; position: absolute;left: 200px; top: 10px;"></p>
+	<script src="/socket.io/socket.io.js"></script>
+ </head>
+ <body>
+
+ 
+
+
+ <div style="left:50px; 
+ top:;width: 600px;height: 500px;position: absolute;background-color: rgb();border:2px solid black;border-radius: 20px;color: rgb();">
+ <audio id = "LocalVideo" controls style="left:20px; 
+ top:40px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();"></audio>
+ <button id = "CallButton",type="button" onclick="CallButtonPressed()" disabled="true" style="left:350px; 
+ top:40px;width: ;height: ;position: absolute;background-color: rgb(0,255,0);border:;border-radius: 20px;color: rgb(0,0,0);font-size: 20px;">CALL</button>
+ <div style="left:450px; 
+ top:40px;width: 100px;height: 30px;position: absolute;background-color: rgb();border:2px solid black;border-radius: 20px;color: rgb();">
+ <a id = "Hang Up"  href = "https://webrtccallapp.herokuapp.com/" style="left:10px; 
+ top:;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: 20px;color: rgb(0,0,0); font-size: 20px;">Hang Up</a>
+   </div>
+   <textarea id = "sent", name = "message" rows="10" cols="50" style="left:20px; 
+ top:100px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();"></textarea>
+ <button type="button" id="TextButton" onclick="myfunc()" disabled="true" style="left:400px; 
+ top:225px;width: ;height: ;position: absolute;background-color: rgb(255,255,255);border:;border-radius: 20px;color: rgb(0,0,0); font-size: 20px;">Send Text</button>
+  
+ <form onchange="FileChosen()" style="left:30px; 
+ top:250px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: 20px;color: rgb(); font-size: 20px;">
+  <input type="file" id="fileInput" disabled="true" style="left:; 
+ top:20px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: 20px;color: rgb(); font-size: 20px;"></input>
+ </form>
+
+
+ <select id="BandwidthList" onchange=BandwidthChosen() style="left:300px; 
+ top:270px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb(); font-size: 20px;">
+    <option value='125'>Choose Bandwidth</option>
+    <option value='125'>125</option>
+    <option value='250'>250</option>
+    <option value='500'>500</option>
+    <option value='1000'>1000</option>
+    <option value='unlimited'>unlimited</option>
+ </select>
+ <canvas id="localcanvas" style="left: 200px;top: 325px;background-color: rgb(0,0,0);position: absolute;"></canvas>
+ <textarea id="ByteRecieved" rows="10" cols="20" style="left:20px; 
+ top:325px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();font-size: 12px;"></textarea>
+ </div>
+ 
+
+
+
+
+
+
+
+ <div style="left:700px; 
+ top:;width:600px ;height: 500px;position: absolute;background-color: rgb();border:2px solid black;border-radius: 20px;color: rgb();"> 
+  <canvas id="remotecanvas" style="left:20px;top:20px;background-color: rgb(0,0,0);position: absolute;"></canvas>
+  <audio id = "RemoteVideo" controls style="left:20px; 
+ top:175px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();"></audio>
+    <textarea id = "received", name = "message" rows="10" cols="30" style="left:350px; 
+ top:20px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();"></textarea>
+  
+ <a id = "download" style="left:20px; 
+ top:225px;width: 300px;height: ;position: absolute;background-color: rgb(255,255,255);border:;border-radius: ;color: rgb(0,0,0);font-size: 12px">noFile</a>
+ <video width="320" height="240" controls id="recieveVideo" style="left:20px; 
+ top:225px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();">
+ </video>
+ <img id="recieveImage"  style="left:350px; 
+ top:250px;width: 200px;height: 200px;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();"></img>
+ </div>
+ 
+
+
+
+
+
+
+
+
+
+
+ <div id="SignInForm" style="border: 2px solid black; position: absolute;top: 80px;left: 50px; height: 500px;width: 1250px; background-color: rgb(255,255,255); border-radius: 20px; opacity: 1;">
+ <p style="font-size: 30px;left: 50px;top: 50px;position: absolute;">Name:</p>
+ <textarea id="NameText" style="font-size: 30px;left: 200px;top: 60px;position: absolute;"></textarea>
+ <p style="font-size: 30px;left: 50px;top: 150px;position: absolute;">Connect To:</p>
+ <textarea id="PeerChosenText" style="font-size: 30px;left: 200px;top: 160px;position: absolute;"></textarea>
+   <p style="font-size: 30px;left: 50px;top: 230px;position: absolute;">Codec:</p>
+   <select id="CodecList" onchange=codecChosen() style="left:200px; 
+ top:260px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();font-size: 30px;">
+    <option value=''>Choose Codec</option>
+    <option value=''>Default</option>
+    <option value='Opus'>Opus</option>
+    <option value='iSAC 16K'>iSAC 16K</option>
+    <option value='G722'>G722</option>
+    <option value='PCMU'>PCMU</option>
+ </select>
+
+<p style="font-size: 30px;left: 50px;top: 300px;position: absolute;">Skill:</p>
+ <select id="SkillSet" onchange=SkillChosen() style="left:200px; 
+ top:325px;width: ;height: ;position: absolute;background-color: rgb();border:;border-radius: ;color: rgb();font-size: 30px">
+    <option value=1>Choose Skill</option>
+    <option value=1>A</option>
+    <option value=2>B</option>
+    <option value=4>C</option>
+    <option value=3>AB</option>
+    <option value=5>AC</option>
+    <option value=6>BC</option>
+    <option value=7>ABC</option>
+</select>
+<p style="font-size: 30px;left: 650px; position: absolute;">Available Agents:</p>
+<textarea id="AvailableCallersText" rows="10" cols="30" style="font-size: 30px; position: absolute;left: 650px;top:70px;"></textarea>
+ </div>
+ 
+
+ 
+
+
+ <script>
+
+	var socket = io();
+  var InfoObj = {};
+  var ReceiveText;
+  var servers = null;
+  var pc1 = new RTCPeerConnection(servers);
+  var localStream;
+  var sendChannel;
+  var offerOptions = {offerToRecieveAudio:1,offerToRecieveVideo:0,voiceActivityDetection:false};
+  var fileInput = document.getElementById('fileInput');
+  //navigator.mediaDevices.getUserMedia({audio: true,video: false}).then(gotStream);
+  var receiveChannel;
+  var receiveBuffer = [];
+  var receivedSize = 0;
+  var FileName;
+  var Queued=0;
+  var QT=0;
+  var FileSize=0;
+  var sendChannel;
+  var downloadAnchor = document.getElementById('download');
+  var recieveVideo = document.getElementById('recieveVideo');
+  var recieveImage = document.getElementById('recieveImage');
+  var ByteRec = document.getElementById('ByteRecieved');
+  var SkillSet = document.getElementById("SkillSet");
+  var CallButton = document.getElementById("CallButton");
+  var TextButton=document.getElementById("TextButton");
+  var fileInput=document.getElementById("fileInput");
+  var bandwidthSelector=document.getElementById("BandwidthList");
+  var codecSelector=document.getElementById("CodecList");
+  var NameText=document.getElementById("NameText");
+  var SignInForm=document.getElementById("SignInForm");
+  var localcanvas=document.getElementById("localcanvas");
+  var remotecanvas=document.getElementById("remotecanvas");
+  var AvailableCallersText=document.getElementById("AvailableCallersText");
+  var AgentName=document.getElementById("AgentName");
+  var CallerName=document.getElementById("CallerName");
+  socket.connect();
+
+  socket.on("List",function(data) {AvailableCallersText.value=data.AgentsList;});
+  socket.on('Information', function(data){console.log('Information received '+JSON.stringify(data));InfoObj = data});
+  socket.on('TextMessage',function(data){console.log('TextMessage received ');document.getElementById("received").value= data});
+  socket.on("offerName",function(name) {AgentName.innerHTML=name;});
+
+  socket.on('answer',function(answer){console.log("answer "+JSON.stringify(answer));Queued=0;
+    fileInput.disabled=false;
+    TextButton.disabled=false;
+//pc1.setRemoteDescription(new RTCSessionDescription(answer));
+    pc1.setRemoteDescription(answer);});
+  socket.on('iceCandidate',function(candidate){console.log('Remote ICE candidate arrived '+JSON.stringify(candidate));
+    //pc1.addIceCandidate(new RTCIceCandidate(candidate.candidate));
+    pc1.addIceCandidate(candidate);});
+// for listening the file info
+    socket.on('fileInformation',function(fileInformation){console.log('fileInformation' + JSON.stringify(fileInformation));FileName=fileInformation.FileName;FileSize=fileInformation.FileSize; socket.emit('StartSendingFile','')});
+  // listening the StartSendingFile message from the Caller 
+    socket.on('StartSendingFile',function(StartSendingFile){SendData();});    
+  socket.on("CompleteFileReceived",function(){fileInput.disabled=false;})
+
+
+
+  pc1.onicecandidate = function(e) {console.log('Local iceCandidate received'+JSON.stringify(e));onIceCandidate(e);};
+  pc1.ontrack = gotRemoteStream;
+  // creating data channel 
+  pc1.ondatachannel = receiveChannelCallback;
+
+
+  sendChannel = pc1.createDataChannel('sendDataChannel');
+  sendChannel.binaryType = 'arraybuffer';
+  console.log('Created send data channel');
+  sendChannel.onopen = onSendChannelStateChange;
+
+
+
+  // functions..........(HT).........
+
+    function SkillChosen() {
+      var skill=SkillSet.value;
+      SkillSet.disabled=true;
+        socket.emit('Type', {type:'caller',Skill:SkillSet.value,Name:NameText.value,PeerChosen:PeerChosenText.value});Queued=1;
+        CallerName.innerHTML=NameText.value;
+        CallButton.disabled=false;
+        SignInForm.disabled=true;
+        SignInForm.style.left="1000px";
+        SignInForm.style.top="1000px";
+        SignInForm.style.width="1px";
+        SignInForm.style.height="1px";
+        SignInForm.style.opacity=0;
+    navigator.mediaDevices.getUserMedia({audio: true,video: false}).then(gotStream);
+    }
+
+  function gotStream(Stream){console.log('localStream received'+JSON.stringify(Stream));
+  	localStream = Stream;
+  	localStream.getTracks().forEach(function(track){pc1.addTrack(track,localStream);});
+  	console.log('Adding local Stream to peer connection');
+  	document.getElementById("LocalVideo").srcObject = Stream;
+    //document.getElementById("LocalVideo").src = URL.createObjectURL(Stream);
+  	console.log('Adding local Stream to peer connection');
+    var localstreamVisualizer = new StreamVisualizer(Stream, localcanvas);
+    localstreamVisualizer.start();
+  }
+
+setInterval(displayStates, 10);
+
+function displayStates() {
+  //console.log(pc1.getDefaultIceServers());
+  //console.log(pc1.getStats());
+
+  if(Queued){QT+=10;}
+ ByteRec.value = receivedSize + '/' + FileSize+ " Bytes Received" + '\nPC State '+ (pc1.signalingState || pc1.readyState) + '\nICE State ' + pc1.iceConnectionState + '\nChannel State ' + sendChannel.readyState+ '\n'+ 'Queue Time ' +QT;
+}
+  function myfunc(){
+  	socket.emit('TextMessage', document.getElementById("sent").value);console.log("TextMessage sent");
+  }
+
+
+  function CallButtonPressed(){
+	pc1.createOffer(offerOptions).then(gotDescription1);CallButton.disabled=true;
+  }
+
+  function gotDescription1(desc) {
+  console.log('Offer from pc1 \n' + desc.sdp);
+  pc1.setLocalDescription(desc).then(function(){
+
+    desc.sdp = forceChosenAudioCodec(desc.sdp);
+    socket.emit('offer', desc);
+
+})
+  }
+
+  function onIceCandidate(event){
+	if (event.candidate){
+	//pc1.addIceCandidate(new RTCIceCandidate(event.candidate));
+  var candidate = new RTCIceCandidate({sdpMLineIndex:event.candidate.sdpMLineIndex,candidate:event.candidate.candidate});
+	socket.emit('iceCandidate',candidate);
+	}
+  }
+
+  function FileChosen() {
+  var file = fileInput.files[0];
+  if (!file) {
+    console.log('No file chosen');
+  } else {
+    var readyState = sendChannel.readyState;
+    console.log('Send channel state is: ' + readyState);
+  if (readyState === 'open') {
+    fileInput.disabled=true;
+    socket.emit('fileInformation' ,{FileName:file.name, FileSize: file.size});
+  }
+  }
+  }
+
+  function onSendChannelStateChange() {
+  var readyState = sendChannel.readyState;
+  console.log('Send channel state is: ' + readyState);
+  if (readyState === 'open') {
+    //socket.emit('fileInformation' ,{FileName:file.name, FileSize: file.size});
+  }
+  }
+
+  function gotRemoteStream(event){console.log('Stream received'+JSON.stringify(event));
+	document.getElementById("RemoteVideo").srcObject = event.streams[0];
+  //document.getElementById("RemoteVideo").src = URL.createObjectURL(event.streams[0]);
+  document.getElementById("RemoteVideo").play();
+  var remotestreamVisualizer = new StreamVisualizer(event.streams[0], remotecanvas);
+    remotestreamVisualizer.start();
+  }
+
+  function SendData() {
+  var file = fileInput.files[0];
+  console.log('File is ' + [file.name, file.size, file.type,
+      file.lastModifiedDate
+  ].join(' '));
+
+  // Handle 0 size files.
+  if (file.size === 0) {
+    bitrateDiv.innerHTML = '';
+    statusMessage.textContent = 'File is empty, please select a non-empty file';
+  
+    return;
+  }
+  
+  
+  var chunkSize = 16384;
+  var sliceFile = function(offset) {
+    var reader = new window.FileReader();
+    reader.onload = (function() {
+      return function(e) {
+        sendChannel.send(e.target.result);
+        if (file.size > offset + e.target.result.byteLength) {
+          window.setTimeout(sliceFile, 0, offset + chunkSize);
+        }
+      };
+    })(file);
+    var slice = file.slice(offset, offset + chunkSize);
+    reader.readAsArrayBuffer(slice);
+  };
+  sliceFile(0);
+  }
+
+
+
+  // recieve channel for Caller
+  // function for receiving 
+  function receiveChannelCallback(event) {
+  console.log('Receive Channel Callback'+JSON.stringify(event));
+  receiveChannel = event.channel;
+  receiveChannel.binaryType = 'arraybuffer';
+  receiveChannel.onmessage = onReceiveMessageCallback;
+  //receiveChannel.onopen = onReceiveChannelStateChange;
+  //receiveChannel.onclose = onReceiveChannelStateChange;
+
+  receivedSize = 0;
+  bitrateMax = 0;
+  //downloadAnchor.textContent = '';
+  downloadAnchor.removeAttribute('download');
+  if (downloadAnchor.href) {
+    URL.revokeObjectURL(downloadAnchor.href);
+    downloadAnchor.removeAttribute('href');
+  }
+  }
+
+  //  On receive message function
+  function onReceiveMessageCallback(event) {
+  receiveBuffer.push(event.data);
+  receivedSize += event.data.byteLength;
+  //console.log('recieved size! '+ receivedSize);
+  
+
+  // we are assuming that our signaling protocol told
+  // about the expected file size (and name, hash, etc).
+    ByteRec.value = receivedSize + '/' + FileSize+ " Bytes Received"; ByteRec.value += '\nPC State '+ (pc1.signalingState || pc1.readyState) + '\nICE State ' + pc1.iceConnectionState + '\nChannel State ' + sendChannel.readyState;
+  if (receivedSize === FileSize) {
+    //FileSize=0;
+    socket.emit("CompleteFileReceived","");
+    // makes a "blob URL" in order to download and save
+    var received = new window.Blob(receiveBuffer); 
+    receiveBuffer = [];
+    //for saving the file
+    receivedSize = 0;
+    downloadAnchor.href = URL.createObjectURL(received);
+    recieveImage.src = URL.createObjectURL(received); 
+    recieveVideo.src = URL.createObjectURL(received);  
+
+    downloadAnchor.download = FileName;
+    downloadAnchor.textContent =
+      'Click to download \'' + FileName + '\' (' + FileSize + ' bytes)';
+    downloadAnchor.style.display = 'block';
+  }
+  }
+
+  function BandwidthChosen(){
+   //bandwidthSelector.disabled = true;
+  var bandwidth = bandwidthSelector.options[bandwidthSelector.selectedIndex]
+      .value;
+  pc1.createOffer()
+  .then(function(offer) {
+    return pc1.setLocalDescription(offer);
+  })
+  .then(function() {
+    var desc = {
+      type: pc1.remoteDescription.type,
+      sdp: bandwidth === 'unlimited'
+          ? removeBandwidthRestriction(pc1.remoteDescription.sdp)
+          : updateBandwidthRestriction(pc1.remoteDescription.sdp, bandwidth)
+    };
+    console.log('Applying bandwidth restriction to setRemoteDescription:\n' +
+        desc.sdp);
+    return pc1.setRemoteDescription(desc);
+  })
+  .then(function() {
+   // bandwidthSelector.disabled = false;
+  })
+  }
+
+  function updateBandwidthRestriction(sdp, bandwidth) {
+  var modifier = 'AS';
+  if (sdp.indexOf('b=' + modifier + ':') === -1) {
+    // insert b= after c= line.
+    sdp = sdp.replace(/c=IN (.*)\r\n/,
+        'c=IN $1\r\nb=' + modifier + ':' + bandwidth + '\r\n');
+  } else {
+    sdp = sdp.replace(new RegExp('b=' + modifier + ':.*\r\n'),
+        'b=' + modifier + ':' + bandwidth + '\r\n');
+  }
+  return sdp;
+}
+
+function removeBandwidthRestriction(sdp) {
+  return sdp.replace(/b=AS:.*\r\n/, '').replace(/b=TIAS:.*\r\n/, '');
+}
+
+function forceChosenAudioCodec(sdp) {
+  if(codecSelector.value != ''){
+  return maybePreferCodec(sdp, 'audio', 'send', codecSelector.value);}
+  else{return sdp;}
+}
+
+// Copied from AppRTC's sdputils.js:
+
+// Sets |codec| as the default |type| codec if it's present.
+// The format of |codec| is 'NAME/RATE', e.g. 'opus/48000'.
+function maybePreferCodec(sdp, type, dir, codec) {
+  var str = type + ' ' + dir + ' codec';
+  if (codec === '') {
+    console.log('No preference on ' + str + '.');
+    return sdp;
+  }
+
+  console.log('Prefer ' + str + ': ' + codec);
+
+  var sdpLines = sdp.split('\r\n');
+
+  // Search for m line.
+  var mLineIndex = findLine(sdpLines, 'm=', type);
+  if (mLineIndex === null) {
+    return sdp;
+  }
+
+  // If the codec is available, set it as the default in m line.
+  var codecIndex = findLine(sdpLines, 'a=rtpmap', codec);
+  console.log('codecIndex', codecIndex);
+  if (codecIndex) {
+    var payload = getCodecPayloadType(sdpLines[codecIndex]);
+    if (payload) {
+      sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex], payload);
+    }
+  }
+
+  sdp = sdpLines.join('\r\n');
+  return sdp;
+}
+
+// Find the line in sdpLines that starts with |prefix|, and, if specified,
+// contains |substr| (case-insensitive search).
+function findLine(sdpLines, prefix, substr) {
+  return findLineInRange(sdpLines, 0, -1, prefix, substr);
+}
+
+// Find the line in sdpLines[startLine...endLine - 1] that starts with |prefix|
+// and, if specified, contains |substr| (case-insensitive search).
+function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
+  var realEndLine = endLine !== -1 ? endLine : sdpLines.length;
+  for (var i = startLine; i < realEndLine; ++i) {
+    if (sdpLines[i].indexOf(prefix) === 0) {
+      if (!substr ||
+          sdpLines[i].toLowerCase().indexOf(substr.toLowerCase()) !== -1) {
+        return i;
+      }
+    }
+  }
+  return null;
+}
+
+// Gets the codec payload type from an a=rtpmap:X line.
+function getCodecPayloadType(sdpLine) {
+  var pattern = new RegExp('a=rtpmap:(\\d+) \\w+\\/\\d+');
+  var result = sdpLine.match(pattern);
+  return (result && result.length === 2) ? result[1] : null;
+}
+
+// Returns a new m= line with the specified codec as the first one.
+function setDefaultCodec(mLine, payload) {
+  var elements = mLine.split(' ');
+
+  // Just copy the first three parameters; codec order starts on fourth.
+  var newLine = elements.slice(0, 3);
+
+  // Put target payload first and copy in the rest.
+  newLine.push(payload);
+  for (var i = 3; i < elements.length; i++) {
+    if (elements[i] !== payload) {
+      newLine.push(elements[i]);
+    }
+  }
+  return newLine.join(' ');
+}
+
+function codecChosen(){
+  codecSelector.disabled = 'true';
+}
+
+
+var WIDTH = 290;
+var HEIGHT = 131;
+
+// Interesting parameters to tweak!
+var SMOOTHING = 0.8;
+var FFT_SIZE = 2048;
+
+function StreamVisualizer(remoteStream, canvas) {
+  console.log('Creating StreamVisualizer with remoteStream and canvas: ',
+    remoteStream, canvas);
+  this.canvas = canvas;
+  this.drawContext = this.canvas.getContext('2d');
+
+  // cope with browser differences
+  if (typeof AudioContext === 'function') {
+    this.context = new AudioContext();
+  } else if (typeof webkitAudioContext === 'function') {
+    this.context = new webkitAudioContext(); // eslint-disable-line new-cap
+  } else {
+    alert('Sorry! Web Audio is not supported by this browser');
+  }
+
+  // Create a MediaStreamAudioSourceNode from the remoteStream
+  this.source = this.context.createMediaStreamSource(remoteStream);
+  console.log('Created Web Audio source from remote stream: ', this.source);
+
+  this.analyser = this.context.createAnalyser();
+//  this.analyser.connect(this.context.destination);
+  this.analyser.minDecibels = -140;
+  this.analyser.maxDecibels = 0;
+  this.freqs = new Uint8Array(this.analyser.frequencyBinCount);
+  this.times = new Uint8Array(this.analyser.frequencyBinCount);
+
+  this.source.connect(this.analyser);
+
+  this.startTime = 0;
+  this.startOffset = 0;
+}
+
+StreamVisualizer.prototype.start = function() {
+  requestAnimationFrame(this.draw.bind(this));
+};
+
+StreamVisualizer.prototype.draw = function() {
+  this.analyser.smoothingTimeConstant = SMOOTHING;
+  this.analyser.fftSize = FFT_SIZE;
+
+  // Get the frequency data from the currently playing music
+  this.analyser.getByteFrequencyData(this.freqs);
+  this.analyser.getByteTimeDomainData(this.times);
+
+
+  this.canvas.width = WIDTH;
+  this.canvas.height = HEIGHT;
+  // Draw the frequency domain chart.
+  for (var i = 0; i < this.analyser.frequencyBinCount; i++) {
+    var value = this.freqs[i];
+    var percent = value / 256;
+    var height = HEIGHT * percent;
+    var offset = HEIGHT - height - 1;
+    var barWidth = WIDTH/this.analyser.frequencyBinCount;
+    var hue = i/this.analyser.frequencyBinCount * 360;
+    this.drawContext.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+    this.drawContext.fillRect(i * barWidth, offset, barWidth, height);
+  }
+
+  // Draw the time domain chart.
+  for (i = 0; i < this.analyser.frequencyBinCount; i++) {
+    value = this.times[i];
+    percent = value / 256;
+    height = HEIGHT * percent;
+    offset = HEIGHT - height - 1;
+    barWidth = WIDTH/this.analyser.frequencyBinCount;
+    this.drawContext.fillStyle = 'white';
+    this.drawContext.fillRect(i * barWidth, offset, 1, 2);
+  }
+
+  requestAnimationFrame(this.draw.bind(this));
+};
+
+StreamVisualizer.prototype.getFrequencyValue = function(freq) {
+  var nyquist = this.context.sampleRate/2;
+  var index = Math.round(freq/nyquist * this.freqs.length);
+  return this.freqs[index];
+};
+
+
+ </script>
+
+
+</body>
+ </html>

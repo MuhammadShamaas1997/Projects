@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style>
+		
+		h1{fontsize: 16px; text-transform: upper-case; letter-spacing: 2px; text-align: center;}
+         
+         script{fontsize: 10px; text-transform: upper-case; letter-spacing: 1px; text-align: center;};
+	
+</style>
+<h1>Agent</h1>
+<p id="AgentName" style="font-size: 30px; position: absolute;left: 200px; top: 10px;"></p>
+<p id="CallerName" style="font-size: 30px; position: absolute;left: 860px; top: 10px;"></p>
+<script src="/socket.io/socket.io.js"></script>
+ </head>
+ <body>
+ <div style="border: 2px solid black;position: absolute;width: 600px; height:500px; left: 50px; top: ;border-radius: 20px;">
+ <audio id = "LocalVideo" controls style="position: absolute;width: ; height:; left: 50px; top: 30px;"></audio>
+ <button type="button" onclick="PickupCall()" disabled="true" id="PickupCallButton" style="font-size: 20px; position: absolute;width: 90px; height:30px; left: 350px; top: 30px; background-color: rgb(0,255,0); opacity: 0; border-radius: 20px; color: rgb(0,0,0);">Pick Up</button>
+
+<div style="border: 2px solid; box-shadow: 2px rgb(102,102,102);height: 30px; width: 100px; position: absolute; left: 450px;top:30px;border-radius: 20px; background-color: rgb(255,255,255);">
+ <a id = "Hang Up"  href = "https://webrtccallapp.herokuapp.com/" style="position: absolute;width: ; height:; left:10px; top: ; color: rgb(0,0,0);background-color: rgb(255,255,255); font-size: 20px; ">Hang Up</a>
+</div>
+ <textarea id = "sent", name = "message" rows="10" cols="50" style="position: absolute; left: 50px; top: 80px;"></textarea>  
+ <button type="button" onclick="myfunc()" disabled="true" id="TextButton" style="position: absolute;width:; height:; left: 450px; top: 200px; color: rgb(0,0,0);background-color: rgb(255,255,255); font-size: 20px;border-radius: 20px;">Send Text</button>
+ <form onchange="FileChosen()" style="color: rgb(0,0,0);background-color: rgb(255,255,255); font-size: 20px;">
+  <input type="file" id="fileInput" disabled="true" style="position: absolute;width: ; height:; left: 50px; top: 250px; color: rgb(0,0,0);background-color: rgb(255,255,255); font-size: 20px;">
+ </form>
+ <textarea id= "ByteRecieved" rows="10" cols="20" style="position: absolute;width: ; height:; left: 50px; top: 300px;font-size: 12px;"></textarea>
+ <canvas id="localcanvas" style="left: 250px;top: 300px;background-color: rgb(0,0,0);position: absolute;"></canvas>
+ </div>
+ 
+
+
+
+
+
+
+ <div style="border: 2px solid black; position: absolute;width: 600px; height:500px; left: 700px;border-radius: 20px;">
+ <canvas id="remotecanvas" style="left: 20px;top: 10px;background-color: rgb(0,0,0);position: absolute;"></canvas>
+ <audio id = "RemoteVideo" controls style="position: absolute;width: ; height:; left: 20px; top: 150px;"></audio>
+ <textarea id = "received", name = "message" rows="10" cols="30" style="position: absolute;width: ; height:; left: 350px; top: 10px; font-size: 12px;"></textarea>
+
+ <a id = "download" style="position: absolute;width: 300px; height:; left: 50px; top: 200px; color: rgb(0,0,0);background-color: rgb(255,255,255);font-size: 12px;"></a>
+ <video width="320" height="240" controls id="recieveVideo" style="position: absolute;width: ; height:; left:20px; top: 225px;">
+ </video>  
+ <img id="recieveImage"  height="200" width="200" style="position: absolute;width: ; height:; left:350px; top: 250px;"></img>
+ 
+ </div>
+ 
+ 
+ 
+  <div id="SignInForm" style="border: 2px solid black; position: absolute;top: 80px;left: 50px; height: 500px;width: 1250px; background-color: rgb(255,255,255); border-radius: 20px;">
+  <p style="font-size: 30px; position: absolute;left: 80px; top: 100px;">Name:</p>
+  <textarea id="NameText" style="font-size: 30px; position: absolute;left: 250px;top:100px;"></textarea>
+  <p style="font-size: 30px; position: absolute;left: 80px; top: 200px;">Connect To:</p>
+  <textarea id="PeerChosenText" style="font-size: 30px; position: absolute;left: 250px;top:200px;"></textarea>
+ <p style="font-size: 30px; position: absolute;left: 80px; top: 275px;">Skill:</p>
+ <select id="SkillSet" onchange="SkillChosen()" style="font-size: 30px; left: 250px; top: 300px;position: absolute;">
+    <option value=1>Choose Skill</option>
+    <option value=1>A</option>
+    <option value=2>B</option>
+    <option value=4>C</option>
+    <option value=3>AB</option>
+    <option value=5>AC</option>
+    <option value=6>BC</option>
+    <option value=7>ABC</option>
+</select>
+<p style="font-size: 30px;left: 650px; top:20px;position: absolute;">Available Callers:</p>
+<textarea id="AvailableCallersText" rows="10" cols="30" style="font-size: 30px; position: absolute;left: 650px;top:100px;"></textarea>
+</div>
+	<script>
+  	var socket = io();
+  	var InfoObj ={};
+  	var servers = null;
+  	var receiveChannel;
+  	var receiveBuffer = [];
+	  var receivedSize = 0;
+    var Remotestream;
+    var T=0;
+    var Start=0;
+    
+    var pc2 = new RTCPeerConnection(servers);
+    var offerOptions = {offerToRecieveAudio:1,offerToRecieveVideo:0,voiceActivityDetection:false};
+  	var downloadAnchor = document.getElementById('download');
+  	//navigator.mediaDevices.getUserMedia({audio: true,video: false}).then(gotStream);
+    var FileName;
+    var FileSize=0;
+    var sendChannel;
+    var fileInput = document.getElementById('fileInput');
+    var recieveVideo = document.getElementById('recieveVideo');
+    var recieveImage = document.getElementById('recieveImage');
+    var ByteRec = document.getElementById('ByteRecieved');
+    var SkillSet=document.getElementById("SkillSet");
+    var PickupCallButton=document.getElementById("PickupCallButton");
+    var TextButton=document.getElementById("TextButton");
+  	var SignInForm=document.getElementById("SignInForm");
+    var NameText=document.getElementById("NameText");
+    var localcanvas=document.getElementById("localcanvas");
+    var remotecanvas=document.getElementById("remotecanvas");
+    var PeerChosenText=document.getElementById("PeerChosenText");
+    var AvailableCallersText=document.getElementById("AvailableCallersText");
+    var AgentName=document.getElementById("AgentName");
+    var CallerName=document.getElementById("CallerName");
+    socket.connect();
+
+    socket.on("List",function(data) {AvailableCallersText.value=data.CallersList;});   
+    socket.on('Information', function(data){console.log('Information Received '+JSON.stringify(data));InfoObj = data});
+    socket.on('TextMessage',function(data){console.log('TextMessage Received ');document.getElementById("received").value= data});
+    socket.on("offerName",function(name) {CallerName.innerHTML=name;});
+
+    socket.on('offer',function(offer){PickupCallButton.disabled=false;console.log("offer Received "+JSON.stringify(offer));
+    PickupCallButton.style.opacity=1; //pc2.setRemoteDescription(new RTCSessionDescription(offer));
+    	pc2.setRemoteDescription(offer)});
+    socket.on('iceCandidate',function(candidate){console.log("Remote ICE Candidate "+JSON.stringify(candidate));//pc2.addIceCandidate(new RTCIceCandidate(candidate.candidate));
+    	pc2.addIceCandidate(candidate);});
+    
+    // for listening the file info
+    socket.on('fileInformation',function(fileInformation){console.log('fileInformation' + JSON.stringify(fileInformation));FileName=fileInformation.FileName;FileSize=fileInformation.FileSize; socket.emit('StartSendingFile','');Start=1;});
+	// listening the StartSendingFile message from the Caller 
+  	socket.on('StartSendingFile',function(StartSendingFile){SendData();});    
+    socket.on("CompleteFileReceived",function(){fileInput.disabled=false;})
+
+
+    pc2.onicecandidate = function(e) {console.log('Local IceCandidate received'+JSON.stringify(e));onIceCandidate(e);};
+    pc2.ontrack = gotRemoteStream;
+    pc2.ondatachannel = receiveChannelCallback;
+	  
+
+    sendChannel = pc2.createDataChannel('sendDataChannel');
+  	sendChannel.binaryType = 'arraybuffer';
+  	console.log('Created send data channel');
+    sendChannel.onopen = onSendChannelStateChange;
+
+    function PickupCall(){
+      pc2.createAnswer().then(gotDescription2);
+      //recieveVideo.src='';
+  document.getElementById("RemoteVideo").srcObject = Remotestream;
+  //document.getElementById("RemoteVideo").src = URL.createObjectURL(Remotestream);
+      document.getElementById("RemoteVideo").play();
+      PickupCallButton.disabled=true;
+      fileInput.disabled=false;
+     TextButton.disabled=false;
+     
+    }
+    function SkillChosen() {
+    	var skill=SkillSet.value;
+    	SkillSet.disabled=true;
+        socket.emit('Type', {type:'agent',Skill:skill,Name:NameText.value,PeerChosen:PeerChosenText.value});
+        AgentName.innerHTML=NameText.value;
+        SignInForm.disabled=true;
+        SignInForm.style.left="1000px";
+        SignInForm.style.top="1000px";
+        SignInForm.style.width="1px";
+        SignInForm.style.height="1px";
+        SignInForm.style.opacity=0;
+      navigator.mediaDevices.getUserMedia({audio: true,video: false}).then(gotStream);  
+    }
+
+ 
+    function myfunc(){
+    socket.emit('TextMessage', document.getElementById("sent").value);console.log('TextMessage Sent ');
+    };
+
+    function gotDescription2(desc) {
+     console.log('Answer from pc2 \n' + desc.sdp);
+     pc2.setLocalDescription(desc);
+     socket.emit('answer', desc);
+    }
+
+    function gotStream(Stream){
+  	localStream = Stream;
+  	localStream.getTracks().forEach(function(track){pc2.addTrack(track,localStream);});
+  	console.log('Adding local Stream to peer connection');
+  	document.getElementById("LocalVideo").srcObject = Stream;
+    //document.getElementById("LocalVideo").src = URL.createObjectURL(Stream);
+  var localstreamVisualizer = new StreamVisualizer(Stream, localcanvas);
+    localstreamVisualizer.start();
+  	}
+
+setInterval(displayStates, 10);
+
+function displayStates() {
+
+ ByteRec.value = receivedSize + '/' + FileSize+ " Bytes Received" + '\nPC State '+ (pc2.signalingState || pc2.readyState) + '\nICE State ' + pc2.iceConnectionState + '\nChannel State ' + sendChannel.readyState;
+}
+
+// function for receiving 
+  function receiveChannelCallback(event) {
+  console.log('Receive Channel Callback'+JSON.stringify(event));
+  receiveChannel = event.channel;
+  receiveChannel.binaryType = 'arraybuffer';
+  receiveChannel.onmessage = onReceiveMessageCallback;
+  //receiveChannel.onopen = onReceiveChannelStateChange;
+  //receiveChannel.onclose = onReceiveChannelStateChange;
+
+  receivedSize = 0;
+  bitrateMax = 0;
+  //downloadAnchor.textContent = '';
+  downloadAnchor.removeAttribute('download');
+  if (downloadAnchor.href) {
+    URL.revokeObjectURL(downloadAnchor.href);
+    downloadAnchor.removeAttribute('href');
+  }
+  }
+
+//  On receive message function
+  function onReceiveMessageCallback(event) {
+  receiveBuffer.push(event.data);
+  receivedSize += event.data.byteLength;
+  //console.log('recieved size! '+ receivedSize);
+  
+
+  // we are assuming that our signaling protocol told
+  // about the expected file size (and name, hash, etc).
+  ByteRec.value = receivedSize + '/' + FileSize + " Bytes Received"; ByteRec.value += '\nPC State '+ (pc2.signalingState || pc2.readyState) + '\nICE State ' + pc2.iceConnectionState + '\nChannel State ' + sendChannel.readyState;
+  if (receivedSize === FileSize) {
+    //FileSize=0;
+    socket.emit("CompleteFileReceived","");
+    // makes a "blob URL" in order to download and save
+    var received = new window.Blob(receiveBuffer); 
+    receiveBuffer = [];
+ 	//for saving the file
+ 	receivedSize = 0;
+  Start=0;
+    downloadAnchor.href = URL.createObjectURL(received); 
+	recieveImage.src = URL.createObjectURL(received); 
+	recieveVideo.src = URL.createObjectURL(received); 
+
+
+    downloadAnchor.download = FileName;
+    downloadAnchor.textContent =
+      'Click to download \'' + FileName + '\' (' + FileSize + ' bytes)';
+    downloadAnchor.style.display = 'block';
+    }
+  }
+
+
+
+  function onIceCandidate(event){
+	if (event.candidate){
+	//pc2.addIceCandidate(new RTCIceCandidate(event.candidate));
+	var candidate = new RTCIceCandidate({sdpMLineIndex:event.candidate.sdpMLineIndex,candidate:event.candidate.candidate});
+	socket.emit('iceCandidate',candidate);
+	}
+  }
+    
+  function gotRemoteStream(event){console.log('RemoteStream received'+JSON.stringify(event));
+	Remotestream = event.streams[0];
+  var remotestreamVisualizer = new StreamVisualizer(event.streams[0], remotecanvas);
+    remotestreamVisualizer.start();
+  }
+
+  //send channel for agent
+  function FileChosen() {
+  var file = fileInput.files[0];
+  if (!file) {
+    console.log('No file chosen');
+  } else {
+    var readyState = sendChannel.readyState;
+    console.log('Send channel state is: ' + readyState);
+  if (readyState === 'open') {
+    fileInput.disabled=true;
+    socket.emit('fileInformation' ,{FileName:file.name, FileSize: file.size});
+  }
+  }
+  }
+
+  function onSendChannelStateChange() {
+  var readyState = sendChannel.readyState;
+  console.log('Send channel state is: ' + readyState);
+  if (readyState === 'open') {
+    //socket.emit('fileInformation' ,{FileName:file.name, FileSize: file.size});
+  }
+  }
+
+  /*function gotRemoteStream(event){console.log('Stream received'+JSON.stringify(event));
+	Remotestream = event.streams[0];
+  var streamVisualizer = new StreamVisualizer(event.streams[0], canvas);
+    streamVisualizer.start();
+  }*/
+
+  function SendData() {
+  var file = fileInput.files[0];
+  console.log('File is ' + [file.name, file.size, file.type,
+      file.lastModifiedDate
+  ].join(' '));
+
+  // Handle 0 size files.
+  if (file.size === 0) {
+    bitrateDiv.innerHTML = '';
+    statusMessage.textContent = 'File is empty, please select a non-empty file';
+  
+    return;
+  }
+  
+  
+  var chunkSize = 16384;
+  var sliceFile = function(offset) {
+    var reader = new window.FileReader();
+    reader.onload = (function() {
+      return function(e) {
+        sendChannel.send(e.target.result);
+        if (file.size > offset + e.target.result.byteLength) {
+          window.setTimeout(sliceFile, 0, offset + chunkSize);
+        }
+      };
+    })(file);
+    var slice = file.slice(offset, offset + chunkSize);
+    reader.readAsArrayBuffer(slice);
+  };
+  sliceFile(0);
+}
+
+
+
+var WIDTH = 290;
+var HEIGHT = 131;
+
+// Interesting parameters to tweak!
+var SMOOTHING = 0.8;
+var FFT_SIZE = 2048;
+
+function StreamVisualizer(remoteStream, canvas) {
+  console.log('Creating StreamVisualizer with remoteStream and canvas: ',
+    remoteStream, canvas);
+  this.canvas = canvas;
+  this.drawContext = this.canvas.getContext('2d');
+
+  // cope with browser differences
+  if (typeof AudioContext === 'function') {
+    this.context = new AudioContext();
+  } else if (typeof webkitAudioContext === 'function') {
+    this.context = new webkitAudioContext(); // eslint-disable-line new-cap
+  } else {
+    alert('Sorry! Web Audio is not supported by this browser');
+  }
+
+  // Create a MediaStreamAudioSourceNode from the remoteStream
+  this.source = this.context.createMediaStreamSource(remoteStream);
+  console.log('Created Web Audio source from remote stream: ', this.source);
+
+  this.analyser = this.context.createAnalyser();
+//  this.analyser.connect(this.context.destination);
+  this.analyser.minDecibels = -140;
+  this.analyser.maxDecibels = 0;
+  this.freqs = new Uint8Array(this.analyser.frequencyBinCount);
+  this.times = new Uint8Array(this.analyser.frequencyBinCount);
+
+  this.source.connect(this.analyser);
+
+  this.startTime = 0;
+  this.startOffset = 0;
+}
+
+StreamVisualizer.prototype.start = function() {
+  requestAnimationFrame(this.draw.bind(this));
+};
+
+StreamVisualizer.prototype.draw = function() {
+  this.analyser.smoothingTimeConstant = SMOOTHING;
+  this.analyser.fftSize = FFT_SIZE;
+
+  // Get the frequency data from the currently playing music
+  this.analyser.getByteFrequencyData(this.freqs);
+  this.analyser.getByteTimeDomainData(this.times);
+
+
+  this.canvas.width = WIDTH;
+  this.canvas.height = HEIGHT;
+  // Draw the frequency domain chart.
+  for (var i = 0; i < this.analyser.frequencyBinCount; i++) {
+    var value = this.freqs[i];
+    var percent = value / 256;
+    var height = HEIGHT * percent;
+    var offset = HEIGHT - height - 1;
+    var barWidth = WIDTH/this.analyser.frequencyBinCount;
+    var hue = i/this.analyser.frequencyBinCount * 360;
+    this.drawContext.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+    this.drawContext.fillRect(i * barWidth, offset, barWidth, height);
+  }
+
+  // Draw the time domain chart.
+  for (i = 0; i < this.analyser.frequencyBinCount; i++) {
+    value = this.times[i];
+    percent = value / 256;
+    height = HEIGHT * percent;
+    offset = HEIGHT - height - 1;
+    barWidth = WIDTH/this.analyser.frequencyBinCount;
+    this.drawContext.fillStyle = 'white';
+    this.drawContext.fillRect(i * barWidth, offset, 1, 2);
+  }
+
+  requestAnimationFrame(this.draw.bind(this));
+};
+
+StreamVisualizer.prototype.getFrequencyValue = function(freq) {
+  var nyquist = this.context.sampleRate/2;
+  var index = Math.round(freq/nyquist * this.freqs.length);
+  return this.freqs[index];
+};
+
+    </script>
+
+
+ </body>
+</html>
