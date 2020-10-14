@@ -4,6 +4,9 @@ Hello World
 Hello World
 """
 import random
+import numpy as np
+import scipy as stats
+import matplotlib.pyplot as plt
 
 y, z, a, b, c, d=str("Hello, World"), int(5), float(20.5), complex(1+2j), bool(5),  bool(True)
 def myfunc():
@@ -66,3 +69,10 @@ print(y.title())
 print(y.upper())
 print(y.zfill(50))
 print(isinstance(y, str))
+
+arr=np.array([1, 7, 3, 4, 5])
+print(np.sort(arr))
+print(np.mean(arr))
+#print(stats.mode(arr))
+plt.scatter(arr, arr)
+plt.show()
