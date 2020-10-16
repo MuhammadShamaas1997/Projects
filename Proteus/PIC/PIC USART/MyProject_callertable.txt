@@ -1,0 +1,3 @@
+main
+	EEPROM_Write
+	EEPROM_Read
