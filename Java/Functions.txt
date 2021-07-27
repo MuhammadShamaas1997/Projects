@@ -1,0 +1,500 @@
+Entering Commands
+diary	Save Command Window text to file
+
+
+Matrices and Arrays
+rand	Uniformly distributed random numbers
+blkdiag	Construct block diagonal matrix from input arguments
+cat	Concatenate arrays along specified dimension
+horzcat	Concatenate arrays horizontally
+vertcat	Concatenate arrays vertically
+repelem	Repeat copies of array elements
+repmat	Repeat copies of array
+linspace	Generate linearly spaced vector
+logspace	Generate logarithmically spaced vector
+freqspace	Frequency spacing for frequency response
+meshgrid	2-D and 3-D grids
+ndgrid	Rectangular grid in N-D space
+ndims	Number of array dimensions
+numel	Number of array elements
+topkrows	Top rows in sorted order
+flip	Flip order of elements
+fliplr	Flip array left to right
+flipud	Flip array up to down
+rot90	Rotate array 90 degrees
+permute	Rearrange dimensions of N-D array
+ipermute	Inverse permute dimensions of N-D array
+circshift	Shift array circularly
+shiftdim	Shift dimensions
+reshape	Reshape array
+squeeze	Remove singleton dimensions
+ind2sub	Subscripts from linear index
+sub2ind	Convert subscripts to linear indices
+
+
+Operators and Elementary Operations
+Arithmetic
+bsxfun	Apply element-wise operation to two arrays with implicit expansion enabled
+
+
+Set Operations
+intersect	Set intersection of two arrays
+ismember	Array elements that are members of set array
+ismembertol	Members of set within tolerance
+issorted	Determine if array is sorted
+setdiff	Set difference of two arrays
+setxor	Set exclusive OR of two arrays
+union	Set union of two arrays
+unique	Unique values in array
+uniquetol	Unique values within tolerance
+join	Combine two tables or timetables by rows using key variables
+innerjoin	Inner join between two tables or timetables
+outerjoin	Outer join between two tables or timetables
+
+
+Mathematics
+Exponents and Logarithms
+expm1	Compute exp(x)-1 accurately for small values of x
+log1p	Compute log(1+x) accurately for small values of x
+nextpow2	Exponent of next higher power of 2
+reallog	Natural logarithm for nonnegative real arrays
+realpow	Array power for real-only output
+realsqrt	Squareroot for nonnegative real arrays
+
+
+Complex Numbers
+complex	Create complex array
+cplxpair	Sort complex numbers into complex conjugate pairs
+isreal	Determine whether array is real
+sign	Sign function (signum function)
+unwrap	Correct phase angles to produce smoother phase plots
+
+
+Discrete Math
+factor	Prime factors
+factorial	Factorial of input
+gcd	Greatest common divisor
+isprime	Determine which array elements are prime
+lcm	Least common multiple
+nchoosek	Binomial coefficient or all combinations
+perms	All possible permutations
+primes	Prime numbers less than or equal to input value
+rat	Rational fraction approximation
+rats	Rational output
+
+
+Polynomials
+polyeig	Polynomial eigenvalue problem
+polyfit	Polynomial curve fitting
+residue	Partial fraction expansion (partial fraction decomposition)
+polyvalm	Matrix polynomial evaluation
+deconv	Deconvolution and polynomial division
+
+
+Special Functions
+airy	Airy Functions
+besselh	Bessel function of third kind (Hankel function)
+besseli	Modified Bessel function of first kind
+besselj	Bessel function of first kind
+besselk	Modified Bessel function of second kind
+bessely	Bessel function of second kind
+beta	Beta function
+betainc	Incomplete beta function
+betaincinv	Beta inverse cumulative distribution function
+betaln	Logarithm of beta function
+ellipj	Jacobi elliptic functions
+ellipke	Complete elliptic integrals of first and second kind
+erf	Error function
+erfc	Complementary error function
+erfcinv	Inverse complementary error function
+erfcx	Scaled complementary error function
+erfinv	Inverse error function
+expint	Exponential integral
+gamma	Gamma function
+gammainc	Incomplete gamma function
+gammaincinv	Inverse incomplete gamma function
+gammaln	Logarithm of gamma function
+legendre	Associated Legendre functions
+psi	Psi (polygamma) function
+Cartesian Coordinate System Conversion
+cart2pol	Transform Cartesian coordinates to polar or cylindrical
+cart2sph	Transform Cartesian coordinates to spherical
+pol2cart	Transform polar or cylindrical coordinates to Cartesian
+sph2cart	Transform spherical coordinates to Cartesian
+
+
+Constants and Test Matrices
+eps	Floating-point relative accuracy
+flintmax	Largest consecutive integer in floating-point format
+compan	Companion matrix
+gallery	Test matrices
+hadamard	Hadamard matrix
+hankel	Hankel matrix
+hilb	Hilbert matrix
+invhilb	Inverse of Hilbert matrix
+magic	Magic square
+pascal	Pascal matrix
+rosser	Classic symmetric eigenvalue test problem
+toeplitz	Toeplitz matrix
+vander	Vandermonde matrix
+wilkinson	Wilkinson's eigenvalue test matrix
+
+
+Linear Algebra
+decomposition	Matrix decomposition for solving linear systems
+lsqminnorm	Minimum norm least-squares solution to linear equation
+linsolve	Solve linear system of equations
+pinv	Moore-Penrose pseudoinverse
+lscov	Least-squares solution in presence of known covariance
+sylvester	Solve Sylvester equation AX + XB = C for X
+eig	Eigenvalues and eigenvectors
+eigs	Subset of eigenvalues and eigenvectors
+balance	Diagonal scaling to improve eigenvalue accuracy
+svd	Singular value decomposition
+svds	Subset of singular values and vectors
+gsvd	Generalized singular value decomposition
+ordeig	Eigenvalues of quasitriangular matrices
+ordqz	Reorder eigenvalues in QZ factorization
+ordschur	Reorder eigenvalues in Schur factorization
+polyeig	Polynomial eigenvalue problem
+qz	QZ factorization for generalized eigenvalues
+hess	Hessenberg form of matrix
+schur	Schur decomposition
+rsf2csf	Convert real Schur form to complex Schur form
+cdf2rdf	Convert complex diagonal form to real block diagonal form
+lu	LU matrix factorization
+ldl	Block LDL' factorization for Hermitian indefinite matrices
+chol	Cholesky factorization
+cholupdate	Rank 1 update to Cholesky factorization
+qr	Orthogonal-triangular decomposition
+qrdelete	Remove column or row from QR factorization
+qrinsert	Insert column or row into QR factorization
+qrupdate	Rank 1 update to QR factorization
+planerot	Givens plane rotation
+ctranspose	Complex conjugate transpose
+sqrtm	Matrix square root
+logm	Matrix logarithm
+funm	Evaluate general matrix function
+kron	Kronecker tensor product
+bandwidth	Lower and upper matrix bandwidth
+tril	Lower triangular part of matrix
+triu	Upper triangular part of matrix
+isbanded	Determine if matrix is within specific bandwidth
+isdiag	Determine if matrix is diagonal
+ishermitian	Determine if matrix is Hermitian or skew-Hermitian
+issymmetric	Determine if matrix is symmetric or skew-symmetric
+istril	Determine if matrix is lower triangular
+istriu	Determine if matrix is upper triangular
+normest	2-norm estimate
+vecnorm	Vector-wise norm
+cond	Condition number for inversion
+condest	1-norm condition number estimate
+rcond	Reciprocal condition number
+condeig	Condition number with respect to eigenvalues
+orth	Orthonormal basis for range of matrix
+rank	Rank of matrix
+rref	Reduced row echelon form (Gauss-Jordan elimination)
+subspace	Angle between two subspaces
+
+
+Random Number Generation
+rand	Uniformly distributed random numbers
+randn	Normally distributed random numbers
+randi	Uniformly distributed pseudorandom integers
+randperm	Random permutation
+rng	Control random number generation
+RandStream	Random number stream
+
+
+Interpolation
+interp1	1-D data interpolation (table lookup)
+interp2	Interpolation for 2-D gridded data in meshgrid format
+interp3	Interpolation for 3-D gridded data in meshgrid format
+interpn	Interpolation for 1-D, 2-D, 3-D, and N-D gridded data in ndgrid format
+griddedInterpolant	Gridded data interpolation
+pchip	Piecewise Cubic Hermite Interpolating Polynomial (PCHIP)
+spline	Cubic spline data interpolation
+ppval	Evaluate piecewise polynomial
+mkpp	Make piecewise polynomial
+unmkpp	Extract piecewise polynomial details
+padecoef	Padé approximation of time delays
+interpft	1-D interpolation (FFT method)
+ndgrid	Rectangular grid in N-D space
+meshgrid	2-D and 3-D grids
+griddata	Interpolate 2-D or 3-D scattered data
+griddatan	Interpolate N-D scattered data
+scatteredInterpolant	Interpolate 2-D or 3-D scattered data
+
+
+Optimization
+fminsearch	Find minimum of unconstrained multivariable function using derivative-free method
+fzero	Root of nonlinear function
+optimget	Optimization options values
+optimset	Create or edit optimization options structure
+
+
+Numerical Integration and Differential Equations
+Ordinary Differential Equations
+ode45	Solve nonstiff differential equations — medium order method
+ode23	Solve nonstiff differential equations — low order method
+ode113	Solve nonstiff differential equations — variable order method
+ode15s	Solve stiff differential equations and DAEs — variable order method
+ode23s	Solve stiff differential equations — low order method
+ode23t	Solve moderately stiff ODEs and DAEs — trapezoidal rule
+ode23tb	Solve stiff differential equations — trapezoidal rule + backward differentiation formula
+ode15i	Solve fully implicit differential equations — variable order method
+decic	Compute consistent initial conditions for ode15i
+odeget	Extract ODE option values
+odeset	Create or modify options structure for ODE solvers
+deval	Evaluate differential equation solution structure
+odextend	Extend solution to ODE
+
+
+Boundary Value Problems
+bvp4c	Solve boundary value problems for ordinary differential equations
+bvp5c	Solve boundary value problems for ordinary differential equations
+bvpinit	Form initial guess for BVP solvers
+bvpxtend	Form guess structure for extending boundary value solutions
+bvpget	Extract properties from options structure created with bvpset
+bvpset	Create or alter options structure of boundary value problem
+deval	Evaluate differential equation solution structure
+
+
+Delay Differential Equations
+dde23	Solve delay differential equations (DDEs) with constant delays
+ddesd	Solve delay differential equations (DDEs) with general delays
+ddensd	Solve delay differential equations (DDEs) of neutral type
+ddeget	Extract properties from delay differential equations options structure
+ddeset	Create or alter delay differential equations options structure
+deval	Evaluate differential equation solution structure
+
+
+Partial Differential Equations
+pdepe	Solve initial-boundary value problems for parabolic-elliptic PDEs in 1-D
+pdeval	Evaluate numerical solution of PDE using output of pdepe
+
+
+Numerical Integration and Differentiation
+integral2	Numerically evaluate double integral
+integral3	Numerically evaluate triple integral
+quadgk	Numerically evaluate integral, adaptive Gauss-Kronrod quadrature
+quad2d	Numerically evaluate double integral, tiled method
+cumtrapz	Cumulative trapezoidal numerical integration
+trapz	Trapezoidal numerical integration
+del2	Discrete Laplacian
+gradient	Numerical gradient
+
+
+Fourier Analysis and Filtering
+fft2	2-D fast Fourier transform
+fftn	N-D fast Fourier transform
+fftshift	Shift zero-frequency component to center of spectrum
+fftw	Define method for determining FFT algorithm
+ifft	Inverse fast Fourier transform
+ifft2	2-D inverse fast Fourier transform
+ifftn	Multidimensional inverse fast Fourier transform
+ifftshift	Inverse zero-frequency shift
+nextpow2	Exponent of next higher power of 2
+interpft	1-D interpolation (FFT method)
+conv2	2-D convolution
+convn	N-D convolution
+deconv	Deconvolution and polynomial division
+filter	1-D digital filter
+filter2	2-D digital filter
+ss2tf	Convert state-space representation to transfer function
+padecoef	Padé approximation of time delays
+
+
+Sparse Matrices
+spalloc	Allocate space for sparse matrix
+spdiags	Extract and create sparse band and diagonal matrices
+speye	Sparse identity matrix
+sprand	Sparse uniformly distributed random matrix
+sprandn	Sparse normally distributed random matrix
+sprandsym	Sparse symmetric random matrix
+sparse	Create sparse matrix
+spconvert	Import from sparse matrix external format
+issparse	Determine whether input is sparse
+nnz	Number of nonzero matrix elements
+nonzeros	Nonzero matrix elements
+nzmax	Amount of storage allocated for nonzero matrix elements
+spfun	Apply function to nonzero sparse matrix elements
+spones	Replace nonzero sparse matrix elements with ones
+spparms	Set parameters for sparse matrix routines
+spy	Visualize sparsity pattern
+find	Find indices and values of nonzero elements
+full	Convert sparse matrix to full matrix
+dissect	Nested dissection permutation
+amd	Approximate minimum degree permutation
+colamd	Column approximate minimum degree permutation
+colperm	Sparse column permutation based on nonzero count
+dmperm	Dulmage-Mendelsohn decomposition
+randperm	Random permutation
+symamd	Symmetric approximate minimum degree permutation
+symrcm	Sparse reverse Cuthill-McKee ordering
+pcg	Preconditioned conjugate gradients method
+minres	Minimum residual method
+symmlq	Symmetric LQ method
+gmres	Generalized minimum residual method (with restarts)
+bicg	Biconjugate gradients method
+bicgstab	Biconjugate gradients stabilized method
+bicgstabl	Biconjugate gradients stabilized (l) method
+cgs	Conjugate gradients squared method
+qmr	Quasi-minimal residual method
+tfqmr	Transpose-free quasi-minimal residual method
+lsqr	LSQR method
+ichol	Incomplete Cholesky factorization
+ilu	Incomplete LU factorization
+eigs	Subset of eigenvalues and eigenvectors
+svds	Subset of singular values and vectors
+normest	2-norm estimate
+condest	1-norm condition number estimate
+sprank	Structural rank
+etree	Elimination tree
+symbfact	Symbolic factorization analysis
+spaugment	Form least-squares augmented system
+dmperm	Dulmage-Mendelsohn decomposition
+etreeplot	Plot elimination tree
+treelayout	Lay out tree or forest
+treeplot	Plot picture of tree
+gplot	Plot nodes and links representing adjacency matrix
+unmesh	Convert edge matrix to coordinate and Laplacian matrices
+
+
+Graph and Network Algorithms
+graph	Graph with undirected edges
+digraph	Graph with directed edges
+addnode	Add new node to graph
+rmnode	Remove node from graph
+addedge	Add new edge to graph
+rmedge	Remove edge from graph
+flipedge	Reverse edge directions
+numnodes	Number of nodes in graph
+numedges	Number of edges in graph
+findnode	Locate node in graph
+findedge	Locate edge in graph
+edgecount	Number of edges between two nodes
+reordernodes	Reorder graph nodes
+subgraph	Extract subgraph
+bfsearch	Breadth-first graph search
+dfsearch	Depth-first graph search
+centrality	Measure node importance
+maxflow	Maximum flow in graph
+conncomp	Connected graph components
+biconncomp	Biconnected graph components
+condensation	Graph condensation
+bctree	Block-cut tree graph
+minspantree	Minimum spanning tree of graph
+toposort	Topological order of directed acyclic graph
+isdag	Determine if graph is acyclic
+transclosure	Transitive closure
+transreduction	Transitive reduction
+isisomorphic	Determine whether two graphs are isomorphic
+isomorphism	Compute isomorphism between two graphs
+ismultigraph	Determine whether graph has multiple edges
+simplify	Reduce multigraph to simple graph
+shortestpath	Shortest path between two single nodes
+shortestpathtree	Shortest path tree from node
+distances	Shortest path distances of all node pairs
+adjacency	Graph adjacency matrix
+incidence	Graph incidence matrix
+laplacian	Graph Laplacian matrix
+degree	Degree of graph nodes
+neighbors	Neighbors of graph node
+nearest	Nearest neighbors within radius
+indegree	In-degree of nodes
+outdegree	Out-degree of nodes
+predecessors	Node predecessors
+successors	Node successors
+inedges	Incoming edges to node
+outedges	Outgoing edges from node
+plot	Plot graph nodes and edges
+labeledge	Label graph edges
+labelnode	Label graph nodes
+layout	Change layout of graph plot
+highlight	Highlight nodes and edges in plotted graph
+GraphPlot	Graph plot for directed and undirected graphs
+
+
+Computational Geometry
+Triangulation Representation
+triangulation	Triangulation in 2-D or 3-D
+tetramesh	Tetrahedron mesh plot
+trimesh	Triangular mesh plot
+triplot	2-D triangular plot
+trisurf	Triangular surface plot
+
+
+Delaunay Triangulation
+delaunayTriangulation	Delaunay triangulation in 2-D and 3-D
+delaunay	Delaunay triangulation
+delaunayn	N-D Delaunay triangulation
+tetramesh	Tetrahedron mesh plot
+trimesh	Triangular mesh plot
+triplot	2-D triangular plot
+trisurf	Triangular surface plot
+
+
+Spatial Search
+triangulation	Triangulation in 2-D or 3-D
+delaunayTriangulation	Delaunay triangulation in 2-D and 3-D
+dsearchn	N-D nearest point search
+tsearchn	N-D closest simplex search
+delaunay	Delaunay triangulation
+delaunayn	N-D Delaunay triangulation
+
+
+Bounding Regions
+boundary	Boundary of a set of points in 2-D or 3-D
+alphaShape	Polygons and polyhedra from points in 2-D and 3-D
+convhull	Convex hull
+convhulln	N-D convex hull
+
+
+Voronoi Diagram
+patch	Create one or more filled polygons
+voronoi	Voronoi diagram
+voronoin	N-D Voronoi diagram
+
+
+Elementary Polygons
+inpolygon	Points located inside or on edge of polygonal region
+nsidedpoly	Regular polygon
+polyarea	Area of polygon
+polybuffer	Create buffer around points or lines
+rectint	Rectangle intersection area
+polyshape	2-D polygons
+addboundary	Add polyshape boundary
+rmboundary	Remove polyshape boundary
+rmholes	Remove holes in polyshape
+rmslivers	Remove polyshape boundary outliers
+simplify	Simplify polyshape boundaries
+boundary	Vertex coordinates of polyshape boundary
+isequal	Determine if polyshape objects are equal
+ishole	Determine if polyshape boundary is a hole
+isinterior	Query points inside polyshape
+issimplified	Determine if polyshape is well-defined
+nearestvertex	Query nearest polyshape vertex
+numboundaries	Number of polyshape boundaries
+numsides	Number of polyshape sides
+overlaps	Determine whether polyshape objects overlap
+area	Area of polyshape
+boundingbox	Bounding box of polyshape
+centroid	Centroid of polyshape
+convhull	Convex hull of polyshape
+perimeter	Perimeter of polyshape
+triangulation	Triangulate polyshape
+turningdist	Compute turning distance between polyshape objects
+intersect	Intersection of polyshape objects
+subtract	Difference of two polyshape objects
+union	Union of polyshape objects
+xor	Exclusive OR of two polyshape objects
+polybuffer	Buffer polyshape
+rotate	Rotate polyshape
+scale	Scale polyshape
+translate	Translate polyshape
+holes	Convert polyshape hole boundaries to array of polyshape objects
+plot	Plot polyshape
+regions	Access polyshape regions
+sortboundaries	Sort polyshape boundaries
+sortregions	Sort polyshape regions

@@ -1,0 +1,2 @@
+javac ComplexMatrix.java && java ComplexMatrix && javac Graph.java && appletviewer Graph.html
+git add . && git commit -m "V1" && git push -u origin master

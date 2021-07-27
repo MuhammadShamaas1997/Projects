@@ -1,0 +1,1442 @@
+% %base case
+% r12=0.02;
+% r13=0.08;
+% r14=0;
+% r15=0;
+% r23=0.06;
+% r24=0.06;
+% r25=0.04;
+% r34=0.01;
+% r35=0;
+% r45=0.08;
+% 
+% x12=1i*0.06;
+% x13=1i*0.24;
+% x14=1i*0;
+% x15=1i*0;
+% x23=1i*0.18;
+% x24=1i*0.18;
+% x25=1i*0.12;
+% x34=1i*0.03;
+% x35=1i*0;
+% x45=1i*0.24;
+% 
+% b12=1i*0.06;
+% b13=1i*0.05;
+% b14=0;
+% b15=0;
+% b23=1i*0.04;
+% b24=1i*0.04;
+% b25=1i*0.03;
+% b34=1i*0.02;
+% b35=0;
+% b45=1i*0.05;
+% 
+% Y=[
+%     (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2), (-1/(r12+x12)), (-1/(r13+x13)), 0, 0;
+%     (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2)+(1/(r24+x24))+(b24/2)+(1/(r25+x25))+(b25/2), (-1/(r23+x23)), (-1/(r24+x24)), (-1/(r25+x25));
+%     (-1/(r13+x13)), (-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34))+(b34/2), (-1/(r34+x34)), 0;
+%     0, (-1/(r24+x24)), (-1/(r34+x34)), (1/(r24+x24))+(b24/2)+(1/(r34+x34))+(b34/2)+(1/(r45+x45))+(b45/2), (-1/(r45+x45));
+%     0, (-1/(r25+x25)), 0, (-1/(r45+x45)), (1/(r25+x25))+(b25/2)+(1/(r45+x45))+(b45/2);
+%     ];
+% 
+% 
+% n=5;
+% GenP=[0;0.4;0;0;0];
+% GenQ=[0;0;0;0;0];
+% LoadP=[0;.20;.45;.40;.60];
+% LoadQ=[0;.10;.15;.05;.10];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1.06;1;1;1;1];
+% Vp=[0;0;0;0;0];
+% Ym=zeros(n,n);
+% Yp=zeros(n,n);
+% maxiter=10;
+% 
+% 
+% for t=1:n
+%     for k=1:n
+%         Ym(t,k)=abs(Y(t,k));
+%         Yp(t,k)=phase(Y(t,k));
+%     end
+% end
+% 
+%     
+% for iteration=1:maxiter
+% 
+% 
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for x=1:n
+%         P=0;
+%         Q=0;
+%         for k=1:n
+%             P=P+abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*cos(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%             Q=Q-abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*sin(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%         end
+%         CalcP(x,1)=P;
+%         CalcQ(x,1)=Q;
+%     end
+% 
+% 
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+% 
+%     for y=2:n
+%         for o=2:n
+%             if (y==o)
+%                 for k=1:n
+%                     if (k~=y)
+%                         J1(y-1,o-1)=J1(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     else
+%                         J1(y-1,o-1)=J1(y-1,o-1)+0;
+%                         J2(y-1,o-1)=J2(y-1,o-1)+2*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+0;
+%                         J4(y-1,o-1)=J4(y-1,o-1)-2*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(y-1,o-1)=J1(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J3(y-1,o-1)=J3(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%             end
+%         end
+%     end
+%     
+%     J2(1,1)=0;
+%     J2(2,1)=0;
+%     J2(3,1)=0;
+%     J2(4,1)=0;
+%     J4(1,1)=1;
+%     J4(2,1)=0;
+%     J4(3,1)=0;
+%     J4(4,1)=0;
+%     
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     Vm
+%     Vp
+%     Y
+%     CalcP
+%     CalcQ
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0;0; DeltaVoltage((n+1):(2*(n-1)),1);];
+%     GenQ(2,1)=GenQ(2,1)+DeltaVoltage(n,1);
+% 
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% SVC
+% r12=0.02;
+% r13=0.08;
+% r14=0;
+% r15=0;
+% r23=0.06;
+% r24=0.06;
+% r25=0.04;
+% r34=0.01;
+% r35=0;
+% r45=0.08;
+% 
+% x12=1i*0.06;
+% x13=1i*0.24;
+% x14=1i*0;
+% x15=1i*0;
+% x23=1i*0.18;
+% x24=1i*0.18;
+% x25=1i*0.12;
+% x34=1i*0.03;
+% x35=1i*0;
+% x45=1i*0.24;
+% 
+% b12=1i*0.06;
+% b13=1i*0.05;
+% b14=0;
+% b15=0;
+% b23=1i*0.04;
+% b24=1i*0.04;
+% b25=1i*0.03;
+% b34=1i*0.02;
+% b35=0;
+% b45=1i*0.05;
+% bsvc=1;
+% 
+% Y=[
+%     (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2), (-1/(r12+x12)), (-1/(r13+x13)), 0, 0;
+%     (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2)+(1/(r24+x24))+(b24/2)+(1/(r25+x25))+(b25/2), (-1/(r23+x23)), (-1/(r24+x24)), (-1/(r25+x25));
+%     (-1/(r13+x13)), (-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34))+(b34/2)+(1i*bsvc), (-1/(r34+x34)), 0;
+%     0, (-1/(r24+x24)), (-1/(r34+x34)), (1/(r24+x24))+(b24/2)+(1/(r34+x34))+(b34/2)+(1/(r45+x45))+(b45/2), (-1/(r45+x45));
+%     0, (-1/(r25+x25)), 0, (-1/(r45+x45)), (1/(r25+x25))+(b25/2)+(1/(r45+x45))+(b45/2);
+%     ];
+% 
+% 
+% n=5;
+% GenP=[0;0.4;0;0;0];
+% GenQ=[0;0;0;0;0];
+% LoadP=[0;.20;.45;.40;.60];
+% LoadQ=[0;.10;.15;.05;.10];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1.06;1;1;1;1];
+% Vp=[0;0;0;0;0];
+% Ym=zeros(n,n);
+% Yp=zeros(n,n);
+% maxiter=10;
+% 
+% 
+% for t=1:n
+%     for k=1:n
+%         Ym(t,k)=abs(Y(t,k));
+%         Yp(t,k)=phase(Y(t,k));
+%     end
+% end
+% 
+%     
+% for iteration=1:maxiter
+% 
+%     Y=[
+%         (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2), (-1/(r12+x12)), (-1/(r13+x13)), 0, 0;
+%         (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2)+(1/(r24+x24))+(b24/2)+(1/(r25+x25))+(b25/2), (-1/(r23+x23)), (-1/(r24+x24)), (-1/(r25+x25));
+%         (-1/(r13+x13)), (-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34))+(b34/2)+(1i*bsvc), (-1/(r34+x34)), 0;
+%         0, (-1/(r24+x24)), (-1/(r34+x34)), (1/(r24+x24))+(b24/2)+(1/(r34+x34))+(b34/2)+(1/(r45+x45))+(b45/2), (-1/(r45+x45));
+%         0, (-1/(r25+x25)), 0, (-1/(r45+x45)), (1/(r25+x25))+(b25/2)+(1/(r45+x45))+(b45/2);
+%         ];
+%     
+%     for t=1:n
+%         for k=1:n
+%             Ym(t,k)=abs(Y(t,k));
+%             Yp(t,k)=phase(Y(t,k));
+%         end
+%     end
+% 
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for x=1:n
+%         P=0;
+%         Q=0;
+%         for k=1:n
+%             P=P+abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*cos(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%             Q=Q-abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*sin(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%         end
+%         CalcP(x,1)=P;
+%         CalcQ(x,1)=Q;
+%     end
+% 
+% 
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+% 
+%     for y=2:n
+%         for o=2:n
+%             if (y==o)
+%                 for k=1:n
+%                     if (k~=y)
+%                         J1(y-1,o-1)=J1(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     else
+%                         J1(y-1,o-1)=J1(y-1,o-1)+0;
+%                         J2(y-1,o-1)=J2(y-1,o-1)+2*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+0;
+%                         J4(y-1,o-1)=J4(y-1,o-1)-2*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(y-1,o-1)=J1(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J3(y-1,o-1)=J3(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%             end
+%         end
+%     end
+%     
+%     J2(1,1)=0;
+%     J2(2,1)=0;
+%     J2(3,1)=0;
+%     J2(4,1)=0;
+%     J4(1,1)=1;
+%     J4(2,1)=0;
+%     J4(3,1)=0;
+%     J4(4,1)=0;
+%     
+%     J2(1,2)=0;
+%     J2(2,2)=0;
+%     J2(3,2)=0;
+%     J2(4,2)=0;
+%     J4(1,2)=0;
+%     J4(2,2)=-abs(Vm(3))*abs(Vm(3));
+%     J4(3,2)=0;
+%     J4(4,2)=0;
+%     
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     bsvc
+%     Vm
+%     Vp
+%     Y
+%     CalcP
+%     CalcQ
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0;0;0; DeltaVoltage((n+2):(2*(n-1)),1);];
+%     GenQ(2,1)=GenQ(2,1)+DeltaVoltage(n,1);
+%     bsvc=bsvc+DeltaVoltage(n+1,1);
+% 
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% %STATCOM
+% r12=0.02;
+% r13=0.08;
+% r14=0;
+% r15=0;
+% r23=0.06;
+% r24=0.06;
+% r25=0.04;
+% r34=0.01;
+% r35=0;
+% r45=0.08;
+% 
+% x12=1i*0.06;
+% x13=1i*0.24;
+% x14=1i*0;
+% x15=1i*0;
+% x23=1i*0.18;
+% x24=1i*0.18;
+% x25=1i*0.12;
+% x34=1i*0.03;
+% x35=1i*0;
+% x45=1i*0.24;
+% 
+% b12=1i*0.06;
+% b13=1i*0.05;
+% b14=0;
+% b15=0;
+% b23=1i*0.04;
+% b24=1i*0.04;
+% b25=1i*0.03;
+% b34=1i*0.02;
+% b35=0;
+% b45=1i*0.05;
+% 
+% Vvr=1;
+% Bvr=1;
+% 
+% Y=[
+%     (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2), (-1/(r12+x12)), (-1/(r13+x13)), 0, 0;
+%     (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2)+(1/(r24+x24))+(b24/2)+(1/(r25+x25))+(b25/2), (-1/(r23+x23)), (-1/(r24+x24)), (-1/(r25+x25));
+%     (-1/(r13+x13)), (-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34))+(b34/2), (-1/(r34+x34)), 0;
+%     0, (-1/(r24+x24)), (-1/(r34+x34)), (1/(r24+x24))+(b24/2)+(1/(r34+x34))+(b34/2)+(1/(r45+x45))+(b45/2), (-1/(r45+x45));
+%     0, (-1/(r25+x25)), 0, (-1/(r45+x45)), (1/(r25+x25))+(b25/2)+(1/(r45+x45))+(b45/2);
+%     ];
+% 
+% 
+% n=5;
+% GenP=[0;0.4;0;0;0];
+% GenQ=[0;0;0;0;0];
+% LoadP=[0;.20;.45;.40;.60];
+% LoadQ=[0;.10;.15;.05;.10];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1.06;1;1;1;1];
+% Vp=[0;0;0;0;0];
+% Ym=zeros(n,n);
+% Yp=zeros(n,n);
+% maxiter=10;
+% 
+% 
+% for t=1:n
+%     for k=1:n
+%         Ym(t,k)=abs(Y(t,k));
+%         Yp(t,k)=phase(Y(t,k));
+%     end
+% end
+% 
+%     
+% for iteration=1:maxiter
+% 
+% 
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for x=1:n
+%         P=0;
+%         Q=0;
+%         for k=1:n
+%             P=P+abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*cos(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%             Q=Q-abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*sin(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%         end
+%         CalcP(x,1)=P;
+%         CalcQ(x,1)=Q;
+%     end
+% 
+%     CalcQ(3,1)=CalcQ(3,1)-Vvr*Vvr*Bvr+Vvr*abs(Vm(3))*Bvr;
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+% 
+%     for y=2:n
+%         for o=2:n
+%             if (y==o)
+%                 for k=1:n
+%                     if (k~=y)
+%                         J1(y-1,o-1)=J1(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     else
+%                         J1(y-1,o-1)=J1(y-1,o-1)+0;
+%                         J2(y-1,o-1)=J2(y-1,o-1)+2*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+0;
+%                         J4(y-1,o-1)=J4(y-1,o-1)-2*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(y-1,o-1)=J1(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J3(y-1,o-1)=J3(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%             end
+%         end
+%     end
+%     
+%     J2(1,1)=0;
+%     J2(2,1)=0;
+%     J2(3,1)=0;
+%     J2(4,1)=0;
+%     J4(1,1)=1;
+%     J4(2,1)=0;
+%     J4(3,1)=0;
+%     J4(4,1)=0;
+%     
+%     J2(1,2)=0;
+%     J2(2,2)=0;
+%     J2(3,2)=0;
+%     J2(4,2)=0;
+%     J4(1,2)=0;
+%     J4(2,2)=-2*Vvr*Bvr+abs(Vm(3))*Bvr;
+%     J4(3,2)=0;
+%     J4(4,2)=0;
+%     
+%     
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     Vm
+%     Vp
+%     Y
+%     CalcP
+%     CalcQ
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0;0;0; DeltaVoltage((n+2):(2*(n-1)),1);];
+%     GenQ(2,1)=GenQ(2,1)+DeltaVoltage(n,1);
+%     Vvr=Vvr+DeltaVoltage(n+1,1);
+% 
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%TCSC
+% r12=0.02;
+% r13=0.08;
+% r14=0;
+% r15=0;
+% r23=0.06;
+% r24=0.06;
+% r25=0.04;
+% r34=0.01;
+% r35=0;
+% r45=0.08;
+% 
+% % xtcsc=-6.5029e-6;
+% xtcsc=-0.1;
+% x12=1i*0.06;
+% x13=1i*0.24;
+% x14=1i*0;
+% x15=1i*0;
+% x23=1i*0.18;
+% x24=1i*0.18;
+% x25=1i*0.12;
+% x34=0;
+% x35=1i*0;
+% x45=1i*0.24;
+% 
+% 
+% b12=1i*0.06;
+% b13=1i*0.05;
+% b14=0;
+% b15=0;
+% b23=1i*0.04;
+% b24=1i*0.04;
+% b25=1i*0.03;
+% b34=1i*0.02;
+% b35=0;
+% b45=1i*0.05;
+% 
+% 
+% 
+% n=5;
+% Preg=0.21;
+% GenP=[0;0.4;0;0;0];
+% GenQ=[0;0;0;0;0];
+% LoadP=[0;.20;.45;.40;.60];
+% LoadQ=[0;.10;.15;.05;.10];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1.06;1;1;1;1];
+% Vp=[0;0.1;0.2;0.3;0.4];
+% Ym=zeros(n,n);
+% Yp=zeros(n,n);
+% maxiter=20;
+% history1=[];
+% history2=[];
+% 
+%     
+% for iteration=1:maxiter
+%     
+%     Y=[
+%         (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2), (-1/(r12+x12)), (-1/(r13+x13)), 0, 0;
+%         (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2)+(1/(r24+x24))+(b24/2)+(1/(r25+x25))+(b25/2), (-1/(r23+x23)), (-1/(r24+x24)), (-1/(r25+x25));
+%         (-1/(r13+x13)), (-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34+1i*xtcsc))+(b34/2), (-1/(r34+x34+1i*xtcsc)), 0;
+%         0, (-1/(r24+x24)), (-1/(r34+x34+1i*xtcsc)), (1/(r24+x24))+(b24/2)+(1/(r34+x34+1i*xtcsc))+(b34/2)+(1/(r45+x45))+(b45/2), (-1/(r45+x45));
+%         0, (-1/(r25+x25)), 0, (-1/(r45+x45)), (1/(r25+x25))+(b25/2)+(1/(r45+x45))+(b45/2);
+%         ];
+%     
+%     for t=1:n
+%         for k=1:n
+%             Ym(t,k)=abs(Y(t,k));
+%             Yp(t,k)=phase(Y(t,k));
+%         end
+%     end
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for x=1:n
+%         P=0;
+%         Q=0;
+%         for k=1:n
+%             P=P+abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*cos(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%             Q=Q-abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*sin(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%         end
+%         CalcP(x,1)=P;
+%         CalcQ(x,1)=Q;
+%     end
+% 
+% 
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     DeltaPowers=[DeltaPowers;Preg-(abs(Vm(3))*abs(Vm(4))*(1/(xtcsc))*sin((Vp(3))-(Vp(4))))];
+%     
+%     for y=2:n
+%         for o=2:n
+%             if (y==o)
+%                 for k=1:n
+%                     if (k~=y)
+%                         J1(y-1,o-1)=J1(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     else
+%                         J1(y-1,o-1)=J1(y-1,o-1)+0;
+%                         J2(y-1,o-1)=J2(y-1,o-1)+2*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+0;
+%                         J4(y-1,o-1)=J4(y-1,o-1)-2*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(y-1,o-1)=J1(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J3(y-1,o-1)=J3(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%             end
+%         end
+%     end
+%     
+%     J2(1,1)=0;
+%     J2(2,1)=0;
+%     J2(3,1)=0;
+%     J2(4,1)=0;
+%     J4(1,1)=1;
+%     J4(2,1)=0;
+%     J4(3,1)=0;
+%     J4(4,1)=0;
+%     
+%     J=[J1 J2;J3 J4];
+%     
+% %     P3=Vm3*Vm4*sin(vp3-vp4)/xtcsc
+% %     P4=Vm4*Vm3*sin(vp4-vp3)/xtcsc
+% %     Q3=Vm3*Vm3/xtcsc-Vm3*Vm4*cos(vp3-vp4)/xtcsc
+% %     Q4=Vm4*Vm4/xtcsc-Vm4*Vm3*cos(vp4-vp3)/xtcsc
+%     
+%     J(2,9)=-abs(Vm(3))*abs(Vm(4))*sin((Vp(3))-(Vp(4)))*(1/xtcsc)*(1/xtcsc);
+%     J(3,9)=-abs(Vm(4))*abs(Vm(3))*sin((Vp(4))-(Vp(3)))*(1/xtcsc)*(1/xtcsc);
+%     J(6,9)=-abs(Vm(3))*abs(Vm(3))                     *(1/xtcsc)*(1/xtcsc)+abs(Vm(3))*abs(Vm(4))*cos((Vp(3))-(Vp(4)))*(1/xtcsc)*(1/xtcsc);
+%     J(7,9)=-abs(Vm(4))*abs(Vm(4))                     *(1/xtcsc)*(1/xtcsc)+abs(Vm(4))*abs(Vm(3))*cos((Vp(4))-(Vp(3)))*(1/xtcsc)*(1/xtcsc);
+%     J(9,9)=-abs(Vm(3))*abs(Vm(4))*sin((Vp(3))-(Vp(4)))*(1/xtcsc)*(1/xtcsc);
+%     
+%     J(9,2)=+abs(Vm(3))*abs(Vm(4))*cos((Vp(3))-(Vp(4)))*(1/xtcsc);
+%     J(9,3)=-abs(Vm(3))*abs(Vm(4))*cos((Vp(3))-(Vp(4)))*(1/xtcsc);
+%     J(9,6)=            abs(Vm(4))*sin((Vp(3))-(Vp(4)))*(1/xtcsc);
+%     J(9,7)= abs(Vm(3))           *sin((Vp(3))-(Vp(4)))*(1/xtcsc);
+%     
+% 
+% 
+%     DeltaVoltage=J\DeltaPowers;
+% %     iteration
+% %     Vm
+% %     Vp
+% %     Y
+% %     CalcP
+% %     CalcQ
+% %     J
+% %     inv(J)
+% %     DeltaPowers
+% %     DeltaVoltage
+% %     (abs(Vm(3))*abs(Vm(4))*(1/xtcsc)*sin((Vp(3))-(Vp(4))))
+% %     xtcsc
+% %     DeltaVoltage((2*(n-1))+1,1)
+% 
+%     history1(iteration)=(abs(Vm(3))*abs(Vm(4))*(1/xtcsc)*sin((Vp(3))-(Vp(4))));
+%     history2(iteration)=xtcsc;
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0;0; DeltaVoltage((n+1):(2*(n-1)),1);];
+%     xtcsc=xtcsc+DeltaVoltage((2*(n-1))+1,1);
+% 
+%     GenQ(2,1)=GenQ(2,1)+DeltaVoltage(n,1);
+% 
+% end
+% subplot(2,1,1); plot(history1);
+% title('Regulated Power P_3_4');
+% subplot(2,1,2); plot(history2);
+% title('X_T_C_S_C');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% n=2;
+% GenP=[0;0];
+% GenQ=[0;0];
+% LoadP=[0;1];
+% LoadQ=[0;0.5];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1;1];
+% Vp=[0;0];
+% Y=[-10j 10j;10j -10j];
+% maxiter=2;
+% 
+% for iteration=1:maxiter
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     for i=1:n
+%         P=0;
+%         Q=0;
+%         for j=1:n
+%             P=P+abs(Vm(i))*abs(Y(i,j))*abs(Vm(j))*cos(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%             Q=Q-abs(Vm(i))*abs(Y(i,j))*abs(Vm(j))*sin(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%         end
+%         CalcP(i,1)=P;
+%         CalcQ(i,1)=Q;
+%     end
+%     
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     
+%     for i=2:n
+%         for j=2:n
+%             if (i==j)
+%                 for k=1:n
+%                     if (k~=i)
+%                         J1(i-1,j-1)=J1(i-1,j-1)+abs(Vm(i))*abs(Y(i,k))*abs(Vm(k))*sin(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                         J2(i-1,j-1)=J2(i-1,j-1)+           abs(Y(i,k))*abs(Vm(k))*cos(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                         J3(i-1,j-1)=J3(i-1,j-1)+abs(Vm(i))*abs(Y(i,k))*abs(Vm(k))*cos(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                         J4(i-1,j-1)=J4(i-1,j-1)-           abs(Y(i,k))*abs(Vm(k))*sin(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                     else
+%                         J1(i-1,j-1)=J1(i-1,j-1)+0;
+%                         J2(i-1,j-1)=J2(i-1,j-1)+2*abs(Y(i,k))*abs(Vm(k))*cos(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                         J3(i-1,j-1)=J3(i-1,j-1)+0;
+%                         J4(i-1,j-1)=J4(i-1,j-1)-2*abs(Y(i,k))*abs(Vm(k))*sin(phase(Y(i,k))-(Vp(i))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(i-1,j-1)=J1(i-1,j-1)-abs(Vm(i))*abs(Y(i,j))*abs(Vm(j))*sin(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%                 J2(i-1,j-1)=J2(i-1,j-1)+           abs(Y(i,j))*abs(Vm(j))*cos(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%                 J3(i-1,j-1)=J3(i-1,j-1)-abs(Vm(i))*abs(Y(i,j))*abs(Vm(j))*cos(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%                 J4(i-1,j-1)=J4(i-1,j-1)-           abs(Y(i,j))*abs(Vm(j))*sin(phase(Y(i,j))-(Vp(i))+(Vp(j)));
+%             end
+%         end
+%     end
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=(eye(n,n)/J)*DeltaPowers;
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0; DeltaVoltage(n:2*(n-1),1)];
+%     %%iteration
+%     %%Vm
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% x12=j*0.025;
+% x13=j*0.05;
+% x23=j*0.025;
+% 
+% bsvc=0.1;
+% 
+% Y=[
+%     (1/(x12))+(1/(x13)), (-1/(x12)), (-1/(x13)); 
+%     (-1/(x12)), (1/(x12))+(1/(x23)),(-1/(x23));
+%     (-1/(x13)),(-1/(x23)), (1/(x13))+(1/(x23))+j*bsvc
+% ];
+% for x=1:3
+%     for y=1:3
+%         Ym(x,y)=abs(Y(x,y));
+%         Yp(x,y)=phase(Y(x,y));
+%     end
+% end
+% 
+% n=3;
+% GenP=[0;0;0];
+% GenQ=[0;0;0];
+% LoadP=[0;4;0];
+% LoadQ=[0;2;0];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1.25;1;1.05];
+% Vp=[0;0;0];
+% %%Y=[-10j 10j;10j -10j];
+% maxiter=1;
+% 
+% Y
+% NetP
+% NetQ
+% 
+% 
+% for iteration=1:maxiter
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for v=1:n
+%         P=0;
+%         Q=0;
+%         for w=1:n
+%             P=P+abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*cos(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%             %%P=P+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*cos(Vp(i)-Vp(j))+imag(Y(i,j))*sin(Vp(i)-Vp(j)));
+%             %%Q=Q+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*sin(Vp(i)-Vp(j))-imag(Y(i,j))*cos(Vp(i)-Vp(j)));
+%             Q=Q-abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*sin(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%         end
+%         CalcP(v,1)=P;
+%         CalcQ(v,1)=Q;
+%     end
+%     
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     
+%     for p=2:n
+%         for q=2:n
+%             if (p==q)
+%                 for k=1:n
+%                     if (k~=p)
+%                         J1(p-1,q-1)=J1(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     else
+%                         J1(p-1,q-1)=J1(p-1,q-1)+0;
+%                         J2(p-1,q-1)=J2(p-1,q-1)+2*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+0;
+%                         J4(p-1,q-1)=J4(p-1,q-1)-2*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(p-1,q-1)=J1(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J3(p-1,q-1)=J3(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%             end
+%         end
+%     end
+%     
+%     J2(1,2)=0;
+%     J2(2,2)=0;
+%     J4(1,2)=0;
+%     J4(2,2)=-Vm(3)*Vm(3);
+% 
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     Vm
+%     Vp
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0; DeltaVoltage(n:2*(n-1),1)];
+%     
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% x12=j*0.1;
+% n=2;
+% 
+% Y=[
+%     (1/(x12)), (-1/(x12)); 
+%     (-1/(x12)), (1/(x12))
+% ];
+% 
+% 
+% for x=1:n
+%     for y=1:n
+%         Ym(x,y)=abs(Y(x,y));
+%         Yp(x,y)=phase(Y(x,y));
+%     end
+% end
+% 
+% GenP=[0;0];
+% GenQ=[0;0];
+% LoadP=[0;1];
+% LoadQ=[0;0.5];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1;1];
+% Vp=[0;0];
+% maxiter=2;
+% 
+% Y
+% NetP
+% NetQ
+% 
+% 
+% for iteration=1:maxiter
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for v=1:n
+%         P=0;
+%         Q=0;
+%         for w=1:n
+%             P=P+abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*cos(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%             %%P=P+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*cos(Vp(i)-Vp(j))+imag(Y(i,j))*sin(Vp(i)-Vp(j)));
+%             %%Q=Q+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*sin(Vp(i)-Vp(j))-imag(Y(i,j))*cos(Vp(i)-Vp(j)));
+%             Q=Q-abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*sin(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%         end
+%         CalcP(v,1)=P;
+%         CalcQ(v,1)=Q;
+%     end
+%     
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     
+%     for p=2:n
+%         for q=2:n
+%             if (p==q)
+%                 for k=1:n
+%                     if (k~=p)
+%                         J1(p-1,q-1)=J1(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     else
+%                         J1(p-1,q-1)=J1(p-1,q-1)+0;
+%                         J2(p-1,q-1)=J2(p-1,q-1)+2*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+0;
+%                         J4(p-1,q-1)=J4(p-1,q-1)-2*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(p-1,q-1)=J1(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J3(p-1,q-1)=J3(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%             end
+%         end
+%     end
+%     
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     Vm
+%     Vp
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0; DeltaVoltage(n:2*(n-1),1)];
+%     
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% r12=0.07;
+% r13=0.05;
+% r14=0.05;
+% r23=0.04;
+% r24=0.06;
+% r34=0.03;
+% x12=1i*0.21;
+% x13=1i*0.15;
+% x14=1i*0.15;
+% x23=1i*0.24;
+% x24=1i*0.18;
+% x34=1i*0.09;
+% 
+% b12=0;
+% b13=0;
+% b14=0;
+% b23=0;
+% b34=0;
+% 
+% 
+% bsvc=0.1;
+% 
+% n=4;
+% GenP=[0;0;0;0];
+% GenQ=[0;0;0;0];
+% LoadP=[0;0.9;1;0.8];
+% LoadQ=[0;0.3;0.7;0.4];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1;1;1;1];
+% Vp=[0;0;0;0];
+% Ym=zeros(4,4);
+% Yp=zeros(4,4);
+% %%Y=[-10j 10j;10j -10j];
+% maxiter=20;
+% 
+% 
+% for iteration=1:maxiter
+%         
+% %     Y=[
+% %         (1/(r12+x12))+(b12/2)+(1/(r13+x13))+(b13/2)+(1/(r14+x14))+(b14/2), (-1/(r12+x12)), (-1/(r13+x13)), (-1/(r14+x14));
+% %         (-1/(r12+x12)), (1/(r12+x12))+(b12/2)+(1/(r23+x23))+(b23/2),(-1/(r23+x23)), 0;
+% %         (-1/(r13+x13)),(-1/(r23+x23)), (1/(r13+x13))+(b13/2)+(1/(r23+x23))+(b23/2)+(1/(r34+x34))+(b34/2)+(bsvc*j),(-1/(r34+x34));
+% %         (-1/(r14+x14)),0,(-1/(r34+x34)),(1/(r14+x14))+(b14/2)+(1/(r34+x34))+(b34/2);
+% %         ];
+%     Y=[
+%     (1/(r12+x12))+(1/(r13+x13))+(1/(r14+x14)), (-1/(r12+x12)), (-1/(r13+x13)), (-1/(r14+x14)); 
+%     (-1/(r12+x12)), (1/(r12+x12))+(1/(r23+x23))+(1/(r24+x24)),(-1/(r23+x23)), (-1/(r24+x24));
+%     (-1/(r13+x13)),(-1/(r23+x23)), (1/(r13+x13))+(1/(r23+x23))+(1/(r34+x34))+(bsvc*1i),(-1/(r34+x34));
+%     (-1/(r14+x14)),(-1/(r24+x24)),(-1/(r34+x34)),(1/(r14+x14))+(1/(r24+x24))+(1/(r34+x34));
+% ];
+%     for t=1:4
+%         for k=1:4
+%             Ym(t,k)=abs(Y(t,k));
+%             Yp(t,k)=phase(Y(t,k));
+%         end
+%     end
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for x=1:n
+%         P=0;
+%         Q=0;
+%         for k=1:n
+%             P=P+abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*cos(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%             Q=Q-abs(Vm(x))*abs(Y(x,k))*abs(Vm(k))*sin(phase(Y(x,k))-(Vp(x))+(Vp(k)));
+%         end
+%         CalcP(x,1)=P;
+%         CalcQ(x,1)=Q;
+%     end
+%     
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     
+%     for y=2:n
+%         for o=2:n
+%             if (y==o)
+%                 for k=1:n
+%                     if (k~=y)
+%                         J1(y-1,o-1)=J1(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+abs(Vm(y))*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     else
+%                         J1(y-1,o-1)=J1(y-1,o-1)+0;
+%                         J2(y-1,o-1)=J2(y-1,o-1)+2*abs(Y(y,k))*abs(Vm(k))*cos(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                         J3(y-1,o-1)=J3(y-1,o-1)+0;
+%                         J4(y-1,o-1)=J4(y-1,o-1)-2*abs(Y(y,k))*abs(Vm(k))*sin(phase(Y(y,k))-(Vp(y))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(y-1,o-1)=J1(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J2(y-1,o-1)=J2(y-1,o-1)+           abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J3(y-1,o-1)=J3(y-1,o-1)-abs(Vm(y))*abs(Y(y,o))*abs(Vm(o))*cos(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%                 J4(y-1,o-1)=J4(y-1,o-1)-           abs(Y(y,o))*abs(Vm(o))*sin(phase(Y(y,o))-(Vp(y))+(Vp(o)));
+%             end
+%         end
+%     end
+%     J2(1,2)=0;
+%     J2(2,2)=0;
+%     J2(3,2)=0;
+%     J4(1,2)=0;
+%     J4(2,2)=-1;
+%     J4(3,2)=0;
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+% %     bsvc
+%     Vm
+% %     Vp
+% %     Y
+% %     CalcP
+% %     CalcQ
+% %     J
+% %     inv(J)
+% %     DeltaPowers
+% %     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0; DeltaVoltage(n,1);0;DeltaVoltage(2*(n-1),1)];
+%     bsvc=(bsvc+(DeltaVoltage(n+1,1)));
+%     %%iteration
+%     %%Vm
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% r12=0.07;
+% r13=0.05;
+% r14=0.05;
+% r23=0.04;
+% r24=0.06;
+% r34=0.03;
+% x12=j*0.21;
+% x13=j*0.15;
+% x14=j*0.15;
+% x23=j*0.24;
+% x24=j*0.18;
+% x34=j*0.09;
+% 
+% b12=0;
+% b13=0;
+% b14=0;
+% b23=0;
+% b34=0;
+% 
+% Y=[
+%     (1/(r12+x12))+(1/(r13+x13))+(1/(r14+x14)), (-1/(r12+x12)), (-1/(r13+x13)), (-1/(r14+x14)); 
+%     (-1/(r12+x12)), (1/(r12+x12))+(1/(r23+x23))+(1/(r24+x24)),(-1/(r23+x23)), (-1/(r24+x24));
+%     (-1/(r13+x13)),(-1/(r23+x23)), (1/(r13+x13))+(1/(r23+x23))+(1/(r34+x34)),(-1/(r34+x34));
+%     (-1/(r14+x14)),(-1/(r24+x24)),(-1/(r34+x34)),(1/(r14+x14))+(1/(r24+x24))+(1/(r34+x34));
+% ];
+% for x=1:4
+%     for y=1:4
+%         Ym(x,y)=abs(Y(x,y));
+%         Yp(x,y)=phase(Y(x,y));
+%     end
+% end
+% 
+% n=4;
+% GenP=[0;0;0;0];
+% GenQ=[0;0;0;0];
+% LoadP=[0;0.9;1;0.8];
+% LoadQ=[0;0.3;0.7;0.4];
+% NetP=GenP-LoadP;
+% NetQ=GenQ-LoadQ;
+% Vm=[1;1;1;1];
+% Vp=[0;0;0;0];
+% %%Y=[-10j 10j;10j -10j];
+% maxiter=5;
+% 
+% Y
+% NetP
+% NetQ
+% 
+% 
+% for iteration=1:maxiter
+%     
+%     J1=zeros(n-1,n-1);
+%     J2=zeros(n-1,n-1);
+%     J3=zeros(n-1,n-1);
+%     J4=zeros(n-1,n-1);
+%     DeltaP=zeros(n-1,1);
+%     DeltaQ=zeros(n-1,1);
+%     DeltaPowers =zeros(2*(n-1),1);
+%     CalcP=zeros(n,1);
+%     CalcQ=zeros(n,1);
+%     for v=1:n
+%         P=0;
+%         Q=0;
+%         for w=1:n
+%             P=P+abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*cos(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%             %%P=P+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*cos(Vp(i)-Vp(j))+imag(Y(i,j))*sin(Vp(i)-Vp(j)));
+%             %%Q=Q+abs(Vm(i))*abs(Vm(j))*(real(Y(i,j))*sin(Vp(i)-Vp(j))-imag(Y(i,j))*cos(Vp(i)-Vp(j)));
+%             Q=Q-abs(Vm(v))*abs(Y(v,w))*abs(Vm(w))*sin(phase(Y(v,w))-(Vp(v))+(Vp(w)));
+%         end
+%         CalcP(v,1)=P;
+%         CalcQ(v,1)=Q;
+%     end
+%     
+%     
+%     DeltaP=NetP-CalcP;
+%     DeltaP=DeltaP(2:n,1);
+%     DeltaQ=NetQ-CalcQ;
+%     DeltaQ=DeltaQ(2:n,1);
+%     DeltaPowers=[DeltaP;DeltaQ];
+%     
+%     for p=2:n
+%         for q=2:n
+%             if (p==q)
+%                 for k=1:n
+%                     if (k~=p)
+%                         J1(p-1,q-1)=J1(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+abs(Vm(p))*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     else
+%                         J1(p-1,q-1)=J1(p-1,q-1)+0;
+%                         J2(p-1,q-1)=J2(p-1,q-1)+2*abs(Y(p,k))*abs(Vm(k))*cos(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                         J3(p-1,q-1)=J3(p-1,q-1)+0;
+%                         J4(p-1,q-1)=J4(p-1,q-1)-2*abs(Y(p,k))*abs(Vm(k))*sin(phase(Y(p,k))-(Vp(p))+(Vp(k)));
+%                     end
+%                 end
+%             else
+%                 J1(p-1,q-1)=J1(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J2(p-1,q-1)=J2(p-1,q-1)+           abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J3(p-1,q-1)=J3(p-1,q-1)-abs(Vm(p))*abs(Y(p,q))*abs(Vm(q))*cos(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%                 J4(p-1,q-1)=J4(p-1,q-1)-           abs(Y(p,q))*abs(Vm(q))*sin(phase(Y(p,q))-(Vp(p))+(Vp(q)));
+%             end
+%         end
+%     end
+%     J=[J1 J2;J3 J4];
+%     DeltaVoltage=inv(J)*DeltaPowers;
+%     iteration
+%     Vm
+%     Vp
+%     J
+%     inv(J)
+%     DeltaPowers
+%     DeltaVoltage
+% 
+%     Vp=Vp+[0; DeltaVoltage(1:n-1,1)];
+%     Vm=Vm+[0; DeltaVoltage(n:2*(n-1),1)];
+%     
+% end
