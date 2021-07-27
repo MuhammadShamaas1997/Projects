@@ -1,0 +1,5 @@
+main
+	InitMain
+		SPI1_Init
+	DAC_Output
+		SPI1_Write

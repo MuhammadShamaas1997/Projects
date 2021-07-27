@@ -1,0 +1,491 @@
+
+<html>
+<head>
+        <title>Reversi</title>
+        <h1 id="Title"></h1>
+        <script src="/socket.io/socket.io.js"></script>        
+</head>
+    
+<body style="padding: 80px">
+    <script type="text/javascript">
+            var sio=io();
+            var Title=document.getElementById('Title');
+            setInterval(()=>{sio.emit('clientMessage','')},50000)
+            sio.on('welcome',(data)=>{
+                if((parseInt(data))%2==0){
+                    player=blue;
+                    opponent=red;
+                    Title.innerHTML='Blue';
+                    myturn=false;
+                    done=true;
+                    document.getElementById("text").innerHTML="Opponent's turn"+" Your Score: "+player_score+" Opponent's Score: "+opponent_score;
+                }else{
+                    player=red;
+                    opponent=blue;
+                    Title.innerHTML='Red';
+                    myturn=true;
+                    done=false;
+                    document.getElementById("text").innerHTML="Your Turn"+" Your Score: "+player_score+" Opponent's Score: "+opponent_score;
+                }
+                SID=data;
+            });
+            sio.on('player_left',(data)=>{
+                if(data==SID){
+                    if(player_score>opponent_score){
+                        document.getElementById("text").innerHTML="Your opponent left. Your score:"+player_score.toString()+" Opponent score: "+opponent_score.toString()+" You win."
+                    }
+                    else if(player_score<opponent_score){
+                        document.getElementById("text").innerHTML="Your opponent left. Your score : "+player_score.toString()+" Opponent's score: "+opponent_score.toString()+" You lose."
+                    }else{
+                        document.getElementById("text").innerHTML="Your opponent left. Your score : "+player_score.toString()+" Opponent's score: "+opponent_score.toString()+" It's a tie"
+                    }
+                }
+            })
+            sio.on('serverMessage',(data)=>{
+                if(data==SID){
+                    myturn=true;
+                    document.getElementById("text").innerHTML="Your Turn"+" Your Score: "+player_score+" Opponent's Score: "+opponent_score;
+                }
+            });
+            sio.on('update',(data)=>{
+                var num=parseInt(data);
+                var col=num%10;
+                var row=Math.floor((num%100)/10);
+                next=Math.floor(num/100);
+                if(next.toString()==SID){
+                    document.getElementById(row.toString()+col.toString()).childNodes[0].src=opponent;
+                    document.getElementById(row.toString()+col.toString()).childNodes[0].alt=opponent;
+                    document.getElementById(row.toString()+col.toString()).childNodes[0].tag="changed";
+                    opponent_score++;
+                }
+            })
+            sio.on('game_over',(data)=>{
+                var num=parseInt(data);
+                var col=num%10;
+                var row=Math.floor((num%100)/10);
+                next=Math.floor(num/100);
+                if(data==SID){
+                    if(player_score>opponent_score){
+                        document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" opponent score: "+opponent_score.toString()+" You win."
+                    }
+                    else if(player_score<opponent_score){
+                        document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" opponent score: "+opponent_score.toString()+" You lose."
+                    }else{
+                            document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" opponent score: "+opponent_score.toString()+" You lose."
+                        }
+                    }
+            })
+    </script>
+        <h3 id="text"></h3>
+        <table id="table" border="0.1" background="" style="width: 400px; height: 400px; background-color: rgb(165,245,233);position: absolute;"> 
+            <caption></caption>
+                <script type="text/javascript">
+                    
+                    var blue="https://kimscrane.com/shop/4448-large_default/origami-paper-navy-blue-color-150-mm-40-sheets.jpg";
+                    var red="https://image.freepik.com/free-vector/red-geometrical-background_1085-125.jpg";
+                    var grey="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAADFBMVEWYmZuCg4WZmpxvcHGW7YJ5AAABTklEQVR4nO3QwQ3DMAwAMavef+cEfUW4FcgReO6w3TM/tnlPDl9Oykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJ/U/Y5txhuw874Aqpr4CHoAAAAABJRU5ErkJggg==";
+                    var green="https://static-cdn.jtvnw.net/jtv_user_pictures/e91a3dcf-c15a-441a-b369-996922364cdc-profile_image-300x300.png";
+                    var yellow="http://www.formica.com/~/media/emea/images/decors/eu/f0949.jpg?bmw=true&fd=true";
+
+                    var player,
+                    opponent,
+                    myturn,
+                    done,
+                    SID,
+                    player_score=0,
+                    opponent_score=0,
+                    game_over=false;
+
+                    function OME(x)
+                    {
+                        var ID=x.parentNode.id;
+                        var t=Math.floor(parseInt(ID)/10);
+                        var u=(parseInt(ID)%10);
+                        var cons=0;
+                        var t1=t;
+                        var u1=u;
+                        if((x.src!=player)&&(x.src!=opponent)){
+
+                        if(t<6){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if(t1<6){
+                                if(document.getElementById(((t1+1).toString()+u.toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    ++t1;
+                                }else{
+                                    i=8;
+                                }
+                            }
+                        }
+                        if(cons>0){
+                            if(document.getElementById(((t1+1).toString()+u.toString())).childNodes[0].src==player)
+                            {for(var j=0;j<=cons+1;j++){
+                                if(j<=cons){
+                                    document.getElementById(((t+j).toString()+u.toString())).childNodes[0].alt=opponent
+                                }else{
+                                    document.getElementById(((t+j).toString()+u.toString())).childNodes[0].alt=player;
+                                }
+                                document.getElementById(((t+j).toString()+u.toString())).childNodes[0].src=grey;
+                            }
+                        }
+                    }
+                    cons=0;
+                    t1=t;
+                    u1=u;
+                    }
+
+                        if(t>1){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if(t1>1){
+                                if(document.getElementById(((t1-1).toString()+u.toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    --t1;
+                                }else{
+                                    i=8;
+                                }
+                            }}
+                        if(cons>0){
+                            if(document.getElementById(((t1-1).toString()+u.toString())).childNodes[0].src==player)
+                            {for(var j=0;j<=cons+1;j++)
+                            {if(j<=cons){
+                                document.getElementById(((t-j).toString()+u.toString())).childNodes[0].alt=opponent}else{
+                                    document.getElementById(((t-j).toString()+u.toString())).childNodes[0].alt=player;
+                                }document.getElementById(((t-j).toString()+u.toString())).childNodes[0].src=grey;
+                            }}}
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        }
+
+                        if(u<6){cons=0;t1=t;u1=u;
+                        for(var i=0;i<8;++i){
+                            if(u1<6){
+                                if(document.getElementById(((t1).toString()+(u1+1).toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    ++u1;
+                                }else{
+                                    i=8;
+                                }}}
+                        if(cons>0){
+                            if(document.getElementById(((t1).toString()+(u1+1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){
+                                        document.getElementById(((t).toString()+(u+j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t).toString()+(u+j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t).toString()+(u+j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+
+                        if(u>1){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if(u1>1){
+                                if(document.getElementById(((t1).toString()+(u1-1).toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    --u1;
+                                }else{
+                                    i=8;
+                                }}}
+                        if(cons>0){
+                            if(document.getElementById(((t1).toString()+(u1-1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){
+                                        document.getElementById(((t).toString()+(u-j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t).toString()+(u-j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t).toString()+(u-j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+
+                        if((u<6)&&(t<6)){cons=0;t1=t;u1=u;
+                        for(var i=0;i<8;++i){
+                            if((t1<6)&&(u1<6)){
+                                if(document.getElementById(((t1+1).toString()+(u1+1).toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    ++u1;
+                                    ++t1
+                                }else{
+                                    i=8;
+                                }}}
+                        if(cons>0){
+                            if(document.getElementById(((t1+1).toString()+(u1+1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){document.getElementById(((t+j).toString()+(u+j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t+j).toString()+(u+j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t+j).toString()+(u+j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+
+                        if((u>1)&&(t>1)){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if((t1>1)&&(u1>1)){
+                                if(document.getElementById(((t1-1).toString()+(u1-1).toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    --u1;
+                                    --t1
+                                }else{
+                                    i=8;
+                                }}}
+                        if(cons>0){
+                            if(document.getElementById(((t1-1).toString()+(u1-1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){document.getElementById(((t-j).toString()+(u-j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t-j).toString()+(u-j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t-j).toString()+(u-j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+
+                        if((u>1)&&(t<6)){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if((t1<6)&&(u1>1)){
+                                if(document.getElementById(((t1+1).toString()+(u1-1).toString())).childNodes[0].src==opponent){
+                                    cons++;
+                                    --u1;
+                                    ++t1
+                                }else{
+                                    i=8;
+                                }}}
+                        if(cons>0){
+                            if(document.getElementById(((t1+1).toString()+(u1-1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){
+                                        document.getElementById(((t+j).toString()+(u-j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t+j).toString()+(u-j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t+j).toString()+(u-j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+
+                        if((u<6)&&(t>1)){
+                            cons=0;
+                            t1=t;
+                            u1=u;
+                        for(var i=0;i<8;++i){
+                            if((t1>1)&&(u1<6))if(document.getElementById(((t1-1).toString()+(u1+1).toString())).childNodes[0].src==opponent){
+                                cons++;
+                                ++u1;
+                                --t1
+                            }else{
+                                i=8;
+                            }}
+                        if(cons>0){
+                            if(document.getElementById(((t1-1).toString()+(u1+1).toString())).childNodes[0].src==player){
+                                for(var j=0;j<=cons+1;j++){
+                                    if(j<=cons){
+                                        document.getElementById(((t-j).toString()+(u+j).toString())).childNodes[0].alt=opponent
+                                    }else{
+                                        document.getElementById(((t-j).toString()+(u+j).toString())).childNodes[0].alt=player;
+                                    }document.getElementById(((t-j).toString()+(u+j).toString())).childNodes[0].src=grey;
+                                }}}
+                                cons=0;
+                                t1=t;
+                                u1=u;
+                            }
+                        }
+                    }   
+                    
+                    function OC(x){
+                        if(myturn){for(var i=0;i<8;i++){
+                            for(var j=0;j<8;j++){
+                    if (document.getElementById(i.toString()+j.toString()).childNodes[0].src==grey){
+                        document.getElementById(i.toString()+j.toString()).childNodes[0].src=player;
+                            document.getElementById(i.toString()+j.toString()).childNodes[0].tag="changed";
+                            document.getElementById(i.toString()+j.toString()).childNodes[0].alt=player;
+                            done=true;
+                            sio.emit('update',SID+i.toString()+j.toString());
+                            player_score++;
+                        }}
+                    }}if(done){
+                        myturn=false;done=false;
+                        document.getElementById("text").innerHTML="Opponent's Turn"+" Your Score: "+player_score+" Opponent's Score: "+opponent_score;
+                        sio.emit('clientMessage',SID);check();
+                        if(game_over){
+                            sio.emit('game_over',SID);{
+                                if(player_score>opponent_score){
+                                    document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" Opponent's score: "+opponent_score.toString()+" You win."
+                                }
+                        else if(player_score<opponent_score){
+                        document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" Opponent's score: "+opponent_score.toString()+" You lose."
+                        }else{
+                            document.getElementById("text").innerHTML="Your score : "+player_score.toString()+" Opponent's score: "+opponent_score.toString()+" You lose."
+                        }}}}
+                    }
+
+                    function OML(x){
+                        if(x.tag!="changed"){
+                        if((((Math.floor(parseInt(x.parentNode.id)/10))+(Math.floor(parseInt(x.parentNode.id)%10)))%2==0)){
+                            x.src=green;
+                        }else{
+                            x.src=yellow;
+                        }
+                    }
+                    for(var i=0;i<8;i++){
+                        for(var j=0;j<8;j++){
+                            if(document.getElementById(i.toString()+j.toString()).childNodes[0].src==grey){
+                                {
+                                    document.getElementById(i.toString()+j.toString()).childNodes[0].src=document.getElementById(i.toString()+j.toString()).childNodes[0].alt;
+                                }
+                                }
+                            }
+                        }
+                    }
+                    
+                </script>
+                <tr style="height: 50px">
+                    <td id="00" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="01" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="02" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="03" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="04" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="05" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="06" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="07" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="10" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="11" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="12" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="13" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="14" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="15" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="16" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="17" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="20" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="21" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="22" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="23" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="24" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="25" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="26" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="27" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="30" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="31" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="32" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="33" ><img></td>
+                    <td id="34" ><img></td>
+                    <td id="35" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="36" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="37" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="40" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="41" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="42" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="43" ><img></td>
+                    <td id="44" ><img></td>
+                    <td id="45" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="46" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="47" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="50" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="51" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="52" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="53" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="54" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="55" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="56" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="57" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="60" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="61" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="62" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="63" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="64" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="65" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="66" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="67" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                                <tr style="height: 50px">
+                    <td id="70" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="71" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="72" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="73" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="74" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="75" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="76" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                    <td id="77" ><img onmouseenter="OME(this)" onmouseleave="OML(this)" onclick="OC(this)"></td>
+                </tr>
+                <script type="text/javascript">
+                    for(var i=0;i<8;i++){
+                    for(var j=0;j<8;j++){
+                      if(((i+j)%2)==0){
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].src=green;
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].alt=green;
+                    }else{
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].src=yellow;
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].alt=yellow;
+                    }  
+                          document.getElementById((i.toString()+j.toString())).childNodes[0].height="50";
+                          document.getElementById((i.toString()+j.toString())).childNodes[0].width="50";
+                          document.getElementById((i.toString()+j.toString())).style.width=50;
+                          document.getElementById((i.toString()+j.toString())).style.height=50;
+                    }}
+                    for(var i=3;i<=4;i++){
+                    for(var j=3;j<=4;j++){
+                      if(((i+j)%2)==0){
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].src=blue;
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].tag="changed";
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].alt=blue;
+                      }else{
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].src=red;
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].tag="changed";
+                        document.getElementById((i.toString()+j.toString())).childNodes[0].alt=red;
+
+                      }  
+                    }}
+                    function check()
+                    {for(var i=0;i<8;i++)
+                        {for(var j=0;j<8;j++)
+                            {
+                                if((document.getElementById(i.toString()+j.toString()).childNodes[0].src==opponent)||(document.getElementById(i.toString()+j.toString()).childNodes[0].src==player)){
+                                    game_over=true;
+                                }else{
+                                    game_over=false;
+                                    j=8;
+                                    i=8;
+                                }
+                            }}
+                    }
+                    check();
+                </script>
+        </table>
+</body>
+</html>

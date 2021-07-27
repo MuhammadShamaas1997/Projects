@@ -1,0 +1,1867 @@
+
+Call Sent
+PacketSize:189
+InterArrivalTime:38
+Packet Waiting Time:932
+Time: +1000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:13697444
+PacketEnqueueTime: +4026374998.0ns
+Time: +4099999999.0ns
+]
+
+Call Sent
+PacketSize:4
+InterArrivalTime:9
+Packet Waiting Time:189
+Time: +39000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:1573309
+PacketEnqueueTime: +42003249998.0ns
+Time: +42100000000.0ns
+]
+
+Call Sent
+PacketSize:77
+InterArrivalTime:26
+Packet Waiting Time:390
+Time: +48000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6357382
+PacketEnqueueTime: +51012374999.0ns
+Time: +51100000000.0ns
+]
+
+Call Sent
+PacketSize:446
+InterArrivalTime:53
+Packet Waiting Time:197
+Time: +74000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:30540229
+PacketEnqueueTime: +77058499999.0ns
+Time: +77102999999.0ns
+]
+
+Call Sent
+PacketSize:51
+InterArrivalTime:6
+Packet Waiting Time:397
+Time: +127000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:4653452
+PacketEnqueueTime: +130009124998.0ns
+Time: +131212124999.0ns
+]
+
+Call Sent
+PacketSize:139
+InterArrivalTime:4
+Packet Waiting Time:243
+Time: +133000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:62
+InterArrivalTime:12
+Packet Waiting Time:85
+Time: +137000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:78
+InterArrivalTime:30
+Packet Waiting Time:597
+Time: +149000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:349
+InterArrivalTime:16
+Packet Waiting Time:254
+Time: +179000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:10420674
+PacketEnqueueTime: +136020125000.0ns
+Time: +185320999999.0ns
+]
+
+Call Sent
+PacketSize:113
+InterArrivalTime:4
+Packet Waiting Time:592
+Time: +195000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:5374237
+PacketEnqueueTime: +140010500000.0ns
+Time: +196226124999.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:31
+InterArrivalTime:1
+Packet Waiting Time:122
+Time: +199000000000.0ns
+]
+
+Call Sent
+PacketSize:23
+InterArrivalTime:29
+Packet Waiting Time:442
+Time: +200000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Call Sent
+PacketSize:5
+InterArrivalTime:2
+Packet Waiting Time:269
+Time: +229000000000.0ns
+]
+
+Call Sent
+PacketSize:425
+InterArrivalTime:12
+Packet Waiting Time:209
+Time: +231000000000.0ns
+]
+
+Packet Dropped , MaximumQueueLimit Exceeded
+
+Packet Dropped , MaximumQueueLimit Exceeded
+
+Queue Abandonement 
+Packet Waiting Time: +84987500001.0ns
+Time: +237000000000.0ns
+]
+
+Call Sent
+PacketSize:91
+InterArrivalTime:28
+Packet Waiting Time:63
+Time: +243000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Packet Removed from Queue
+Packet Address:24183215
+PacketEnqueueTime: +182046374998.0ns
+Time: +261336374998.0ns
+]
+
+Call Sent
+PacketSize:16
+InterArrivalTime:8
+Packet Waiting Time:161
+Time: +271000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Queue Abandonement 
+Packet Waiting Time: +79983125001.0ns
+Time: +278000000000.0ns
+]
+
+Call Sent
+PacketSize:65
+InterArrivalTime:6
+Packet Waiting Time:251
+Time: +279000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Call Sent
+PacketSize:12
+InterArrivalTime:85
+Packet Waiting Time:179
+Time: +285000000000.0ns
+]
+
+Packet Dropped , MaximumQueueLimit Exceeded
+
+Queue Abandonement 
+Packet Waiting Time: +62985875000.0ns
+Time: +309000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +121993375002.0ns
+Time: +324000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:2818366
+PacketEnqueueTime: +203005624998.0ns
+Time: +327440874999.0ns
+]
+
+Packet Removed from Queue
+Packet Address:2359634
+PacketEnqueueTime: +274004749999.0ns
+Time: +353546249998.0ns
+]
+
+Call Sent
+PacketSize:238
+InterArrivalTime:74
+Packet Waiting Time:56
+Time: +370000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:5570977
+PacketEnqueueTime: +282010874999.0ns
+Time: +372650749996.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Queue Abandonement 
+Packet Waiting Time: +55967500000.0ns
+Time: +429000000000.0ns
+]
+
+Call Sent
+PacketSize:101
+InterArrivalTime:36
+Packet Waiting Time:22
+Time: +444000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:7930134
+PacketEnqueueTime: +447015374999.0ns
+Time: +447061374996.0ns
+]
+
+Call Sent
+PacketSize:289
+InterArrivalTime:22
+Packet Waiting Time:23
+Time: +480000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:28
+InterArrivalTime:38
+Packet Waiting Time:168
+Time: +502000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Queue Abandonement 
+Packet Waiting Time: +22961125002.0ns
+Time: +506000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:3146131
+PacketEnqueueTime: +505006250000.0ns
+Time: +526261250000.0ns
+]
+
+Call Sent
+PacketSize:70
+InterArrivalTime:5
+Packet Waiting Time:407
+Time: +540000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:187
+InterArrivalTime:2
+Packet Waiting Time:749
+Time: +545000000000.0ns
+]
+
+Call Sent
+PacketSize:56
+InterArrivalTime:2
+Packet Waiting Time:884
+Time: +547000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:198
+InterArrivalTime:41
+Packet Waiting Time:180
+Time: +549000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Packet Removed from Queue
+Packet Address:5898639
+PacketEnqueueTime: +543011499998.0ns
+Time: +551176499995.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Packet Removed from Queue
+Packet Address:13566436
+PacketEnqueueTime: +548026124998.0ns
+Time: +557367250000.0ns
+]
+
+Call Sent
+PacketSize:93
+InterArrivalTime:1
+Packet Waiting Time:456
+Time: +590000000000.0ns
+]
+
+Call Sent
+PacketSize:120
+InterArrivalTime:30
+Packet Waiting Time:1070
+Time: +591000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:4981045
+PacketEnqueueTime: +550009749998.0ns
+Time: +613482499997.0ns
+]
+
+Call Sent
+PacketSize:6
+InterArrivalTime:30
+Packet Waiting Time:291
+Time: +621000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:14287212
+PacketEnqueueTime: +552027500000.0ns
+Time: +624287749995.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +45982250002.0ns
+Time: +640000000000.0ns
+]
+
+Call Sent
+PacketSize:46
+InterArrivalTime:23
+Packet Waiting Time:362
+Time: +651000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Queue Abandonement 
+Packet Waiting Time: +34996500000.0ns
+Time: +659000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:7405945
+PacketEnqueueTime: +593014374999.0ns
+Time: +672591999997.0ns
+]
+
+Call Sent
+PacketSize:24
+InterArrivalTime:10
+Packet Waiting Time:97
+Time: +674000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:28
+InterArrivalTime:29
+Packet Waiting Time:50
+Time: +684000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:261
+InterArrivalTime:16
+Packet Waiting Time:460
+Time: +713000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Call Sent
+PacketSize:27
+InterArrivalTime:43
+Packet Waiting Time:2174
+Time: +729000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Queue Abandonement 
+Packet Waiting Time: +49993750000.0ns
+Time: +737000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:4325645
+PacketEnqueueTime: +654008500000.0ns
+Time: +747493124998.0ns
+]
+
+Packet Removed from Queue
+Packet Address:2883846
+PacketEnqueueTime: +677005749999.0ns
+Time: +768706124996.0ns
+]
+
+Call Sent
+PacketSize:56
+InterArrivalTime:49
+Packet Waiting Time:577
+Time: +772000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Packet Removed from Queue
+Packet Address:18415997
+PacketEnqueueTime: +716035374999.0ns
+Time: +795811624995.0ns
+]
+
+Packet Removed from Queue
+Packet Address:3080510
+PacketEnqueueTime: +732006124999.0ns
+Time: +796601374998.0ns
+]
+
+Call Sent
+PacketSize:9
+InterArrivalTime:25
+Packet Waiting Time:166
+Time: +821000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:4981007
+PacketEnqueueTime: +775009749998.0ns
+Time: +825414999994.0ns
+]
+
+Packet Removed from Queue
+Packet Address:1900964
+PacketEnqueueTime: +824003874999.0ns
+Time: +826707249999.0ns
+]
+
+Call Sent
+PacketSize:28
+InterArrivalTime:21
+Packet Waiting Time:92
+Time: +846000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:3146076
+PacketEnqueueTime: +849006250000.0ns
+Time: +849010874998.0ns
+]
+
+Call Sent
+PacketSize:350
+InterArrivalTime:17
+Packet Waiting Time:281
+Time: +867000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:24248591
+PacketEnqueueTime: +870046499999.0ns
+Time: +880116874998.0ns
+]
+
+Call Sent
+PacketSize:146
+InterArrivalTime:35
+Packet Waiting Time:152
+Time: +884000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:10879384
+PacketEnqueueTime: +887020999999.0ns
+Time: +887024499992.0ns
+]
+
+Call Sent
+PacketSize:184
+InterArrivalTime:7
+Packet Waiting Time:107
+Time: +919000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:19
+InterArrivalTime:81
+Packet Waiting Time:70
+Time: +926000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Queue Abandonement 
+Packet Waiting Time: +69994875000.0ns
+Time: +999000000000.0ns
+]
+
+Call Sent
+PacketSize:214
+InterArrivalTime:1
+Packet Waiting Time:811
+Time: +1007000000000.0ns
+]
+
+Call Sent
+PacketSize:96
+InterArrivalTime:73
+Packet Waiting Time:169
+Time: +1008000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Queue Abandonement 
+Packet Waiting Time: +106974250001.0ns
+Time: +1029000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:15335697
+PacketEnqueueTime: +1010029499998.0ns
+Time: +1036145249993.0ns
+]
+
+Packet Removed from Queue
+Packet Address:7602553
+PacketEnqueueTime: +1011014749998.0ns
+Time: +1059946749996.0ns
+]
+
+Call Sent
+PacketSize:55
+InterArrivalTime:38
+Packet Waiting Time:1737
+Time: +1081000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:48
+InterArrivalTime:12
+Packet Waiting Time:45
+Time: +1119000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:18
+InterArrivalTime:3
+Packet Waiting Time:424
+Time: +1131000000000.0ns
+]
+
+Call Sent
+PacketSize:43
+InterArrivalTime:23
+Packet Waiting Time:115
+Time: +1134000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Call Sent
+PacketSize:261
+InterArrivalTime:40
+Packet Waiting Time:653
+Time: +1157000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:4915582
+PacketEnqueueTime: +1084009624998.0ns
+Time: +1159061249996.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Queue Abandonement 
+Packet Waiting Time: +44991250001.0ns
+Time: +1167000000000.0ns
+]
+
+Call Sent
+PacketSize:84
+InterArrivalTime:32
+Packet Waiting Time:386
+Time: +1197000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:2490709
+PacketEnqueueTime: +1134005000000.0ns
+Time: +1217170624995.0ns
+]
+
+Call Sent
+PacketSize:45
+InterArrivalTime:97
+Packet Waiting Time:1191
+Time: +1229000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:4129043
+PacketEnqueueTime: +1137008125000.0ns
+Time: +1233263124997.0ns
+]
+
+Packet Removed from Queue
+Packet Address:18415935
+PacketEnqueueTime: +1160035374998.0ns
+Time: +1238275374994.0ns
+]
+
+Packet Removed from Queue
+Packet Address:6816077
+PacketEnqueueTime: +1200013249998.0ns
+Time: +1253274499993.0ns
+]
+
+Packet Removed from Queue
+Packet Address:4260216
+PacketEnqueueTime: +1232008374999.0ns
+Time: +1279370999997.0ns
+]
+
+Call Sent
+PacketSize:42
+InterArrivalTime:38
+Packet Waiting Time:182
+Time: +1326000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:4063670
+PacketEnqueueTime: +1329008000000.0ns
+Time: +1329079124997.0ns
+]
+
+Call Sent
+PacketSize:279
+InterArrivalTime:21
+Packet Waiting Time:41
+Time: +1364000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:19595561
+PacketEnqueueTime: +1367037624998.0ns
+Time: +1367087499991.0ns
+]
+
+Call Sent
+PacketSize:136
+InterArrivalTime:1
+Packet Waiting Time:589
+Time: +1385000000000.0ns
+]
+
+Call Sent
+PacketSize:27
+InterArrivalTime:33
+Packet Waiting Time:257
+Time: +1386000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:10223949
+PacketEnqueueTime: +1388019749999.0ns
+Time: +1388086874996.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Queue Abandonement 
+Packet Waiting Time: +993875000.0ns
+Time: +1390000000000.0ns
+]
+
+Call Sent
+PacketSize:52
+InterArrivalTime:4
+Packet Waiting Time:181
+Time: +1419000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:519
+InterArrivalTime:4
+Packet Waiting Time:1572
+Time: +1423000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:119
+InterArrivalTime:5
+Packet Waiting Time:1066
+Time: +1427000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:355
+InterArrivalTime:150
+Packet Waiting Time:390
+Time: +1432000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Queue Abandonement 
+Packet Waiting Time: +35932375001.0ns
+Time: +1462000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +41982375002.0ns
+Time: +1472000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:4718949
+PacketEnqueueTime: +1422009249999.0ns
+Time: +1502410499994.0ns
+]
+
+Packet Removed from Queue
+Packet Address:24576298
+PacketEnqueueTime: +1435047125000.0ns
+Time: +1527206374996.0ns
+]
+
+Call Sent
+PacketSize:274
+InterArrivalTime:10
+Packet Waiting Time:599
+Time: +1582000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:19267927
+PacketEnqueueTime: +1585036999999.0ns
+Time: +1585119499993.0ns
+]
+
+Call Sent
+PacketSize:3
+InterArrivalTime:28
+Packet Waiting Time:997
+Time: +1592000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:45
+InterArrivalTime:5
+Packet Waiting Time:482
+Time: +1620000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:68
+InterArrivalTime:51
+Packet Waiting Time:445
+Time: +1625000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Packet Removed from Queue
+Packet Address:1507759
+PacketEnqueueTime: +1595003124999.0ns
+Time: +1649224874990.0ns
+]
+
+Packet Removed from Queue
+Packet Address:4260290
+PacketEnqueueTime: +1623008374999.0ns
+Time: +1655327749990.0ns
+]
+
+Call Sent
+PacketSize:45
+InterArrivalTime:11
+Packet Waiting Time:1547
+Time: +1676000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:89
+InterArrivalTime:33
+Packet Waiting Time:1
+Time: +1687000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +10991625001.0ns
+Time: +1690000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Queue Abandonement 
+Packet Waiting Time: +986125000.0ns
+Time: +1691000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:5767538
+PacketEnqueueTime: +1628011249999.0ns
+Time: +1703435874990.0ns
+]
+
+Call Sent
+PacketSize:81
+InterArrivalTime:7
+Packet Waiting Time:151
+Time: +1720000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:118
+InterArrivalTime:33
+Packet Waiting Time:32
+Time: +1727000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:28
+InterArrivalTime:34
+Packet Waiting Time:70
+Time: +1760000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +31982500001.0ns
+Time: +1762000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:6619492
+PacketEnqueueTime: +1723012874998.0ns
+Time: +1774546874988.0ns
+]
+
+Call Sent
+PacketSize:300
+InterArrivalTime:33
+Packet Waiting Time:101
+Time: +1794000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:18
+InterArrivalTime:171
+Packet Waiting Time:1474
+Time: +1827000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Queue Abandonement 
+Packet Waiting Time: +69993750001.0ns
+Time: +1833000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:20971816
+PacketEnqueueTime: +1797040250000.0ns
+Time: +1858659499989.0ns
+]
+
+Packet Removed from Queue
+Packet Address:2490786
+PacketEnqueueTime: +1830005000000.0ns
+Time: +1862256249991.0ns
+]
+
+Call Sent
+PacketSize:87
+InterArrivalTime:111
+Packet Waiting Time:165
+Time: +1998000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:7012773
+PacketEnqueueTime: +2001013624999.0ns
+Time: +2001053249995.0ns
+]
+
+Call Sent
+PacketSize:69
+InterArrivalTime:52
+Packet Waiting Time:1740
+Time: +2109000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:5833164
+PacketEnqueueTime: +2112011374999.0ns
+Time: +2112060999990.0ns
+]
+
+Call Sent
+PacketSize:12
+InterArrivalTime:15
+Packet Waiting Time:65
+Time: +2161000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:2097473
+PacketEnqueueTime: +2164004249999.0ns
+Time: +2164066624994.0ns
+]
+
+Call Sent
+PacketSize:342
+InterArrivalTime:104
+Packet Waiting Time:194
+Time: +2176000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:23724482
+PacketEnqueueTime: +2179045499999.0ns
+Time: +2179099499988.0ns
+]
+
+Call Sent
+PacketSize:77
+InterArrivalTime:22
+Packet Waiting Time:290
+Time: +2280000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6357282
+PacketEnqueueTime: +2283012374999.0ns
+Time: +2283070624994.0ns
+]
+
+Call Sent
+PacketSize:86
+InterArrivalTime:46
+Packet Waiting Time:132
+Time: +2302000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6947204
+PacketEnqueueTime: +2305013499999.0ns
+Time: +2305072124989.0ns
+]
+
+Call Sent
+PacketSize:140
+InterArrivalTime:40
+Packet Waiting Time:25
+Time: +2348000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:10486029
+PacketEnqueueTime: +2351020250000.0ns
+Time: +2363182749994.0ns
+]
+
+Call Sent
+PacketSize:164
+InterArrivalTime:40
+Packet Waiting Time:99
+Time: +2388000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:12058976
+PacketEnqueueTime: +2391023249999.0ns
+Time: +2394185374989.0ns
+]
+
+Call Sent
+PacketSize:13
+InterArrivalTime:16
+Packet Waiting Time:52
+Time: +2428000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:81
+InterArrivalTime:9
+Packet Waiting Time:188
+Time: +2444000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:74
+InterArrivalTime:12
+Packet Waiting Time:88
+Time: +2453000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:114
+InterArrivalTime:9
+Packet Waiting Time:525
+Time: +2465000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Call Sent
+PacketSize:35
+InterArrivalTime:20
+Packet Waiting Time:381
+Time: +2474000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:5
+
+Queue Abandonement 
+Packet Waiting Time: +12983000001.0ns
+Time: +2481000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +51995625001.0ns
+Time: +2483000000000.0ns
+]
+
+Call Sent
+PacketSize:12
+InterArrivalTime:64
+Packet Waiting Time:842
+Time: +2494000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:4
+
+Packet Removed from Queue
+Packet Address:6619521
+PacketEnqueueTime: +2447012874998.0ns
+Time: +2506302749994.0ns
+]
+
+Packet Removed from Queue
+Packet Address:6160660
+PacketEnqueueTime: +2456012000000.0ns
+Time: +2524244749987.0ns
+]
+
+Call Sent
+PacketSize:15
+InterArrivalTime:14
+Packet Waiting Time:1295
+Time: +2558000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Packet Removed from Queue
+Packet Address:3604777
+PacketEnqueueTime: +2477007125000.0ns
+Time: +2561308374988.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +73995750001.0ns
+Time: +2571000000000.0ns
+]
+
+Call Sent
+PacketSize:117
+InterArrivalTime:7
+Packet Waiting Time:225
+Time: +2572000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Queue Abandonement 
+Packet Waiting Time: +14995375001.0ns
+Time: +2576000000000.0ns
+]
+
+Call Sent
+PacketSize:24
+InterArrivalTime:67
+Packet Waiting Time:226
+Time: +2579000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:8978898
+PacketEnqueueTime: +2575017374999.0ns
+Time: +2590415374995.0ns
+]
+
+Packet Removed from Queue
+Packet Address:2884049
+PacketEnqueueTime: +2582005749998.0ns
+Time: +2599415249988.0ns
+]
+
+Call Sent
+PacketSize:160
+InterArrivalTime:48
+Packet Waiting Time:356
+Time: +2646000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:11796836
+PacketEnqueueTime: +2649022749999.0ns
+Time: +2649056499987.0ns
+]
+
+Call Sent
+PacketSize:99
+InterArrivalTime:25
+Packet Waiting Time:163
+Time: +2694000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:7799203
+PacketEnqueueTime: +2697015124998.0ns
+Time: +2697020749986.0ns
+]
+
+Call Sent
+PacketSize:111
+InterArrivalTime:8
+Packet Waiting Time:608
+Time: +2719000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:8585568
+PacketEnqueueTime: +2722016625000.0ns
+Time: +2722032499994.0ns
+]
+
+Call Sent
+PacketSize:26
+InterArrivalTime:31
+Packet Waiting Time:730
+Time: +2727000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:91
+InterArrivalTime:53
+Packet Waiting Time:158
+Time: +2758000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:3015061
+PacketEnqueueTime: +2730005999999.0ns
+Time: +2799135624986.0ns
+]
+
+Call Sent
+PacketSize:111
+InterArrivalTime:13
+Packet Waiting Time:255
+Time: +2811000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:7274859
+PacketEnqueueTime: +2761014125000.0ns
+Time: +2812178999987.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:117
+InterArrivalTime:11
+Packet Waiting Time:1432
+Time: +2824000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:8585713
+PacketEnqueueTime: +2814016625000.0ns
+Time: +2828241374985.0ns
+]
+
+Call Sent
+PacketSize:63
+InterArrivalTime:38
+Packet Waiting Time:389
+Time: +2835000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:8978831
+PacketEnqueueTime: +2827017374999.0ns
+Time: +2836148874994.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:292
+InterArrivalTime:27
+Packet Waiting Time:172
+Time: +2873000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Call Sent
+PacketSize:177
+InterArrivalTime:4
+Packet Waiting Time:267
+Time: +2900000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Call Sent
+PacketSize:148
+InterArrivalTime:55
+Packet Waiting Time:32
+Time: +2904000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:5439809
+PacketEnqueueTime: +2838010624999.0ns
+Time: +2906292874986.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:3
+
+Queue Abandonement 
+Packet Waiting Time: +10975125000.0ns
+Time: +2914000000000.0ns
+]
+
+Queue Abandonement 
+Packet Waiting Time: +31978750001.0ns
+Time: +2939000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:20447594
+PacketEnqueueTime: +2876039249999.0ns
+Time: +2942357749984.0ns
+]
+
+Call Sent
+PacketSize:51
+InterArrivalTime:1
+Packet Waiting Time:900
+Time: +2959000000000.0ns
+]
+
+Call Sent
+PacketSize:130
+InterArrivalTime:39
+Packet Waiting Time:362
+Time: +2960000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:4653444
+PacketEnqueueTime: +2962009124999.0ns
+Time: +2962065999994.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:9830753
+PacketEnqueueTime: +2963018999998.0ns
+Time: +2972403249986.0ns
+]
+
+Call Sent
+PacketSize:26
+InterArrivalTime:73
+Packet Waiting Time:1149
+Time: +2999000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:3015023
+PacketEnqueueTime: +3002005999999.0ns
+Time: +3016174874994.0ns
+]
+
+Call Sent
+PacketSize:79
+InterArrivalTime:19
+Packet Waiting Time:744
+Time: +3072000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6488552
+PacketEnqueueTime: +3075012624999.0ns
+Time: +3075080624993.0ns
+]
+
+Call Sent
+PacketSize:33
+InterArrivalTime:7
+Packet Waiting Time:510
+Time: +3091000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:242
+InterArrivalTime:18
+Packet Waiting Time:86
+Time: +3098000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:3473907
+PacketEnqueueTime: +3094006875000.0ns
+Time: +3105521999986.0ns
+]
+
+Call Sent
+PacketSize:37
+InterArrivalTime:48
+Packet Waiting Time:346
+Time: +3116000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:17170734
+PacketEnqueueTime: +3101032999999.0ns
+Time: +3141628624984.0ns
+]
+
+Packet Removed from Queue
+Packet Address:3735860
+PacketEnqueueTime: +3119007374999.0ns
+Time: +3157192999992.0ns
+]
+
+Call Sent
+PacketSize:22
+InterArrivalTime:54
+Packet Waiting Time:272
+Time: +3164000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Queue Abandonement 
+Packet Waiting Time: +15994500001.0ns
+Time: +3183000000000.0ns
+]
+
+Call Sent
+PacketSize:14
+InterArrivalTime:6
+Packet Waiting Time:160
+Time: +3218000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:2228640
+PacketEnqueueTime: +3221004499999.0ns
+Time: +3221100124993.0ns
+]
+
+Call Sent
+PacketSize:27
+InterArrivalTime:15
+Packet Waiting Time:247
+Time: +3224000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:3080685
+PacketEnqueueTime: +3227006124999.0ns
+Time: +3237496749983.0ns
+]
+
+Call Sent
+PacketSize:73
+InterArrivalTime:16
+Packet Waiting Time:402
+Time: +3239000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6095250
+PacketEnqueueTime: +3242011875000.0ns
+Time: +3242104374992.0ns
+]
+
+Call Sent
+PacketSize:98
+InterArrivalTime:62
+Packet Waiting Time:19
+Time: +3255000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:7733514
+PacketEnqueueTime: +3258014999998.0ns
+Time: +3267602624984.0ns
+]
+
+Call Sent
+PacketSize:68
+InterArrivalTime:34
+Packet Waiting Time:2206
+Time: +3317000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:5767582
+PacketEnqueueTime: +3320011249999.0ns
+Time: +3320015999992.0ns
+]
+
+Call Sent
+PacketSize:23
+InterArrivalTime:25
+Packet Waiting Time:641
+Time: +3351000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:2818419
+PacketEnqueueTime: +3354005624998.0ns
+Time: +3368717374982.0ns
+]
+
+Call Sent
+PacketSize:64
+InterArrivalTime:9
+Packet Waiting Time:1201
+Time: +3376000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Call Sent
+PacketSize:47
+InterArrivalTime:1
+Packet Waiting Time:804
+Time: +3385000000000.0ns
+]
+
+Call Sent
+PacketSize:128
+InterArrivalTime:53
+Packet Waiting Time:533
+Time: +3386000000000.0ns
+]
+
+Packet Removed from Queue
+Packet Address:5505450
+PacketEnqueueTime: +3379010749998.0ns
+Time: +3386761374985.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Enqueue
+NumberOfPacketsInQueue:2
+
+Packet Removed from Queue
+Packet Address:4391201
+PacketEnqueueTime: +3388008624999.0ns
+Time: +3391126999991.0ns
+]
+
+Packet Removed from Queue
+Packet Address:9699600
+PacketEnqueueTime: +3389018749999.0ns
+Time: +3394822749982.0ns
+]
+
+Call Sent
+PacketSize:169
+InterArrivalTime:1
+Packet Waiting Time:283
+Time: +3439000000000.0ns
+]
+
+Call Sent
+PacketSize:56
+InterArrivalTime:67
+Packet Waiting Time:538
+Time: +3440000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:12386587
+PacketEnqueueTime: +3442023874999.0ns
+Time: +3442035374991.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:4981008
+PacketEnqueueTime: +3443009749999.0ns
+Time: +3453871874984.0ns
+]
+
+Call Sent
+PacketSize:19
+InterArrivalTime:16
+Packet Waiting Time:1135
+Time: +3507000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:2556269
+PacketEnqueueTime: +3510005125000.0ns
+Time: +3512981374984.0ns
+]
+
+Call Sent
+PacketSize:74
+InterArrivalTime:22
+Packet Waiting Time:18
+Time: +3523000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:6160658
+PacketEnqueueTime: +3526012000000.0ns
+Time: +3526041249980.0ns
+]
+
+Call Sent
+PacketSize:173
+InterArrivalTime:44
+Packet Waiting Time:87
+Time: +3545000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1
+
+Packet Removed from Queue
+Packet Address:12648791
+PacketEnqueueTime: +3548024374999.0ns
+Time: +3548086249983.0ns
+]
+
+Call Sent
+PacketSize:92
+InterArrivalTime:35
+Packet Waiting Time:45
+Time: +3589000000000.0ns
+]
+
+Enqueue
+NumberOfPacketsInQueue:1

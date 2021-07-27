@@ -1,2 +1,2 @@
-git add . && git commit -m "V1" && git push -u origin master
+git add . && git commit -m "V1" && git push -u origin main
 git reset --hard HEAD~n
