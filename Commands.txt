@@ -1,2 +1,17 @@
+git pull 
+
 git add . && git commit -m "V1" && git push -u origin main
+
 git reset --hard HEAD~n
+
+git remote remove origin
+
+git remote add origin https://PAT@github.com/MuhammadShamaas1997/Microgrids.git
+
+git config user.password PAT
+
+git config user.email mshamaas1997@gmail.com
+
+git config user.name MuhammadShamaas1997
+
+
