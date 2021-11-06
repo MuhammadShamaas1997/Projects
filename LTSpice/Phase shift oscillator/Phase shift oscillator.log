@@ -1,0 +1,22 @@
+Circuit: * C:\Users\Sony\Desktop\New folder\LTSpice\Phase shift oscillator\Phase shift oscillator.asc
+
+u2:vx1: Missing value, assumed 0V @ DC
+Direct Newton iteration for .op point succeeded.
+
+Date: Sat Oct 16 21:13:19 2021
+Total elapsed time: 8.091 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 351125
+traniter = 351097
+tranpoints = 123564
+accept = 113544
+rejected = 10020
+matrix size = 75
+fillins = 53
+solver = Normal
+Matrix Compiler1: 6.14 KB object code size  8.0/3.7/[1.0]
+Matrix Compiler2: 6.68 KB object code size  2.1/2.9/[1.9]
+

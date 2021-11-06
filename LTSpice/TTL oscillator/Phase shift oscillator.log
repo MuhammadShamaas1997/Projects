@@ -1,0 +1,26 @@
+Circuit: * C:\Users\Sony\Desktop\New folder\LTSpice\TTL oscillator\Phase shift oscillator.asc
+
+C1: Increased Cpar to 3.3e-017
+WARNING: Node N004 is floating.
+WARNING: Node N002 is floating.
+
+WARNING: Less than two connections to node N002.  This node is used by C6.
+Direct Newton iteration for .op point succeeded.
+
+Date: Fri Nov 05 22:14:47 2021
+Total elapsed time: 6.699 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 256004
+traniter = 256000
+tranpoints = 128001
+accept = 128001
+rejected = 0
+matrix size = 9
+fillins = 2
+solver = Normal
+Matrix Compiler1:      39 opcodes  0.5/[0.2]/0.3
+Matrix Compiler2: 777 bytes object code size  0.2/0.3/[0.2]
+
