@@ -1,0 +1,48 @@
+Circuit: * C:\Users\Sony\Desktop\New folder\Proteus\Code Practice Oscillator\Code Practice Oscillator.asc
+
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+Gmin = 1.07374
+Gmin = 0.115292
+Gmin = 0.0123794
+vernier = 0.5
+Gmin = 0.00207692
+vernier = 0.25
+vernier = 0.125
+vernier = 0.0625
+vernier = 0.03125
+Gmin = 0.00199837
+vernier = 0.015625
+vernier = 0.0078125
+vernier = 0.00390625
+vernier = 0.00195313
+Gmin = 0.00200028
+vernier = 0.000976563
+vernier = 0.000488281
+Gmin = 0
+Gmin stepping failed
+
+Starting source stepping with srcstepmethod=0
+Could not converge to DC with sources off!
+Starting source stepping with srcstepmethod=1
+Could not converge to DC with sources off!
+Pseudo Transient succeeded in finding the operating point.
+
+Date: Sat Sep 25 21:16:04 2021
+Total elapsed time: 310.218 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 299451998
+traniter = 2061
+tranpoints = 1030
+accept = 1021
+rejected = 7777868
+matrix size = 3
+fillins = 0
+solver = Normal
+Matrix Compiler1:       4 opcodes  0.2/[0.2]/0.2
+Matrix Compiler2: 155 bytes object code size  0.1/0.2/[0.1]
+
