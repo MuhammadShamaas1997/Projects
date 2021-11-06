@@ -1,0 +1,2 @@
+py -m pip install -U jupyter matplotlib numpy pandas scipy scikit-learn 
+py -m pip install --upgrade tensorflow

@@ -1,0 +1,14 @@
+<spreadsheet>
+<cell row="1" col="1">
+  <value align="left" format="%s"><string>A1</string></value>
+</cell>
+<cell row="1" col="2">
+  <value align="left" format="%s"><string>B1</string></value>
+</cell>
+<cell row="2" col="1">
+  <value align="left" format="%s"><string>A2</string></value>
+</cell>
+<cell row="2" col="2">
+  <value align="left" format="%s"><string>B2</string></value>
+</cell>
+</spreadsheet>
