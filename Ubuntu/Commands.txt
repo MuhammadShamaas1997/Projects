@@ -1,0 +1,10 @@
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+reboot
+sudo su
+nano /etc/apt/sources.list
+./bootstrap.sh
+./configure --prefix=/home/user/install
+sudo make
+sudo make install
