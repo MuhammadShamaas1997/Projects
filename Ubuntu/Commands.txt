@@ -8,3 +8,4 @@ nano /etc/apt/sources.list
 ./configure --prefix=/home/user/install
 sudo make
 sudo make install
+lsb_release -a
