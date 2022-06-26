@@ -1,22 +1,17 @@
 Eden Canal Villas
 Eden Homes
 Thokar Niaz Baig
-Canal Breeze
 Saidpur
 Sabzazar
 Samanabad
 Ichhra
 Gulshan E Ravi
 Riwaz Garden
-Band Road
 Sanda Khurd
 Sanda Kalan
 Islam Pura
 Sanat Nagar
 Bilal Gang
-Amin Park
-Karim Park
-Ravi Road
 Data Nagar
 Shad Bagh
 Usman Ganj
@@ -25,62 +20,36 @@ Faruque Ganj
 Badami Bagh
 Darbar Gurreh Shah
 Baghban Pura
-Mahmood Booty Ring Road
 Herbuns Pura
-Shalimar Link Road
 Ram Garh
 Mughal Pura
 Nabi Pura
 Muslima Bad
-Ali Park
 Mustafa Bad
-Fortress Stadium
-Canal Road
 PCSIR Housing Scheme
 Alpha Co Operative
-Punjab University
-Jinnah Hospital
-Allama Iqbal Medical College
-Punjab University Hostel
-Fc College
 Shah Jamal
-Peco Road
 Kot Lakhpat
-Hamdard Chowk
 Bagrian
-Raiwind Road
 Lake City
-Main Khayaban Road
 Opf Housing Scheme
 Nasheman Iqbal Housing Scheme
 Tariq Garden
 Khyaban E Amin
 Anar Kali
-Mall Road
-Davis Road
 Garhi Shahu
 Dharampura
-Mayo Hospital
 Gawal Mandi
 Lakshmi Chowk
-Punjab University Old Campus
 Qila Gujarsing
 Wapda House
-Jail Road
 Mazang
-Ganga Ram Hospital
-Race Course Park Surrounding Area
 Gor
 Gulberg 1
 Gulberg 2
 Gulberg 3
-Firozpur Road
-Walton Road
-Ghazi Road
 Chungi Amer Sadhu
-Awan Market
 Youhna Bad
-Bedian Road
 Chararrd Village
 Cavalry Ground
 Rehman Garden
@@ -95,7 +64,6 @@ DHA 8
 Lidhar
 Chachowali
 Gohawa
-Airport Road
 Cantt
 Askrai Villa 1
 Askrai Villa 2
@@ -110,9 +78,7 @@ Askrai Villa 10
 Askrai Villa
 Eden Avenue
 Eden View
-Barki Road
 Paragon City
-LUMS
 Rang Mehal
 Civic Center
 Gor I
@@ -122,21 +88,13 @@ Gor IV
 Gor V
 Gulberg 5
 Gulberg 4
-Ferozpur Road
-Saint John Park
 Saddar
 Upper Mall Scheme
-Temple Road
 Quaid e Azam Industrial Estate
 Kainchi
 Salamatpura
-Sarwar Road
 Taj Bagh
 Taj Para
-Moon Market
-Shaikh Zayed Hospital
-Shaukat Khanum Hospital
-UCP
 LDA Avenue
 Canal Garden
 Tricon Valley
@@ -144,14 +102,5 @@ Iqbal Avenue
 Canal Bank
 Main Gulberg Boulevard
 Falcon Complex
-M M Alam Road
-Multan Road
 Fort Villas
 Lahore Gym Khana
-Infantry Road
-Khursheed Alam Road
-Tufail Road
-Lawrence Road
-Munir Road
-R A Bazaar
-University of Lahore
