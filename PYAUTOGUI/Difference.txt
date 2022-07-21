@@ -1,257 +1,198 @@
-Chichawatni
-Kambar
-Moro
-Pano Aqil
-Gujar Khan
-Kot Malik Barkhurdar
-Chuchar-kana Mandi
-Shorkot
-Shabqadar
-Haveli Lakha
-Mailsi
-Jampur
-Sangla Hill
-Rohri
-Matli
-Hadali
-Dullewala
-Hala
-Ratodero
-Jatoi Shimali
-Jauharabad
-Bat Khela
-Kot Radha Kishan
-Kahna Nau
-Mustafabad
-Chak Thirty-one -Eleven Left
-Talagang
-Taunsa
-Sarai Alamgir
-Usta Muhammad
-Kamra
-Umarkot
-Basirpur
-Sehwan
-Naushahra Virkan
-Fort Abbas
-Havelian
-Dinga
-Ladhewala Waraich
-Khalabat
-New Badah
-Kot Mumin
-Tandlianwala
-Chak Azam Sahu
-Jalalpur Pirwala
-Pabbi
-Chak Jhumra
-Renala Khurd
-Topi
-Pir Jo Goth
-Pir Mahal
-Khurrianwala
-Mehrabpur
-Pindi Bhattian
-Malakwal City
-Narang Mandi
-Malakwal
-Thul
-Pindi Gheb
-Zahir Pir
-Dunyapur
-Gambat
-Kashmor
-Alipur
-Naudero
-Pasni
-Sukheke Mandi
-Setharja Old
-Khewra
-Mamu Kanjan
-Sharqpur Sharif
-Digri
-Bhera
-Sakrand
-Tando Jam
-Raiwind
-Lalian
-Khairpur Tamewah
-Kharan
-Mehar
-Khangah Dogran
-Khairpur Nathan Shah
-Ghauspur
-Tangi
-Utmanzai
-Thal
-Minchianabad
-Garh Maharaja
-Jahanian Shah
-Mananwala
-Fazilpur
-Talamba
-Kunjah
-Jhawarian
-Nasirabad
-Nushki
-Sita Road
-Dijkot
-Sillanwali
-Kandiaro
-Zaida
-Kunri
-Daud Khel
-Mitha Tiwana
-Hazro City
-Dunga Bunga
-Aman Garh
-Karor
-Kot Diji
-Kalur Kot
-Faqirwali
+Adilpur
 Ahmadpur Sial
-Phalia
-Yazman
-Raja Jang
-Chak Five Hundred Seventy-five
-Chak One Hundred Twenty Nine Left
-Chawinda
-Ubauro
 Akora
-Zafarwal
-Kot Samaba
-Eminabad
-Kahuta
-Ranipur
-Khanpur Mahar
-Hingorja
-Naukot
-Pind Dadan Khan
-Kanganpur
-Faruka
-Kotli Loharan
-Shahpur Chakar
-Talhar
-Pad Idan
-Kot Ghulam Muhammad
-Qadirpur Ran
-Bela
-Surkhpur
-Sook Kalan
-Dhoro Naro
-Khangarh
-Sarai Naurang
-Gharo
-Bhit Shah
-Dhanot
-Warah
-Lachi
+Alik Ghund
+Alizai
+Aman Garh
+Amirabad
+Astore
+Awaran
 Baddomalhi
-Jand
-Chak Two Hundred Forty-nine Thal Development Authority
-Tharu Shah
-Naushahro Firoz
-Dajal
-Daur
-Bhopalwala
-Paharpur
+Baffa
+Bagarji
+Bajaur
+Bandhi
+Begowala
+Bela
+Berani
 Bhan
-Mach
+Bhawana
+Bhimber
+Bhiria
+Bhit Shah
+Bhopalwala
+Bozdar Wada
+Bulri
+Buner
+Chagai
+Chak
+Chamber
+Chawinda
+Cherat Cantonement
+Chhor
+Choa Saidan Shah
+Chuhar Jamali
+Dadhar
+Daira Din Panah
+Dajal
+Darel
+Daromehar
+Darya Khan
+Darya Khan Marri
+Daud Khel
+Daulatpur
+Daultala
+Daur
+Dhanot
+Dhaunkal
+Dhoro Naro
+Diamer
+Dinan Bashnoian Wala
+Diplo
+Doaba
+Dokri
+Duki
+Dunga Bunga
+Eminabad
+Faqirwali
+Faruka
+Gadani
+Garhi Khairo
+Garhiyasin
+Ghanche
+Gharo
+Ghizer
+Goth Garelo
+Goth Phulji
 Goth Radhan
-Uthal
-Kaleke Mandi
+Gupis Yasin
+Harnai
+Harnoli
+Hattian
+Haveli
+Hazro City
+Hingorja
+Hunza
+Islamkot
+Jafarabad
+Jam Sahib
+Jand
+Jandiala Sher Khan
+Jati
+Jhal Magsi
+Jhol
 Jiwani
 Johi
-Chhor
-Mangla
-Bhawana
-Shahr Sultan
-Jhol
-Sodhri
-Kalabagh
-Sinjhoro
-Kamar Mushani
-Kallar Kahar
-Chuhar Jamali
-Harnoli
-Sarai Sidhu
-Choa Saidan Shah
-Dadhar
-Darya Khan
-Daira Din Panah
-Garhiyasin
-Madeji
-Dokri
-Sobhodero
-Daulatpur
-Bhag
-Rasulnagar
-Chak
-Shahpur
-Tando Bago
-Baffa
-Garhi Khairo
-Lakhi
-Gadani
-Surab
-Rojhan
-Ormara
-Chamber
-Kalaswala
-Islamkot
-Liliani
-Bhiria
-Mirwah Gorchani
-Dhaunkal
-Daultala
-Diplo
-Harnai
-Jandiala Sher Khan
-Daromehar
-Mankera
-Sanjwal
-Miro Khan
-Kot Sultan
-Khadro
-Berani
-Begowala
-Tangwani
-Bozdar Wada
-Jati
-Rustam
-Darya Khan Marri
-Sohbatpur
-Doaba
-Mirpur Bhtoro
-Sann
-Samaro
-Bandhi
-Karaundi
-Mirpur Sakro
-Adilpur
-Bagarji
-Goth Phulji
-Rajo Khanani
-Alik Ghund
-Dinan Bashnoian Wala
-Jam Sahib
-Kandiari
+Kachhi
 Kadhan
-Goth Garelo
-Nazir Town
-Khadan Khak
-Pithoro
-Duki
-Nabisar
-Kario Ghanwar
-Mehmand Chak
-Mughalabad
-Bulri
-Shingli Bala
-Miran Shah
-Alizai
-Amirabad
+Kahuta
 Kakad Wari Dir Upper
-Cherat Cantonement
+Kalabagh
+Kalaswala
+Kaleke Mandi
+Kallar Kahar
+Kalur Kot
+Kamar Mushani
+Kandiari
+Kanganpur
+Karaundi
+Kario Ghanwar
+Karor
+Kech
 Keti Bandar
+Khadan Khak
+Khadro
+Khangarh
+Khanpur Mahar
+Kharmang
+Khyber
+Killa Abdullah
+Kolai Pallas
+Korangi
+Kot Diji
+Kot Ghulam Muhammad
+Kot Samaba
+Kot Sultan
+Kotli Loharan
+Kunri
+Kurram
+Lachi
+Lakhi
+Lasbela
+Liliani
+Mach
+Madeji
+Mangla
+Mankera
+Mehmand Chak
+Miran Shah
+Miro Khan
+Mirpur Bhtoro
+Mirpur Sakro
+Mirwah Gorchani
+Mitha Tiwana
+Mohmand
+Mughalabad
+Nabisar
+Nagar
+Naseerabad
+Naukot
+Nazir Town
+Neelum
+Waziristan
+Orakzai
+Ormara
+Pad Idan
+Paharpur
+Phalia
+Pind Dadan Khan
+Pithoro
+Poonch
+Qadirpur Ran
+Raja Jang
+Rajo Khanani
+Ranipur
+Rasulnagar
+Rojhan
+Roundu
+Rustam
+Samaro
+Sanjwal
+Sann
+Sarai Naurang
+Sarai Sidhu
+Shaheed Benazirabad
+Shaheed Sikandarabad
+Shahpur
+Shahpur Chakar
+Shahr Sultan
+Shangla
+Sherani
+Shigar
+Shingli Bala
+Sinjhoro
+Skardu
+Sobhodero
+Sodhri
+Sohbatpur
+Sook Kalan
+Sudhnutti
+Sujawal
+Surab
+Surkhpur
+Swat
+Talhar
+Tando Bago
 Tando Mitha Khan
+Tangir
+Tangwani
+Tharparkar
+Tharu Shah
+Tor Ghar
+Ubauro
+Kohistan
+Warah
+Washuk
+Yazman
+Zafarwal
+Zaida
