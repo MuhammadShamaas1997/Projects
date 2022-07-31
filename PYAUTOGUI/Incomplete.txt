@@ -1,84 +1,3 @@
-Rawalpindi
-Aliabad
-Jamshoro
-Jhelum
-Sukkur
-Saidu Sharif
-Burewala
-Hujra Shah Muqeem
-Gujrat
-Dalbandin
-Jatoi
-Gujranwala Cantonment
-Kot Abdul Malik
-Kabal
-Parachinar
-Bahawalpur
-Gujranwala
-Kot Addu
-Tando Adam
-Shakargarh
-Thatta
-Pakpattan
-Daharki
-Naushero Feroze
-Daska
-Bagh Azad Kashmir
-Dera Ghazi Khan
-Hafizabad
-Mianwali
-Dainyor
-Lala Musa
-Sargodha
-Islamabad
-Athmuqam
-Mithi
-Okara
-Murree
-Sahiwal
-Lodhran
-Hyderabad
-Sheikhupura
-Mirpur Khas
-Kamber Ali Khan Sindh
-Shikarpur
-Chilas
-Bahawalnagar
-Jaranwala
-Shuja Abad
-Multan
-Narowal
-Tando Allahyar
-Kundian
-Sanghar
-Dipalpur
-Dadu
-Badin
-Chishtian
-Arif Wala
-Jhang
-Rajanpur
-Karachi
-Kamoke
-Uthal Balochistan
-Pattoki
-Tando Muhammad Khan
-Kabirwala
-Mian Channu
-Chunian
-Nawabshah
-Kasur
-Nankana Sahib
-Chenab Nagar
-Hasilpur
-Abdul Hakeem
-Haroonabad
-Gandava Balochistan
-Khanewal
-Kotli
-Pasrur
-Dera Allahyar
-Kahror Pakka
 Muzaffargarh
 Sialkot
 Khanpur
@@ -117,7 +36,6 @@ Samundri
 Chaman
 Rawalakot
 Timergara
-Hub Balochistan
 Kulachi
 Layyah
 Ahmedpur East
