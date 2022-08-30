@@ -1,0 +1,15 @@
+(https://github.com/NanoComp/meep/files/3222559/meep_gyrotropy_note_2.pdf)
+
+Resolution=100;
+epsr=1;
+a0=1e-5;%dx=50nm
+c0=3e8;%2.99792458e8;%Speed of Light (m/s)
+f0=c0/a0;%3e13 Hz
+t0=1/f0;%0.33e-13s, dt=1.6667e-16
+mu0=4*pi*(1e-7);% (H/m)
+eps0=8.854187817e-12;% (F/m)
+I0=1; %(A)
+E0=I0/(a0*eps0*c0);% 3.7647e+07
+D0=I0/(a0*c0);% 3.3333e-04
+B0=I0/(a0*eps0*c0*c0);% 0.1255
+H0=I0/(a0);% 1.0000e+05
