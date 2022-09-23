@@ -40,6 +40,7 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
+          console.log(input.value);
           socket.emit('Request', input.value);
           input.value = '';
         }

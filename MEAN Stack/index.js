@@ -1,4 +1,5 @@
 const express = require('express');
+const path=require('path');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -7,8 +8,10 @@ const io = new Server(server);
 var { MongoClient, ServerApiVersion } = require('mongodb');
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/index.html');
 });
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -25,8 +28,8 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
+server.listen(4200, () => {
+  console.log('listening on *:4200');
 });
 
 async function dbread() {
