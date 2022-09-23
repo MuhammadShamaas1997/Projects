@@ -1,11 +1,12 @@
-This chat application uses MongoDB, Express, AngularJS, Node and Socket.io.
+This chat application uses MongoDB, Express, Angular, Node and Socket.io.
 
 Run the following commands:
 
-cd Express_REST_API
+[Open command prompt in Express_REST_API folder]
 npm install
 node index.js
-cd ..
+
+[Open new command prompt in root folder]
 npm install 
 node index.js
 
