@@ -1,7 +1,7 @@
 import pyautogui
 import time
 
-groups = []
+groups = ['Wisconsin','Wyoming','Abu Dhabi','Dubai','Sharjah','Ras Al Khaimah','Ajman','Umm Al Quwain','Fujairah','England','Scotland','Wales','Northern Ireland']
 
 
 print(len(groups))
@@ -45,25 +45,25 @@ for i in range(len(groups)):
 
     pyautogui.moveTo(132,692)
     pyautogui.click()
-    time.sleep(10)
+    time.sleep(20)
     
-    pyautogui.moveTo(307,260)
-    pyautogui.click()
-    time.sleep(2)
+    #pyautogui.moveTo(307,260)
+    #pyautogui.click()
+    #time.sleep(2)
 
-    pyautogui.moveTo(145,393)
-    pyautogui.click()
-    time.sleep(5)
+    #pyautogui.moveTo(145,393)
+    #pyautogui.click()
+    #time.sleep(5)
 
-    pyautogui.moveTo(451,184)
-    pyautogui.click()
-    pyautogui.keyDown('enter')
-    pyautogui.keyUp('enter')
-    time.sleep(3)
+    #pyautogui.moveTo(451,184)
+    #pyautogui.click()
+    #pyautogui.keyDown('enter')
+    #pyautogui.keyUp('enter')
+    #time.sleep(3)
 
-    pyautogui.moveTo(306,138)
-    pyautogui.click()
-    time.sleep(5)
+    #pyautogui.moveTo(306,138)
+    #pyautogui.click()
+    #time.sleep(5)
 
     pyautogui.moveTo(816,48)
     pyautogui.click()
@@ -73,35 +73,35 @@ for i in range(len(groups)):
     pyautogui.typewrite('/edit')
     pyautogui.keyDown('enter')
     pyautogui.keyUp('enter')
-    time.sleep(10)
+    time.sleep(20)
 
-    pyautogui.moveTo(1365,527)
-    pyautogui.click()
-    time.sleep(1)
+    #pyautogui.moveTo(1360,527)
+    #pyautogui.click()
+    #time.sleep(1)
 
-    pyautogui.moveTo(1056,362)
-    pyautogui.click()
-    time.sleep(1)
+    #pyautogui.moveTo(1056,362)
+    #pyautogui.click()
+    #time.sleep(1)
 
-    pyautogui.moveTo(1056,392)
-    pyautogui.click()
-    time.sleep(1)
+    #pyautogui.moveTo(1056,392)
+    #pyautogui.click()
+    #time.sleep(1)
 
-    pyautogui.moveTo(1027,495)
-    pyautogui.click()
-    time.sleep(5)
+    #pyautogui.moveTo(1027,495)
+    #pyautogui.click()
+    #time.sleep(5)
 
-    pyautogui.moveTo(1065,417)
-    pyautogui.click()
-    time.sleep(1)
+    #pyautogui.moveTo(1065,417)
+    #pyautogui.click()
+    #time.sleep(1)
 
-    pyautogui.moveTo(1065,447)
-    pyautogui.click()
-    time.sleep(1)
+    #pyautogui.moveTo(1065,447)
+    #pyautogui.click()
+    #time.sleep(1)
 
-    pyautogui.moveTo(1045,547)
-    pyautogui.click()
-    time.sleep(5)
+    #pyautogui.moveTo(1045,547)
+    #pyautogui.click()
+    #time.sleep(5)
 
     pyautogui.keyDown('ctrl')
     pyautogui.keyDown('w')
