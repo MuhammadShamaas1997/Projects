@@ -1,7 +1,7 @@
 import pyautogui
 import time
 
-groups = ['Dubai','Sharjah','Ras Al Khaimah','Ajman','Umm Al Quwain','Fujairah','England','Scotland','Wales','Northern Ireland']
+groups = ['Sector F-9 Islamabad Punjab Pakistan','Sector F-10 Islamabad Punjab Pakistan','Sector F-11 Islamabad Punjab Pakistan','Sector F-12 Islamabad Punjab Pakistan','Sector F-13 Islamabad Punjab Pakistan','Sector F-14 Islamabad Punjab Pakistan','Sector F-15 Islamabad Punjab Pakistan','Sector F-16 Islamabad Punjab Pakistan','Sector F-17 Islamabad Punjab Pakistan','Sector F-18 Islamabad Punjab Pakistan','Sector G-5 Islamabad Punjab Pakistan','Sector G-6 Islamabad Punjab Pakistan','Sector G-7 Islamabad Punjab Pakistan','Sector G-8 Islamabad Punjab Pakistan','Sector G-9 Islamabad Punjab Pakistan','Sector G-10 Islamabad Punjab Pakistan','Sector G-11 Islamabad Punjab Pakistan','Sector G-12 Islamabad Punjab Pakistan','Sector G-13 Islamabad Punjab Pakistan','Sector G-14 Islamabad Punjab Pakistan','Sector G-15 Islamabad Punjab Pakistan','Sector G-16 Islamabad Punjab Pakistan','Sector G-17 Islamabad Punjab Pakistan','Sector G-18 Islamabad Punjab Pakistan','Sector H-8 Islamabad Punjab Pakistan','Sector H-9 Islamabad Punjab Pakistan','Sector H-10 Islamabad Punjab Pakistan','Sector H-11 Islamabad Punjab Pakistan','Sector H-12 Islamabad Punjab Pakistan','Sector H-13 Islamabad Punjab Pakistan','Sector H-14 Islamabad Punjab Pakistan','Sector H-15 Islamabad Punjab Pakistan','Sector H-16 Islamabad Punjab Pakistan','Sector H-17 Islamabad Punjab Pakistan','Sector H-18 Islamabad Punjab Pakistan','Sector I-8 Islamabad Punjab Pakistan','Sector I-9 Islamabad Punjab Pakistan','Sector I-10 Islamabad Punjab Pakistan','Sector I-11 Islamabad Punjab Pakistan','Sector I-12 Islamabad Punjab Pakistan','Sector I-13 Islamabad Punjab Pakistan','Sector I-14 Islamabad Punjab Pakistan','Sector I-15 Islamabad Punjab Pakistan','Sector I-16 Islamabad Punjab Pakistan','Sector I-17 Islamabad Punjab Pakistan','Sector I-18 Islamabad Punjab Pakistan']
 
 
 print(len(groups))
@@ -35,7 +35,7 @@ for i in range(len(groups)):
     #pyautogui.moveTo(141,288)
     #pyautogui.click()
     
-    pyautogui.typewrite('Pakistanis in '+groups[i])
+    pyautogui.typewrite(groups[i])
     pyautogui.keyDown('tab')
     pyautogui.keyUp('tab')
     pyautogui.typewrite('p')
