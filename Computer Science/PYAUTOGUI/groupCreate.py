@@ -1,7 +1,7 @@
 import pyautogui
 import time
 
-groups = ['Sector H-8 Islamabad Punjab Pakistan','Sector H-9 Islamabad Punjab Pakistan','Sector H-10 Islamabad Punjab Pakistan','Sector H-11 Islamabad Punjab Pakistan','Sector H-12 Islamabad Punjab Pakistan','Sector H-13 Islamabad Punjab Pakistan','Sector H-14 Islamabad Punjab Pakistan','Sector H-15 Islamabad Punjab Pakistan','Sector H-16 Islamabad Punjab Pakistan','Sector H-17 Islamabad Punjab Pakistan','Sector H-18 Islamabad Punjab Pakistan','Sector I-8 Islamabad Punjab Pakistan','Sector I-9 Islamabad Punjab Pakistan','Sector I-10 Islamabad Punjab Pakistan','Sector I-11 Islamabad Punjab Pakistan','Sector I-12 Islamabad Punjab Pakistan','Sector I-13 Islamabad Punjab Pakistan','Sector I-14 Islamabad Punjab Pakistan','Sector I-15 Islamabad Punjab Pakistan','Sector I-16 Islamabad Punjab Pakistan','Sector I-17 Islamabad Punjab Pakistan','Sector I-18 Islamabad Punjab Pakistan']
+groups = []
 
 
 print(len(groups))
