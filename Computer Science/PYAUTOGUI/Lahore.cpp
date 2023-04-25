@@ -8,7 +8,7 @@ using namespace std;
 int main(){
 
 std::string line;
-std::ifstream infile("Sites.txt");
+std::ifstream infile("list.txt");
 while (std::getline(infile, line))
 {
     std::istringstream iss(line);
@@ -17,7 +17,7 @@ while (std::getline(infile, line))
 	size_t substring_length1 = 0;
 	substring_length1 = line.find(target_string1);
 	if ((substring_length1 = line.find(target_string1)) != std::string::npos) {
-        cout<<line<<endl;
+        cout<<line.substr(0,48)<<endl;
 	}
 	
 }
