@@ -1,0 +1,323 @@
+function doGet() {
+    var sheetId = '1gW2izhHBxLARncO8Q5VfXA4D3miKNbf5kmT6neHkA24';
+    var sheetName = 'Sheet1';  // Replace with the actual sheet name
+    var sourceEmail = Session.getActiveUser().getEmail();
+    // Open the Google Sheet
+    var sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+    // Get the range of emails in column E
+    var emailRange = sheet.getRange('A:A');
+
+    // Get all values in the range
+    var emailValues = emailRange.getValues();
+
+    for (var i = 0; i < emailValues.length; i++) {
+      var useremail = emailValues[i];
+      if (sourceEmail == useremail){
+        var template = HtmlService.createTemplateFromFile('index');
+        //return template.evaluate();
+        scheduleEmailsTrigger();
+      } 
+    }
+    //var template = HtmlService.createTemplateFromFile('Invalide_token');
+    //return template.evaluate();
+}
+
+function browseDriveFiles() {
+  try {
+    // Get the root folder of Google Drive
+    var rootFolder = DriveApp.getRootFolder();
+
+    // Get all files in the root folder
+    var files = rootFolder.getFiles();
+
+    var fileData = [];
+
+    // Iterate through each file
+    while (files.hasNext()) {
+      var file = files.next();
+
+      // Get file information
+      var fileId = file.getId();
+      var fileName = file.getName();
+
+      // Add file information to the array
+      fileData.push([fileId, fileName]);
+    }
+
+    // Return the file information to the client side
+    return fileData;
+  } catch (error) {
+    Logger.log('Error in browseDriveFiles: ' + error);
+    throw error;
+  }
+}
+
+function storeTriggerParameters(templateDocId, spreadsheetId, attachmentId, breakTime) {
+  Logger.log(templateDocId);
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty('templateDocId', templateDocId);
+  userProperties.setProperty('spreadsheetId', spreadsheetId);
+  userProperties.setProperty('attachmentId', attachmentId);
+  userProperties.setProperty('breakTime', breakTime);
+}
+
+
+//templateDocId, spreadsheetId, attachmentId, timestamp, breakTime) {
+function scheduleEmailsTrigger(){
+  try {
+     var templateDocId = '1I_DrBb0hIfuG6EifyUkrkcFF0fIvXFN7iCR8M8HqBlA';
+     var spreadsheetId = '1pm8wjv_6RLRrtekmf-AvcB-yw9iuPAvIzxnyJC_tbwI';
+     var attachmentId = '1OXfw0Ue0jtuCmXt4YLLygCbdoqa-t9Hp';//'noImage';
+     var timestamp = '2024-02-01 17:36';
+     var breakTime = 30;
+
+        // Combine the date and time strings to create a timestamp
+        var timestampDate = new Date(timestamp);
+        // Store trigger parameters in script properties
+        storeTriggerParameters(templateDocId, spreadsheetId, attachmentId, breakTime);
+        // Create a trigger to run the 'createPersonalizedEmails' function at the specified timestamp
+        createPersonalizedEmails();
+        //ScriptApp.newTrigger('createPersonalizedEmails')
+        //  .timeBased()
+        //  .at(timestampDate)
+        //  .create();
+        checkForNewEmails();
+        //ScriptApp.newTrigger('checkForNewEmails')
+           //.timeBased()
+           //.at(timestampDate)
+           //.everyMinutes(5) // You can adjust the interval as needed
+           //.create();
+  } catch (error) {
+    Logger.log('Error in scheduleEmailsTrigger: ' + error);
+    throw error;
+  }
+}
+
+
+
+function createPersonalizedEmails(templateDocId, spreadsheetId, attachmentId, breakTime) {
+  try {
+        var userProperties = PropertiesService.getUserProperties();
+        var templateDocId = userProperties.getProperty('templateDocId');
+        var spreadsheetId = userProperties.getProperty('spreadsheetId');
+        var attachmentId = userProperties.getProperty('attachmentId');
+        var breakTime = userProperties.getProperty('breakTime');
+     
+    // var templateDocId = '1VimME5RPCwjNRRnEMzzoCu7RzzVwUhMfGMkTKiPIhpg';
+    // var spreadsheetId = '1GP04qGxjowg_QSc1OCZH_-s2ZgztAo3vu8-m259QGUI';
+    // var attachmentId = 'noImage';
+    // var breakTime = 10;
+    breakTime = breakTime * 1000;
+    var sheet = SpreadsheetApp.openById(spreadsheetId).getActiveSheet();
+    var emailQuotaRemaining = MailApp.getRemainingDailyQuota();
+    console.log(emailQuotaRemaining);
+
+    // Get the data range (assuming names are in the first column and emails in the second column)
+    var dataRange = sheet.getRange("A2:H" + sheet.getLastRow());
+
+    // Get the data values
+    var data = dataRange.getValues();
+    // Open the template document
+    var templateDoc = DocumentApp.openById(templateDocId);
+    var templateBody = templateDoc.getBody();
+    var templateText = templateBody.getText();
+
+
+    var webAppUrl = 'https://script.google.com/macros/s/AKfycbyRiLLosjUUAZZJIK1EiAfua7ssUFoKzE0BpSVvhdlxY4OaZduoVzugkx45t45sKq3n/exec';
+    var sourceEmail = Session.getActiveUser().getEmail();
+    // Iterate through each row in the sheet
+    for (var i = 0; i < data.length && i <= emailQuotaRemaining; i++) {
+      // Get the name and email from the current row
+      var first_name = data[i][0];
+      var last_name = data[i][1];
+      var sender_name = data[i][2];
+      var subject = data[i][3];
+      var email = data[i][4];
+      var company_name = data[i][5];
+      var subscribed = data[i][6];
+      var token =  data[i][7]; 
+      // Replace the placeholder in the template with the actual name
+      if (email && validateEmail(email)) {
+          // Replace the placeholder in the template with the actual name
+          var personalizedEmail = templateText.replace(/{first_name}/g, first_name).replace(/{last_name}/g, last_name).replace(/{sender_name}/g, sender_name).replace(/{sender_companyname}/g, company_name);
+        
+          // Send email with the content from the new Doc to the corresponding email address
+          if (attachmentId == 'noImage'){
+            var body = '<pre style="font-size: 14px; line-height: 1.5; font-family: Arial, sans-serif;">' + personalizedEmail + '</pre>'+ '<p>If you want to Unsubscribe to our email press Unsubscribe</p>' +
+                    '<a href="' + webAppUrl + '?source_email=' + sourceEmail + '&unsubscribe_hash=' + token + '&sheetId=' + spreadsheetId + '">Unsubscribe</a>';
+            MailApp.sendEmail({
+            to: email,
+            subject: subject,
+            name: sender_name,  // Replace with your name or leave it as is
+            htmlBody: body
+            });
+          } else {
+            var body = '<table style="width: 100%;">' +
+                      '<tr>' +
+                        '<td>' +
+                          '<img src="cid:logo" alt="Company Logo" style="display: block; margin-bottom: 10px auto;">' +
+                        '</td>' +
+                      '</tr>' +
+                      '<tr>' +
+                        '<td colspan="2">' +
+                          '<pre style="font-size: 14px; line-height: 1.5; font-family: Arial, sans-serif;">' + personalizedEmail + '</pre>' +
+                        '</td>' +
+                      '</tr>' +
+                    '</table>' + '<p>If you want to Unsubscribe to our email press Unsubscribe</p>' +
+                    '<a href="' + webAppUrl + '?source_email=' + sourceEmail + '&unsubscribe_hash=' + token + '&sheetId=' + spreadsheetId + '">Unsubscribe</a>';
+            MailApp.sendEmail({
+            to: email,
+            subject: subject,
+            name: sender_name,  // Replace with your name or leave it as is
+            htmlBody: body,
+            inlineImages: {
+              logo: getInlineImage(attachmentId).inlineImageBlob
+            } 
+          });
+          }
+          Utilities.sleep(breakTime);
+      } else {
+        Logger.log('Email is missing for ' + first_name);
+      }
+    }
+  } catch (error) {
+    Logger.log('Error in createPersonalizedEmails: ' + error);
+    throw error;
+  }
+}
+
+function getInlineImage(attachmentId) {
+  try {
+    // var fileId = '1d15oWeKuuUNUnPenGcX0zO-Rg7MdfeN5'; // Replace with the actual Google Drive file ID of your image
+    var file = DriveApp.getFileById(attachmentId);
+    var blob = file.getBlob();
+    return {
+      inlineImageBlob: blob
+    };
+  } catch (error) {
+    Logger.log('Error in getInlineImage: ' + error);
+    throw error;
+  }
+}
+function validateEmail(email) {
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function getRandomHash() {
+  var randomString = Math.random().toString(36).substring(2);
+  var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, randomString, Utilities.Charset.UTF_8);
+  return Utilities.base64Encode(hash);
+}
+
+function checkForNewEmails() {
+  var subjectToMatch = 'Unsubscribe Confirmation';
+
+// Get threads with the specified subject
+var threads = GmailApp.search('subject:' + subjectToMatch);
+
+// Get the IDs of processed emails from PropertiesService
+var processedEmailIds = getProcessedEmailIds();
+console.log(processedEmailIds);
+
+for (var i = 0; i < threads.length; i++) {
+  var messages = threads[i].getMessages();
+  console.log('Total emails',messages.length);
+
+  for (var j = 0; j < messages.length; j++) {
+    var message = messages[j];
+    var messageId = message.getId();
+    console.log('messageId',messageId);
+
+    // Check if the email has already been processed
+    if (!processedEmailIds.includes(messageId)) {
+      // Extract information from the email
+      var subject = message.getSubject();
+      var sender = message.getFrom();
+      var body = message.getBody();
+      
+      // var receivedTime = message.getDate();
+      // var receivedTimeString = receivedTime.toLocaleString();
+      // Process the form response in the email body
+      var unsubscribeHash = extractHiddenFieldValue(body, 'unsubscribeHash');
+      var sheetId = extractHiddenFieldValue(body, 'sheetId');
+      console.log(unsubscribeHash);
+      console.log(sheetId);
+      Logger.log('unsubscribe Hash:' + unsubscribeHash);
+      Logger.log('Sheet ID:' + sheetId)
+      var sheet = SpreadsheetApp.openById(sheetId).getActiveSheet();
+
+      // get the data in the sheet
+      const data = sheet.getDataRange().getValues();
+
+      // get headers
+      const headers = data[0];
+      const emailIndex = headers.indexOf('Email');
+      const unsubscribeHashIndex = headers.indexOf('unsubscribe_hash');
+      const subscribedIndex = headers.indexOf('subscribed');
+      console.log(emailIndex);
+      console.log(unsubscribeHashIndex);
+      console.log(subscribedIndex);
+
+      // iterate through the data, starting at index 1
+      for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        console.log(row);
+        const rowEmail = row[emailIndex];
+        const rowHash = row[unsubscribeHashIndex];
+        console.log(rowEmail,' ',sender);
+        console.log(rowHash,' ',unsubscribeHash);
+
+        // if the email and unsubscribe hash match with the values in the sheet
+        // then update the subscribed value to 'no'
+        if (
+          //sender === rowEmail && 
+          unsubscribeHash === rowHash) {
+          console.log('Found');
+          sheet.getRange(i + 1, subscribedIndex + 1).setValue('no');
+          return true;
+        }
+      }
+
+      // Mark the email as processed by adding its ID to the processedEmailIds array
+      processedEmailIds.push(messageId);
+
+      // Optionally, mark the email as read or move it to another folder to avoid processing it again
+      // message.markRead();
+      // message.moveToArchive();
+    }
+  }
+}
+
+
+  // Update the processed email IDs in PropertiesService
+  setProcessedEmailIds(processedEmailIds);
+}
+
+function getProcessedEmailIds() {
+  var propertyKey = 'processedEmailIds';
+  var storedIds = PropertiesService.getUserProperties().getProperty(propertyKey);
+
+  if (storedIds) {
+    return JSON.parse(storedIds);
+  } else {
+    return [];
+  }
+}
+
+function setProcessedEmailIds(ids) {
+  var propertyKey = 'processedEmailIds';
+  var stringifiedIds = JSON.stringify(ids);
+  PropertiesService.getUserProperties().setProperty(propertyKey, stringifiedIds);
+}
+
+function extractHiddenFieldValue(body, fieldName) {
+  var regex = new RegExp('<input[^>]+name="' + fieldName + '"[^>]+value="([^"]+)"[^>]*>', 'i');
+  var match = body.match(regex);
+
+  // If a match is found, return the captured value
+  return match ? match[1].trim() : null;
+}
+
+
