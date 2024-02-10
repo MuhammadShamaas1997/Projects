@@ -1,0 +1,46 @@
+function doGet(e) {
+  var unsubscribeHash = e.parameter['unsubscribe_hash'];
+  var sourceemail = e.parameter['source_email'];
+  var sheetId = e.parameter['sheetId'];
+   
+  // var unsubscribeHash = 'keaVktrKmErvxxtip8cDvw==';
+  // var sourceemail = 'admin@clicflo.com';
+  // var sheetId = '1GP04qGxjowg_QSc1OCZH_-s2ZgztAo3vu8-m259QGUI';
+
+
+  // Check if both 'email' and 'unsubscribe_hash' parameters are present
+  if (sourceemail && unsubscribeHash && sheetId) {
+    // Send an email as a response
+    var success = sendUnsubscribeResponse(sourceemail, unsubscribeHash, sheetId);
+
+    if (success) {
+      return ContentService.createTextOutput('Unsubscribe email sent successfully.');
+    } else {
+      return ContentService.createTextOutput('Failed to send Unsubscribe email.');
+    }
+  } else {
+    return ContentService.createTextOutput('Missing parameters.');
+  }
+}
+
+function sendUnsubscribeResponse(email, unsubscribeHash, sheetId) {
+  try {
+    // Customize the email content
+    var subject = 'Unsubscribe Confirmation';
+    var body = '<p>Unsubscribing from this emails.</p>' +
+               '<input type="hidden" name="unsubscribeHash" value="' + unsubscribeHash + '">' +
+               '<input type="hidden" name="sheetId" value="' + sheetId + '">';
+
+    // Send the email
+    MailApp.sendEmail({
+      to: email,
+      subject: subject,
+      htmlBody: body,
+    });
+
+    return true;
+  } catch (error) {
+    Logger.log('Error in sendUnsubscribeResponse: ' + error);
+    return false;
+  }
+}
