@@ -88,6 +88,7 @@ function validateSheetId(sheetId,message) {
   }
 }
 
+
 /**
  * Validates the completeness and correctness of credentials object.
  * @param {Object} credentials - Object containing credentials information.

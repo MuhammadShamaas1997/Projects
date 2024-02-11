@@ -171,7 +171,6 @@ function unsubscribe(message) {
         return true;
       }
     }
-
     return false;
   } catch (error) {
     Logger.log('Error in unsubscribe: ' + error);

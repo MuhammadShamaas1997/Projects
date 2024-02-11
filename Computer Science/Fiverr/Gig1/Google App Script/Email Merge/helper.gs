@@ -3,14 +3,19 @@
  * @returns {string} Random hash.
  */
 function getRandomHash() {
-  // Generate a random string
-  var randomString = Math.random().toString(36).substring(2);
+  try {
+    // Generate a random string
+    var randomString = Math.random().toString(36).substring(2);
 
-  // Compute MD5 hash of the random string
-  var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, randomString, Utilities.Charset.UTF_8);
+    // Compute MD5 hash of the random string
+    var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, randomString, Utilities.Charset.UTF_8);
 
-  // Return the base64 encoded hash
-  return Utilities.base64Encode(hash);
+    // Return the base64 encoded hash
+    return Utilities.base64Encode(hash);
+  } catch(error) {
+    Logger.log('Error in getRandomHash: '+ error)
+    throw error;
+  }
 }
 
 /**
@@ -20,18 +25,23 @@ function getRandomHash() {
  * @returns {Object} JSON object with headers as keys and values as values.
  */
 function listToJSON (headers,values) {
-  var result = {};
+  try {
+    var result = {};
 
-  // Ensure that number of headers and values are equal
-  if (headers.length !== values.length) {
-    throw new Error('Headers and values arrays must have the same length.');
-  }
+    // Ensure that number of headers and values are equal
+    if (headers.length !== values.length) {
+      throw new Error('Headers and values arrays must have the same length.');
+    }
 
-  // Populate the result object with headers and values
-  for (let i=0;i<headers.length;i++) {
-    result[headers[i]] = values[i];
+    // Populate the result object with headers and values
+    for (let i=0;i<headers.length;i++) {
+      result[headers[i]] = values[i];
+    }
+    return result;
+  } catch(error) {
+    Logger.log('Error in listToJSON: '+ error)
+    throw error;
   }
-  return result;
 }
 
 /**
@@ -41,12 +51,17 @@ function listToJSON (headers,values) {
  * @returns {string|null} Value of the hidden field, or null if not found.
  */
 function extractHiddenFieldValue(body, fieldName) {
-  // Construct regex to match the hidden form field
-  var regex = new RegExp('<input[^>]+name="' + fieldName + '"[^>]+value="([^"]+)"[^>]*>', 'i');
+  try {
+    // Construct regex to match the hidden form field
+    var regex = new RegExp('<input[^>]+name="' + fieldName + '"[^>]+value="([^"]+)"[^>]*>', 'i');
 
-  // Search for the regex pattern in the body
-  var match = body.match(regex);
+    // Search for the regex pattern in the body
+    var match = body.match(regex);
 
-  // If a match is found, return the captured value
-  return match ? match[1].trim() : null;
+    // If a match is found, return the captured value
+    return match ? match[1].trim() : null;
+  } catch(error) {
+    Logger.log('Error in extractHiddenFieldValue: '+ error)
+    throw error;
+  }
 }

@@ -14,11 +14,18 @@ function doGet() {
     // Iterate over emailValues
     for (var i = 0; i < emailValues.length; i++) {
 
-      // Comparison of Email Values
-      if (credentials.sourceEmail === emailValues[i][0]) {
+      // Use findIndex() method to search for the email in the array
+      var index = emailValues.findIndex(function(row) {
+        return row[0] === credentials.sourceEmail;
+      });
+
+      //If email is found in list, schedule triggers
+      if (index !== -1) {
           
-          // Trigger Scheduling Validation
+          // Trigger Scheduling
           scheduleEmailsTrigger();
+      } else {
+        throw new Error('Email not found in the list.');
       }
     }
   } catch (error) {
