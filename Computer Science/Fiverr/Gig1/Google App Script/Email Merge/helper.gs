@@ -65,3 +65,23 @@ function extractHiddenFieldValue(body, fieldName) {
     throw error;
   }
 }
+
+/**
+ * Returns current date and time in the format: year-month-day hour:minute
+ */
+function getFormattedDate() {
+  // Get current date and time
+  let now = new Date();
+
+  // Extract year, month, day, hour, and minute
+  let year = now.getFullYear();
+  let month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  let day = String(now.getDate()).padStart(2, '0');
+  let hour = String(now.getHours()).padStart(2, '0');
+  let minute = String(now.getMinutes()).padStart(2, '0');
+
+  // Create the formatted datetime string
+  let formattedDateTime = `${year}-${month}-${day} ${hour}:${minute}`;
+
+  return formattedDateTime;
+}

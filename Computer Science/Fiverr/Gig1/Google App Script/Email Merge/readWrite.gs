@@ -195,9 +195,6 @@ function getProcessedEmailIds() {
   // Get stored email ids
   var storedIds = PropertiesService.getUserProperties().getProperty(propertyKey);
 
-  // Ensure storedIds is a string
-  validateString(storedIds, 'Invalid stored email ids ' + storedIds);
-
   if (storedIds) {
     try {
       // Parse storedIds string to an array

@@ -22,8 +22,13 @@ function doGet() {
       //If email is found in list, schedule triggers
       if (index !== -1) {
           
-          // Trigger Scheduling
-          scheduleEmailsTrigger();
+        // Trigger Scheduling
+        ScriptApp.newTrigger('scheduleEmailsTrigger')
+          .timeBased()
+          .everyMinutes(1)
+          .create();
+        //scheduleEmailsTrigger()
+        
       } else {
         throw new Error('Email not found in the list.');
       }
@@ -40,9 +45,10 @@ function doGet() {
  */
 function scheduleEmailsTrigger() {
   try {
-    // Send personalized emails
-    createPersonalizedEmails();
-
+    if(getCredentials().timeStamp===getFormattedDate()) {
+      // Send personalized emails
+      createPersonalizedEmails();
+    }
     // Check for new unsubscription emails
     checkForNewEmails();
   } catch (error) {
@@ -66,8 +72,18 @@ function createPersonalizedEmails() {
     // Iterate over the rows in the sheet. Skip first row
     for (var i = 1; i < sheetData.length && (i <= credentials.emailQuotaRemaining); i++) {
 
-      // Make personalized email and send it to subscriber
-      sendEmail(credentials, listToJSON(sheetData[0], sheetData[i]));
+      try {
+        
+        // Attempt to make personalized email and send it to subscriber
+        sendEmail(credentials, listToJSON(sheetData[0], sheetData[i]));
+      } catch (error) {
+        
+        //Log the error and continue with the next iteration
+        Logger.log('Error in sendEmail: '+error);
+        
+        // Skip the current iteration and proceed with the next one
+        continue;
+      }
     }
   } catch (error) {
     Logger.log('Error in createPersonalizedEmails: ' + error);
