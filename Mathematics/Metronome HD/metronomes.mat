@@ -1,0 +1,53 @@
+clc;
+clear all;
+figure;
+hold on;
+
+pause(3)
+axis([-1200 1200 -1200 1200]);
+axis off;
+set(gcf,'Color',[1 1 1]);
+%plot([0 1200],[0 0],'LineWidth',5,'Color',[0 0 0]);
+%plot([0 -250],[0 0],'LineWidth',5,'Color',[0 0 0]);
+
+total = 1000;
+tmin = 0;
+tmax = 360;
+
+for i = 1:total
+   rad(i) = 100;
+   OuterRad(i) = 20+1*i;
+   t(i) = 90;
+   delta(i) = (total-i);
+   Fcolor{i} = [(i)*(1/total) 0.5*(i)*(1/total) 0.5*(i)*(1/total)];
+   
+end
+
+
+for time=1:10000
+    for i=5:total-1
+        t(i) = t(i) + 0.1*delta(i);
+        if (t(i)>=tmax)
+            t(i) = tmax - (t(i)-tmax);
+            delta(i) = delta(i) * -1 ;
+        end
+        if (t(i)<=tmin)
+            t(i) = tmin + (tmin-t(i));
+            delta(i) = delta(i) * -1 ;
+        end
+        x(i) = OuterRad(i)*cos(t(i)*pi/180);
+        y(i) = OuterRad(i)*sin(t(i)*pi/180);
+        d(i) = rad(i)*2;
+        px(i) = x(i)-rad(i);
+        py(i) = y(i)-rad(i);
+
+        %axis([-100 100 0 100])
+        rec(i)=rectangle('Position',[px(i) py(i) d(i) d(i)], 'Curvature', [1 1],'FaceColor',Fcolor{i},'EdgeColor',Fcolor{i});
+    end
+        pause(0.001);
+        saveas(gcf,['Plot' num2str(time) '.png'])
+       
+    for i=5:total-1
+        set(rec(i),'Visible','off');
+    end
+end
