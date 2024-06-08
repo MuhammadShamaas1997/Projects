@@ -1,27 +1,35 @@
 from pulp import LpProblem, LpMaximize, LpVariable, lpSum, GLPK_CMD
+import math
 
-# Problem dimensions
-n = 10  # Number of customers Minimum 1 Maximum n
-H = 3  # Number of time periods Minimum 1 Maximum H
-K = 1 # Number of vehicles Minimum 1 Maximum K
-s = 2 # Maximum age of products Minimum 0 Maximum s
-Q_k = 1535 # Capacity of each vehicle k
-I_0_g_0 = 2457 # Initial inventory at depot(0) of age g product at time 0
-r_1 = 2457 # Fresh products produced at time 1
-r_2 = 2457 # Fresh products produced at time 2
-r_3 = 2457 # Fresh products produced at time 3
-h_0_0 = 0.92 #Inventory holding cost at depot for product of age 0
-h_0_1 = 0.28 #Inventory holding cost at depot for product of age 1
-h_0_2 = 0.34 #Inventory holding cost at depot for product of age 2
+with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
+    data = file.read()
+file.close()
+lines = data.split('\n')
 
-# Example coefficients (replace these with actual values)
-u = [[1 for g in range(s + 1)] for i in range(n + 1)]
-d = [[[1 for t in range(H + 1)] for g in range(s + 1)] for i in range(n + 1)]
-h = [[1 for g in range(s + 1)] for i in range(n + 1)]
-r = [1 for t in range(H + 1)]  # Replace with actual values of r(t)
-Q = [10 for k in range(K + 1)] # Example values for Q(k), replace with actual values
-C = [10 for i in range(n + 1)]  # Capacity for each item (example values, replace with actual values)
-c = [[1 for j in range(n + 1)] for i in range(n + 1)]
+# Read first line
+values = lines[0].split()
+n=int(values[0])
+s=int(values[1])
+K=int(values[2])
+H=int(values[3])
+Q = [float(values[4]) for i in range(K)]
+print('n',n)
+print('s',s)
+print('K',K)
+print('H',H)
+print('Q',Q)
+
+# Define data arrays
+r = [0 for i in range(H + 1)]
+C = [0 for i in range(n + 1)]
+Xcoord = [0 for i in range(n + 1)]
+Ycoord = [0 for i in range(n + 1)]
+c = [[0 for i in range(n + 1)] for j in range(n + 1)]
+h = [[0 for i in range(s + 1)] for j in range(n + 1)]
+u = [[0 for i in range(s + 1)] for g in range(n + 1)]
+I_total = [[0 for i in range(H + 1)] for j in range(n + 1)]
+d_total = [[0 for t in range(H + 1)] for i in range(n + 1)]
+d = [[[0 for t in range(H + 1)] for g in range(s + 1)] for i in range(n + 1)]
 
 # Define variables
 I = [[[LpVariable(f"I_{i}_{g}_{t}", lowBound=0, cat='Continuous') 
@@ -45,9 +53,6 @@ y = [[[LpVariable(f"y_{i}_{k}_{t}", cat='Binary')
 d_total = [[LpVariable(f"d_total_{i}_{t}", lowBound=0, cat='Continuous') 
         for t in range(H + 1)] 
         for i in range(n + 1)]
-I_total = [[LpVariable(f"I_total_{i}_{t}", lowBound=0, cat='Continuous') 
-        for t in range(H + 1)] 
-        for i in range(n + 1)]
 
 # Define the problem
 prob = LpProblem("MaximizeObjectiveFunction", LpMaximize)
@@ -61,11 +66,57 @@ objective = (
 prob += objective
 
 # Constraints
+
+# Read second line
+values = lines[1].split()
+Xcoord[0] = float(values[0])
+Ycoord[0] = float(values[1])
+I_total[0][0] = float(values[2])
+for i in range(H):
+    r[i+1] = float(values[3+i])
+for i in range(s+1):
+	h[0][i] = float(values[3+H+i])
+
+# Read data of customers
+for cI in range(1,n+1):
+    values = lines[1+cI].split()
+    Xcoord[cI] = float(values[0])
+    Ycoord[cI] = float(values[1])
+    C[cI] = float(values[2])
+    I_total[cI][0] = float(values[3])
+    for i in range(H):
+    	d_total[cI][i+1] = float(values[4+i])
+    	for j in range(s + 1):
+    		d[cI][j][i+1] = float(values[4+i])/(s+1)
+    for i in range(s+1):
+    	u[cI][i] = float(values[4+H+i])
+    for i in range(s+1):
+    	h[cI][i] = float(values[4+H+s+i+1])
+
+
+for i in range(n + 1):
+	for j in range(n + 1):
+		c[i][j] = math.sqrt(math.pow(Xcoord[i]-Xcoord[j],2) + math.pow(Ycoord[i]-Ycoord[j],2))
+
+
+# Print data
+print('X coordinates',Xcoord)
+print('Y coordinates',Ycoord)
+print('I_total',I_total)
+print('d_total',d_total)
+print('r',r)
+print('C',C)
+print('h',h)
+print('u',u)
+print('d',d)
+print('c',c)
+
+
 # I(i=0,g,t) = I(i=0,g-1,t-1) - sum(i=1 to n)sum(k=1 to K)[q(i,g,k,t)] for g=1 to s, t=1 to H
 for g in range(1, s + 1):
     for t in range(1, H + 1):
         prob += I[0][g][t-1] == I[0][g-1][t-2] - lpSum(q[i-1][g][k-1][t-1] for i in range(1, n + 1) for k in range(1, K + 1))
-
+'''
 # I(i=0,g=0,t) = r(t), for t=1 to H
 for t in range(1, H + 1):
     prob += I[0][0][t-1] == r[t-1]
@@ -75,7 +126,7 @@ for i in range(1, n + 1):
     for g in range(1, s + 1):
         for t in range(1, H + 1):
             prob += I[i][g][t-1] == I[i][g-1][t-2] + lpSum(q[i-1][g][k-1][t-1] - d[i][g][t-1] for k in range(1, K + 1))
-
+'''
 # I(i,g=0,t) = sum(k=1 to K)[q(i,g=0,k,t) - d(i,g=0,t)], for i=1 to n, t=1 to H
 for i in range(1, n + 1):
     for t in range(1, H + 1):
@@ -86,9 +137,12 @@ for i in range(1, n + 1):
     for t in range(1, H + 1):
         prob += lpSum(I[i][g][t-1] for g in range(s + 1)) <= C[i]
 
-for i in range(1, n + 1):
+
+# Add constraints for d_total(i,t) = sum(g=0 to s)[d(i,g,t)], for i=0 to n, t=1 to H
+for i in range(n + 1):
     for t in range(1, H + 1):
-        prob += d_total[i-1][t-1] == lpSum(d[i][g][t-1] for g in range(s + 1))
+        prob += d_total[i][t-1] == lpSum(d[i][g][t-1] for g in range(s + 1))
+
 
 # sum(g=0 to s)sum(k=1 to K)[q(i,g,k,t)] <= C(i) - sum(g=0 to s)[I(i,g,t-1)], for i=1 to n, t=1 to H
 for i in range(1, n + 1):
@@ -138,15 +192,20 @@ for i in range(n + 1):
             for t in range(1, H + 1):
                 prob += x[i][j][k][t] <= 1
 
+
 # Add constraints for I_total(i,t) = sum(g=0 to s)[I(i,g,t)], for i=0 to n, t=1 to H
 for i in range(n + 1):
     for t in range(1, H + 1):
         prob += I_total[i][t-1] == lpSum(I[i][g][t-1] for g in range(s + 1))
 
+
+
 # Solve the problem
 prob.solve(GLPK_CMD(msg=1))
 
+'''
 # Output the results
 for v in prob.variables():
     print(v.name, "=", v.varValue)
+'''
 print("Objective value =", prob.objective.value())
