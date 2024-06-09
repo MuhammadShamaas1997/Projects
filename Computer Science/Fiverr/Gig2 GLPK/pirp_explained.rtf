@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww34880\viewh15380\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 ### Dataset Breakdown (`pirp-10-2-1-3-1.dat`)\
+\
+#### First Line:\
+10 2 1 3 1535\
+- `10`: Number of customers (`n`)\
+- `2`: Maximum age of the products (`s`)\
+- `1`: Number of vehicles (`K`)\
+- `3`: Number of periods (`H`)\
+- `1535`: Capacity of the vehicle (`Q_k`)\
+\
+#### Second Line (Depot Information):\
+793 335 2457 2457 2457 2457 0.92 0.28 0.34\
+- `793`: X-coordinate of the depot\
+- `335`: Y-coordinate of the depot\
+- `2457`: Initial inventory at the depot\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 - `2457 2457 2457`: Replenishments for periods 1 to H. At each time period the supplier receives or produces a fresh quantity r^t of the perishable product. We assume that the supplier has sufficient inventory to meet the demand of its customers during the planning horizon, all the demand has to be satisfied.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 - `0.92 0.28 0.34`: Holding costs for products of ages 0 to `s`\
+\
+#### Customer Information:\
+Each line represents the data for a customer in the following format:\
+X Y U Inv d1 d2 d3 rev0 rev1 rev2 h0 h1 h2\
+\
+- `X`: X-coordinate of the customer\
+- `Y`: Y-coordinate of the customer\
+- `U`: Capacity of the customer (`C_i`)\
+- `Inv`: Initial inventory for the customer (`I_i^0`)\
+- `d1 d2 d3`: Demand for periods 1 to H\
+- `rev0 rev1 rev2`: Revenues for products of ages 0 to `s`\
+- `h0 h1 h2`: Holding costs for products of ages 0 to `s`\
+\
+Here is the breakdown of the provided dataset:\
+\
+1. **First Customer:**\
+   567 429 332 250 82 166 101 12 12 4 0.3 0.63 0.92\
+   - `567`: X-coordinate\
+   - `429`: Y-coordinate\
+   - `332`: Capacity (`C_i`)\
+   - `250`: Initial inventory (`I_i^0`)\
+   - `82 166 101`: Demand for periods 1, 2, and 3\
+   - `12 12 4`: Revenues for ages 0, 1, and 2\
+   - `0.3 0.63 0.92`: Holding costs for ages 0, 1, and 2\
+\
+2. **Second Customer:**\
+   229 373 206 103 103 46 61 14 10 6 0.19 0.48 0.28\
+   - `229`: X-coordinate\
+   - `373`: Y-coordinate\
+   - `206`: Capacity (`C_i`)\
+   - `103`: Initial inventory (`I_i^0`)\
+   - `103 46 61`: Demand for periods 1, 2, and 3\
+   - `14 10 6`: Revenues for ages 0, 1, and 2\
+   - `0.19 0.48 0.28`: Holding costs for ages 0, 1, and 2\
+\
+3. **Third Customer:**\
+   996 281 366 220 146 183 152 14 10 4 0.25 0.38 0.59\
+   - `996`: X-coordinate\
+   - `281`: Y-coordinate\
+   - `366`: Capacity (`C_i`)\
+   - `220`: Initial inventory (`I_i^0`)\
+   - `146 183 152`: Demand for periods 1, 2, and 3\
+   - `14 10 4`: Revenues for ages 0, 1, and 2\
+   - `0.25 0.38 0.59`: Holding costs for ages 0, 1, and 2\
+\
+4. **Fourth Customer:**\
+   434 364 576 384 192 75 104 17 11 5 0.5 0.91 0.93\
+   - `434`: X-coordinate\
+   - `364`: Y-coordinate\
+   - `576`: Capacity (`C_i`)\
+   - `384`: Initial inventory (`I_i^0`)\
+   - `192 75 104`: Demand for periods 1, 2, and 3\
+   - `17 11 5`: Revenues for ages 0, 1, and 2\
+   - `0.5 0.91 0.93`: Holding costs for ages 0, 1, and 2\
+\
+5. **Fifth Customer:**\
+   739 12 324 162 162 90 146 14 10 6 0.86 0.82 0.39\
+   - `739`: X-coordinate\
+   - `12`: Y-coordinate\
+   - `324`: Capacity (`C_i`)\
+   - `162`: Initial inventory (`I_i^0`)\
+   - `162 90 146`: Demand for periods 1, 2, and 3\
+   - `14 10 6`: Revenues for ages 0, 1, and 2\
+   - `0.86 0.82 0.39`: Holding costs for ages 0, 1, and 2\
+\
+6. **Sixth Customer:**\
+   301 280 414 207 207 102 82 15 7 6 0.41 0.36 0.37\
+   - `301`: X-coordinate\
+   - `280`: Y-coordinate\
+   - `414`: Capacity (`C_i`)\
+   - `207`: Initial inventory (`I_i^0`)\
+   - `207 102 82`: Demand for periods 1, 2, and 3\
+   - `15 7 6`: Revenues for ages 0, 1, and 2\
+   - `0.41 0.36 0.37`: Holding costs for ages 0, 1, and 2\
+\
+7. **Seventh Customer:**\
+   567 856 555 504 51 185 39 16 13 6 0.53 1.01 0.89\
+   - `567`: X-coordinate\
+   - `856`: Y-coordinate\
+   - `555`: Capacity (`C_i`)\
+   - `504`: Initial inventory (`I_i^0`)\
+   - `51 185 39`: Demand for periods 1, 2, and 3\
+   - `16 13 6`: Revenues for ages 0, 1, and 2\
+   - `0.53 1.01 0.89`: Holding costs for ages 0, 1, and 2\
+\
+8. **Eighth Customer:**\
+   708 715 298 265 33 149 120 16 10 5 0.49 0.54 0.62\
+   - `708`: X-coordinate\
+   - `715`: Y-coordinate\
+   - `298`: Capacity (`C_i`)\
+   - `265`: Initial inventory (`I_i^0`)\
+   - `33 149 120`: Demand for periods 1, 2, and 3\
+   - `16 10 5`: Revenues for ages 0, 1, and 2\
+   - `0.49 0.54 0.62`: Holding costs for ages 0, 1, and 2\
+\
+9. **Ninth Customer:**\
+   193 500 196 122 74 98 31 14 9 5 0.64 0.64 0.76\
+   - `193`: X-coordinate\
+   - `500`: Y-coordinate\
+   - `196`: Capacity (`C_i`)\
+   - `122`: Initial inventory (`I_i^0`)\
+   - `74 98 31`: Demand for periods 1, 2, and 3\
+   - `14 9 5`: Revenues for ages 0, 1, and 2\
+   - `0.64 0.64 0.76`: Holding costs for ages 0, 1, and 2\
+\
+10. **Tenth Customer:**\
+    275 407 284 142 142 41 47 18 10 4 0.21 0.61 0.53\
+    - `275`: X-coordinate\
+    - `407`: Y-coordinate\
+    - `284`: Capacity (`C_i`)\
+    - `142`: Initial inventory (`I_i^0`)\
+    - `142 41 47`: Demand for periods 1, 2, and 3\
+    - `18 10 4`: Revenues for ages 0, 1, and 2\
+    - `0.21 0.61 0.53`: Holding costs for ages 0, 1, and 2\
+}
