@@ -2,6 +2,11 @@ from pulp import LpProblem, LpMaximize, LpVariable, lpSum, GLPK_CMD
 import math
 import itertools
 
+import pulp
+import matplotlib.pyplot as plt
+import networkx as nx
+
+
 with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
     data = file.read()
 file.close()
@@ -227,6 +232,16 @@ for i in range(n + 1):
         for t in range(H + 1):
             prob += y[i][k][t] <= 1
 
+# Add constraint (18): y(0,k,t) == 1 for k=1 to K, t=0 to H
+for k in range(1, K + 1):
+    for t in range(H + 1):
+        prob += y[0][k][t] == 1
+
+# Add constraint (19): sum(i=1 to n)[x(0,i,k,t)] == 2 k=1 to K, t=0 to H
+for k in range(1, K + 1):
+    for t in range(H + 1):
+        prob += lpSum(x[0][i][k][t] for i in range(1, n + 1)) == 2
+
 # Solve the problem
 prob.solve(GLPK_CMD(msg=1))
 
@@ -236,3 +251,35 @@ for v in prob.variables():
     print(v.name, "=", v.varValue)
 '''
 print("Objective value =", prob.objective.value())
+
+
+# Collect vehicle routes for plotting (only for t = 1)
+routes = []
+for k in range(1, K + 1):
+    t = 1  # Only consider t = 1
+    for i in range(n + 1):
+        for j in range(n + 1):
+            if i != j and x[i][j][k][t].varValue > 0:
+                routes.append((i, j))
+
+# Plot vehicle routes
+def plot_routes(coords, routes):
+    plt.figure(figsize=(10, 6))
+    for i, coord in coords.items():
+        plt.plot(coord[0], coord[1], 'bo')
+        plt.text(coord[0], coord[1], str(i), fontsize=12, ha='right')
+    for (i, j) in routes:
+        plt.plot([coords[i][0], coords[j][0]], [coords[i][1], coords[j][1]], 'r-')
+        dx = coords[j][0] - coords[i][0]
+        dy = coords[j][1] - coords[i][1]
+        plt.quiver(coords[i][0], coords[i][1], dx, dy, angles='xy', scale_units='xy', scale=1, color='r')
+    plt.title('Vehicle Routes for t=1')
+    plt.xlabel('X Coordinate')
+    plt.ylabel('Y Coordinate')
+    plt.show()
+
+# Create a dictionary for coordinates
+coord = {i: (Xcoord[i], Ycoord[i]) for i in range(n + 1)}
+
+# Plot the routes
+plot_routes(coord, routes)
