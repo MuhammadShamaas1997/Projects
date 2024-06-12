@@ -1,5 +1,6 @@
 from pulp import LpProblem, LpMaximize, LpVariable, lpSum, GLPK_CMD
 import math
+import itertools
 
 with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
     data = file.read()
@@ -177,6 +178,21 @@ for i in range(n + 1):
                 lpSum(x[i][j][k][t] for j in range(i + 1, n + 1)) +
                 lpSum(x[j][i][k][t] for j in range(i))
             ) == 2 * y[i][k][t]
+
+# Add constraint (12): sum(i in S)sum(j in S, i < j)[x(i,j,k,t)] <= sum(i in S)[y(i,k,t)] - y[m,k,t], for S in V', k=1 to K, t=0 to H, m in S
+def find_subsets(n):
+    numbers = list(range(1, n + 1))
+    subsets = []
+    for i in range(len(numbers) + 1):
+        for combo in itertools.combinations(numbers, i):
+            subsets.append(combo)
+    return subsets
+
+for S in find_subsets(n):
+	for m in S:
+		for k in range(1, K + 1):
+			for t in range(H):
+				prob += lpSum((x[i][j][k][t] for j in S if i < j) for i in S) <= lpSum(y[i][k][t] for i in S) - y[m][k][t] 
 
 # Add constraint (13): sum(k=1 to K)[y(i,k,t)] <= 1, for i=1 to n, t=0 to H
 for i in range(1, n + 1):
