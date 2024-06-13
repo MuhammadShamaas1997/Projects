@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
+with open('./Supplied/pirp/pirp-10-2-1-3-5.dat', 'r') as file:
     data = file.read()
 file.close()
 lines = data.split('\n')
@@ -232,15 +232,22 @@ for i in range(n + 1):
         for t in range(H + 1):
             prob += y[i][k][t] <= 1
 
-# Add constraint (18): y(0,k,t) == 1 for k=1 to K, t=0 to H
+# Add constraint (18): y(0,k,t) == 1 for k=1 to K, t=1 to H
 for k in range(1, K + 1):
-    for t in range(H + 1):
+    for t in range(1, H + 1):
         prob += y[0][k][t] == 1
 
-# Add constraint (19): sum(i=1 to n)[x(0,i,k,t)] == 2 k=1 to K, t=0 to H
+# Add constraint (19): sum(i=1 to n)[x(0,i,k,t)] == 2 k=1 to K, t=1 to H
 for k in range(1, K + 1):
-    for t in range(H + 1):
+    for t in range(1, H + 1):
         prob += lpSum(x[0][i][k][t] for i in range(1, n + 1)) == 2
+
+
+# Add constraint (20): y(i,k,0) == 0 for i=1 to n, k=1 to K
+for i in range(1, n + 1):
+    for k in range(1, K + 1):
+        prob += y[i][k][0] == 0
+
 
 # Solve the problem
 prob.solve(GLPK_CMD(msg=1))
