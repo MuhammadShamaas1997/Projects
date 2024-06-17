@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-with open('./Supplied/pirp/pirp-10-2-1-3-5.dat', 'r') as file:
+with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
     data = file.read()
 file.close()
 lines = data.split('\n')
@@ -248,15 +248,19 @@ for i in range(1, n + 1):
     for k in range(1, K + 1):
         prob += y[i][k][0] == 0
 
+# Add constraint (21): I_total(i,0) = sum(g=0 to s)[I(i,g,t)], for i=0 to n
+for i in range(n + 1):
+    prob += I_total[i][0] == lpSum(I[i][g][0] for g in range(s + 1))
+
 
 # Solve the problem
 prob.solve(GLPK_CMD(msg=1))
 
-'''
+
 # Output the results
 for v in prob.variables():
     print(v.name, "=", v.varValue)
-'''
+
 print("Objective value =", prob.objective.value())
 
 
