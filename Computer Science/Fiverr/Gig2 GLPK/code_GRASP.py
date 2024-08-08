@@ -88,7 +88,13 @@ print('')
 print('c',c)
 print('')
 
+inventory = [{}]
+for i in range(1,n+1):
+	inventory.append({"nodeId":i,"quantity":I_total[i][0],"age":0})
+
 for t in range(1,H+1):
+	print("")
+	print("Period # ",t," started")
 	vehicles = []
 	for i in range(1,K+1):
 		vehicles.append({"vehicleId":i,"currentNode":0,"quantity":Q[i],"route":[]})
@@ -106,22 +112,35 @@ for t in range(1,H+1):
 			# Compute stats for unvisited nodes
 			stats = []
 			for i in possibleNodes:
-				stats.append({"nodeId":i,"holdingCost":I_total[i][0]*h[i][t-1],"transportCost":c[i][v["currentNode"]],"revenue":d_total[i][t] * u[i][0]})
+				stats.append({"nodeId":i,"holdingCost":inventory[i]["age"]*h[i][t-1],"transportCost":c[i][v["currentNode"]],"revenue":d_total[i][t] * u[i][0]})
 
 			# Find best node
 			bestNode = stats[0]
 			metric = 0
 			for nodeStat in stats:
-				if ((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) > metric):
+				dd = d_total[nodeStat["nodeId"]][t]
+				a = inventory[nodeStat["nodeId"]]["age"]
+				
+				age = u[nodeStat["nodeId"]][a]
+				if ((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) < dd*age):
+					coveredNodes.append(nodeStat["nodeId"])
+					inventory[nodeStat["nodeId"]]["quantity"] = inventory[nodeStat["nodeId"]]["quantity"] - d_total[nodeStat["nodeId"]][t]
+					print("Inventory used to meet demand of node # ",nodeStat["nodeId"])
+					break
+				elif ((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) > metric):
 					bestNode = nodeStat
 
 			# Check if vehicle can meet demand of best node
 			if (v["quantity"]>=d_total[bestNode["nodeId"]][t]):
 				coveredNodes.append(bestNode["nodeId"])
+				print("Vehicle visited node # ",bestNode["nodeId"])
 				v["currentNode"] = bestNode["nodeId"]
 				v["quantity"] = v["quantity"] - d_total[bestNode["nodeId"]][t]
 				v["route"].append(bestNode["nodeId"])
 				totalTransported = totalTransported + d_total[bestNode["nodeId"]][t]
+
+	for i in range(1,n+1):
+		inventory[i]["age"] = inventory[i]["age"] + 1
 		
 	# Print best route
 	for v in vehicles:
