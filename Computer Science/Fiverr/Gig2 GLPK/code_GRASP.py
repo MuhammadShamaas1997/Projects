@@ -5,7 +5,7 @@ import pulp
 import matplotlib.pyplot as plt
 import networkx as nx
 
-with open('./Supplied/pirp/pirp-20-2-2-3-1.dat', 'r') as file:
+with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
     data = file.read()
 file.close()
 lines = data.split('\n')
@@ -93,6 +93,7 @@ for i in range(1,n+1):
 	inventory.append({"nodeId":i,"quantity":I_total[i][0],"age":0})
 
 for t in range(1,H+1):
+	profit = 0
 	print("")
 	print("Period # ",t," started")
 	vehicles = []
@@ -117,26 +118,30 @@ for t in range(1,H+1):
 			# Find best node
 			bestNode = stats[0]
 			metric = 0
+			complete = False
 			for nodeStat in stats:
 				dd = d_total[nodeStat["nodeId"]][t]
 				a = inventory[nodeStat["nodeId"]]["age"]
 				
 				age = u[nodeStat["nodeId"]][a]
-				if ((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) < dd*age):
+				if (((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) < dd*age) and (inventory[nodeStat["nodeId"]]["quantity"] >= d_total[nodeStat["nodeId"]][t])):
 					coveredNodes.append(nodeStat["nodeId"])
 					inventory[nodeStat["nodeId"]]["quantity"] = inventory[nodeStat["nodeId"]]["quantity"] - d_total[nodeStat["nodeId"]][t]
+					profit = profit + (dd * age)
+					complete = True
 					print("Inventory used to meet demand of node # ",nodeStat["nodeId"])
 					break
 				elif ((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) > metric):
 					bestNode = nodeStat
 
 			# Check if vehicle can meet demand of best node
-			if (v["quantity"]>=d_total[bestNode["nodeId"]][t]):
+			if (v["quantity"]>=d_total[bestNode["nodeId"]][t] and (not complete)):
 				coveredNodes.append(bestNode["nodeId"])
 				print("Vehicle visited node # ",bestNode["nodeId"])
 				v["currentNode"] = bestNode["nodeId"]
 				v["quantity"] = v["quantity"] - d_total[bestNode["nodeId"]][t]
 				v["route"].append(bestNode["nodeId"])
+				profit = profit + bestNode["revenue"]
 				totalTransported = totalTransported + d_total[bestNode["nodeId"]][t]
 
 	for i in range(1,n+1):
@@ -145,3 +150,5 @@ for t in range(1,H+1):
 	# Print best route
 	for v in vehicles:
 		print('Best route for vehicle ', v["vehicleId"],' in period ',t,': ',v["route"])
+
+	print('Total profit for period ', t, ' = ',profit)
