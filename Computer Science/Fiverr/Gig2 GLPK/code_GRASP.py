@@ -5,7 +5,7 @@ import pulp
 import matplotlib.pyplot as plt
 import networkx as nx
 
-with open('./Supplied/pirp/pirp-10-2-1-3-1.dat', 'r') as file:
+with open('./Supplied/pirp/pirp-10-5-1-10-1.dat', 'r') as file:
     data = file.read()
 file.close()
 lines = data.split('\n')
@@ -90,7 +90,11 @@ print('')
 
 inventory = [{}]
 for i in range(1,n+1):
-	inventory.append({"nodeId":i,"quantity":I_total[i][0],"age":0})
+	inventory.append({
+		"nodeId":i,
+		"quantity":I_total[i][0],
+		"age":0
+	})
 
 for t in range(1,H+1):
 	profit = 0
@@ -98,13 +102,24 @@ for t in range(1,H+1):
 	print("Period # ",t," started")
 	vehicles = []
 	for i in range(1,K+1):
-		vehicles.append({"vehicleId":i,"currentNode":0,"quantity":Q[i],"route":[]})
+		vehicles.append({
+			"vehicleId":i,
+			"currentNode":0,
+			"quantity":Q[i],
+			"route":[]
+		})
+	
+	# Initialize covered nodes
 	coveredNodes = [0]
 	totalTransported = 0
+
+	# Loop while demand of each node has not been met
 	while n >= len(coveredNodes):
+		
 		# Find best nodes which are closest to current node and provide best revenue
 		for v in vehicles:				
 			possibleNodes = []
+			
 			# Find unvisited nodes
 			for i in range(n+1):
 				if (i not in coveredNodes):
@@ -113,21 +128,27 @@ for t in range(1,H+1):
 			# Compute stats for unvisited nodes
 			stats = []
 			for i in possibleNodes:
-				stats.append({"nodeId":i,"holdingCost":inventory[i]["age"]*h[i][t-1],"transportCost":c[i][v["currentNode"]],"revenue":d_total[i][t] * u[i][0]})
+				stats.append({
+					"nodeId":i,
+					"holdingCost":inventory[i]["age"]*(h[i][t-1] if t<=s else 0),
+					"transportCost":c[i][v["currentNode"]],
+					"revenue":d_total[i][t] * u[i][0]
+				})
 
 			# Find best node
 			bestNode = stats[0]
 			metric = 0
 			complete = False
 			for nodeStat in stats:
-				dd = d_total[nodeStat["nodeId"]][t]
-				a = inventory[nodeStat["nodeId"]]["age"]
-				
-				age = u[nodeStat["nodeId"]][a]
-				if (((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) < dd*age) and (inventory[nodeStat["nodeId"]]["quantity"] >= d_total[nodeStat["nodeId"]][t])):
+				nodeDemand = d_total[nodeStat["nodeId"]][t]
+				age = inventory[nodeStat["nodeId"]]["age"]
+				sellingCost = u[nodeStat["nodeId"]][age] if age<=s else 0
+
+				# Check if it is cheaper to use node inventory instead of transporting products
+				if (((nodeStat["revenue"] - nodeStat["holdingCost"] - nodeStat["transportCost"]) < nodeDemand*sellingCost) and (inventory[nodeStat["nodeId"]]["quantity"] >= nodeDemand)):
 					coveredNodes.append(nodeStat["nodeId"])
-					inventory[nodeStat["nodeId"]]["quantity"] = inventory[nodeStat["nodeId"]]["quantity"] - d_total[nodeStat["nodeId"]][t]
-					profit = profit + (dd * age)
+					inventory[nodeStat["nodeId"]]["quantity"] = inventory[nodeStat["nodeId"]]["quantity"] - d_total[nodeStat["nodeId"]][t] if t<=s else 0
+					profit = profit + (nodeDemand * sellingCost) - (inventory[nodeStat["nodeId"]]["quantity"] * nodeStat["holdingCost"])
 					complete = True
 					print("Inventory used to meet demand of node # ",nodeStat["nodeId"])
 					break
@@ -141,11 +162,12 @@ for t in range(1,H+1):
 				v["currentNode"] = bestNode["nodeId"]
 				v["quantity"] = v["quantity"] - d_total[bestNode["nodeId"]][t]
 				v["route"].append(bestNode["nodeId"])
-				profit = profit + bestNode["revenue"]
+				profit = profit + bestNode["revenue"] - bestNode["holdingCost"] - bestNode["transportCost"]
 				totalTransported = totalTransported + d_total[bestNode["nodeId"]][t]
 
 	for i in range(1,n+1):
 		inventory[i]["age"] = inventory[i]["age"] + 1
+		inventory[i]["quantity"] =  inventory[i]["quantity"] if t<=s else 0
 		
 	# Print best route
 	for v in vehicles:
