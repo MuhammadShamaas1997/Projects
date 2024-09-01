@@ -22,8 +22,8 @@ for i = 1:numFlips
     for t = linspace(-90, 90, 180)
         % Clear the current coin drawing
         view([0 t]);
-        saveas(gcf,['Plot' num2str(ind) '.png']);
-        fclose('all');
+        %saveas(gcf,['Plot' num2str(ind) '.png']);
+        %fclose('all');
         ind = ind+1;
         
         % Pause to create animation effect

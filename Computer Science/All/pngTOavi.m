@@ -1,5 +1,5 @@
 % Define parameters
-outputVideo = 'output_video2.avi';  % Name of the output video file
+outputVideo = 'output_video.avi';  % Name of the output video file
 fps = 10;                           % Frames per second
 
 % Create VideoWriter object
