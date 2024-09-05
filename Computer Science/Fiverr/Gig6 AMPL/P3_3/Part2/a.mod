@@ -1,0 +1,11 @@
+set Schedules := 1..7;
+ var x{i in Schedules} >=0;
+ minimize z: sum {i in Schedules} x[i];
+ subject to M: sum {i in {1,6,7}} x[i] >=16;
+ subject to T: sum {i in {1,2,7}} x[i] >=12;
+ subject to W: sum {i in {1,2,3}} x[i] >=18;
+ subject to H: sum {i in {2,3,4}} x[i] >=13;
+ subject to F: sum {i in {3,4,5}} x[i] >=15;
+ subject to Sa: sum {i in {4,5,6}} x[i] >=9;
+ subject to Su: sum {i in {5,6,7}} x[i] >=7;
+ subject to Weekends: sum {i in {1,2,3}} x[i]- sum {i in {4,5,6,7}} x[i] >=0;

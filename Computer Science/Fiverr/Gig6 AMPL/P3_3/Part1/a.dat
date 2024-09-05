@@ -1,0 +1,19 @@
+ set Foods := butter rice juice fish bread;
+ set Nutrients := protein calcium vitC calories;
+ param cost :=
+ butter 2.90
+ rice 3.20
+ juice 0.50
+ fish 4.50
+ bread 0.30;
+ param requirement :=
+ protein 60
+ calcium 800
+ vitC 75
+ calories 2000;
+ param info: protein calcium vitC calories :=
+ butter 15 270 1 600
+ rice 5 20 0 215
+ juice 2 25 106 110
+fish 39 23 0 280
+ bread 3 35 0 66;

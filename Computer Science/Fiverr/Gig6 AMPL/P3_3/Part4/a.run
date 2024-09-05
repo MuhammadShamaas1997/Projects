@@ -1,0 +1,5 @@
+ reset;
+ model a.mod;
+ option solver 'xpress';
+ solve;
+ display a1, a2, w1, w2, z;

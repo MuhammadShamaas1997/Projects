@@ -1,0 +1,5 @@
+ reset;
+ model a.mod;
+ option solver 'gurobi';
+ solve;
+ display p, a1, a2, h1, h2, z;

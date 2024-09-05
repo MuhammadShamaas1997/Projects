@@ -1,0 +1,8 @@
+ reset;
+ model a.mod;
+ data a.dat;
+ option solver 'gurobi';
+ solve;
+ display x > ("diet.out");
+ display ingestion.slack > ("diet.out");
+ close ("out/diet.out");

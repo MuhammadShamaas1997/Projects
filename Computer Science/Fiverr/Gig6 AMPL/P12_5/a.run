@@ -1,0 +1,21 @@
+# Reset the AMPL environment
+ reset;
+ # Load themodel
+ model a.mod;
+ # Load thedata
+ data a.dat;
+ # Specifythe solver (optional)
+ option solver 'gurobi';
+ option presolve 0; # turn off presolve phase
+ option gurobi_options 'solnsens 1'; # perform sensitivity analysis
+ # Solve
+ solve;
+ # Display the results
+ display x;
+ display z;
+ display constr.slack; # slacks of theconstraints
+ display constr; # dual (shadow) prices
+ display x.sensobjlo; # lower bound onobjective coefficient
+ display x.sensobjhi; # upper bound onobjective coefficient
+ display constr.sensrhslo; # lower boundon rhs
+ display constr.sensrhshi; # upper boundon rhs

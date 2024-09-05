@@ -1,0 +1,15 @@
+ set P := productA productB productC;
+ set M := machine1 machine2 machine3;
+ param a: productA productB productC :=
+ machine1 2 1 3
+ machine2 3 2 4
+ machine3 3 5 5;
+ param b :=
+ productA 6
+ productB 8
+ productC 10;
+ param t :=
+ machine1 200 # 5x40
+ machine2 120 # 3x40
+ machine3 160; # 4x40
+ param w:=350;

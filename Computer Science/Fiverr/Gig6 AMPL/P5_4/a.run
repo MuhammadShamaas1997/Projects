@@ -1,0 +1,12 @@
+ # Reset the AMPL environment
+ reset;
+ # Load the model
+ model a.mod;
+ # Load the data
+ data a.dat;
+ # Specify the solver (optional)
+ option solver 'xpress';
+ # Solve
+ solve;
+ # Display the results
+ display x, z;

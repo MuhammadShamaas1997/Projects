@@ -1,0 +1,12 @@
+ # Reset the AMPL environment
+ reset;
+ # Load the model
+ model a.mod;
+ # Load the data
+ data a.dat;
+ # Specify the solver (optional)
+ option solver 'gurobi'; # This is for Mac, use option solver gurobi; in Windows
+ # Solve
+ solve;
+ # Display the results
+ display x, y, Total_Profit;

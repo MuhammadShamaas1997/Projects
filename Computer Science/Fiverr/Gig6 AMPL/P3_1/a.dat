@@ -1,0 +1,17 @@
+ set P := bulksteak steak bulkground ground;
+ 
+ param s :=
+ bulksteak 15
+ steak 20
+ bulkground 6
+ ground 9;
+ 
+ param t :=
+ bulksteak 0
+ steak 0.01 # 1 hour per 100 pounds
+ bulkground 0
+ ground 0.005; # 0.5 hour per 100 pounds
+ 
+ param w :=8;
+ param p :=5;
+ param M:=1000;

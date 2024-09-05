@@ -1,0 +1,14 @@
+ option solver 'xpress';
+ model a.mod;
+ data a.dat
+ solve;
+ printf("+-------+-------+-------+ \n");
+ for {i in 1..n}
+ {printf("|");
+ for {j in 1..n}
+ { printf " %d", sum{k in 1..n} x[i,j,k] * k;
+ if j mod b = 0 then printf(" |");
+ if j mod n = 0 then printf(" \n");
+ }
+ if i mod b = 0 then printf("+-------+-------+-------+ \n");
+ }

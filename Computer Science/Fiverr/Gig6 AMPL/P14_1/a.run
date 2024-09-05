@@ -1,0 +1,8 @@
+reset;
+ option solver 'gurobi';
+ model a.mod;
+ data a.dat
+ solve;
+ display x;
+ display y;
+ display z;

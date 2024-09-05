@@ -1,0 +1,15 @@
+x [*] :=
+ bread  29.1238
+butter   0
+  fish   0
+ juice   0.707547
+  rice   0
+;
+
+ingestion.slack [*] :=
+ calcium  237.021
+calories    2.27374e-13
+ protein   28.7864
+    vitC    0
+;
+

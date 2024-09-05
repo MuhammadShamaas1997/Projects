@@ -1,0 +1,12 @@
+# Reset the AMPL environment
+ reset;
+ # Load themodel
+ model a.mod;
+ # Load thedata
+ data a.dat;
+ # Specifythe solver (optional)
+ option solver 'gurobi';
+ # Solve
+ solve;
+ # Displaythe results
+ display x,z;
