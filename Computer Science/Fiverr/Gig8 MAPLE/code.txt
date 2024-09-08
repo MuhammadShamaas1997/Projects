@@ -1,0 +1,7 @@
+A := {17, 18, 45, 83};
+B := {"Anne", "Per", "Peter", "Pia", "Sofus"};
+C := {-3, 0, 2, 4, 7, 10, 12};
+inCartesianProduct := proc(t) local x, y, z; x := t[1]; y := t[2]; z := t[3]; if x in A and y in B and z in C then return true; else return false; end if; end proc;
+tuples := [[17, "Sofus", 17], [45, "Pia", 4], [12, "Anne", 7], ["Per", 45, 10]];
+results := map(inCartesianProduct, tuples);
+results;
