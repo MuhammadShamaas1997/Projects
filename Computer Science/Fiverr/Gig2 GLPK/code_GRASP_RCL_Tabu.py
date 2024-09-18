@@ -249,7 +249,7 @@ def greedy_algo(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_total, 
 def build_RCL(profit_list, RCL_size):
     # Sort the profit list in descending order based on profit
     sorted_profit_list = sorted(profit_list, key=lambda x: x['profit'], reverse=True)
-    print(sorted_profit_list)
+    #print(sorted_profit_list)
     
     # Select the top N nodes for the RCL
     RCL = sorted_profit_list[:RCL_size]
@@ -258,37 +258,23 @@ def build_RCL(profit_list, RCL_size):
 
 # Tabu Search Class
 class TabuSearch:
-    def __init__(self, initial_solution, max_iterations, tabu_tenure=5):
+    def __init__(self, initial_solution, max_iterations, c, tabu_tenure=5):
         self.current_solution = initial_solution  # Starting solution (from GRASP or another heuristic)
         self.best_solution = initial_solution
         self.tabu_list = []  # List to store tabu moves
         self.max_iterations = max_iterations
         self.tabu_tenure = tabu_tenure  # How long a move stays on the tabu list
+        self.c = c # Transport costs
 
     def neighborhood(self):
         """
         Generate neighbors by performing Inventory Swaps and Route Changes.
         """
         neighbors = []
-        # Only perform inventory swap if inventory_used is not empty
-        if self.current_solution['inventory_used']:
-            neighbors.append(self.inventory_swap(self.current_solution))
-        # Only perform route change if vehicle_route has more than 1 node
-        if len(self.current_solution['vehicle_route']) > 1:
+        # Only perform route change if vehicle_routes has more than 1 node
+        if len(self.current_solution['vehicle_routes']) > 1:
             neighbors.append(self.route_change(self.current_solution))
         return neighbors
-
-    def inventory_swap(self, solution):
-        """
-        Perform an inventory swap for a customer.
-        Example: Switch between using existing inventory and delivering new inventory.
-        """
-        new_solution = solution.copy()
-        # Logic to swap inventory usage at a random customer node
-        node_to_swap = random.choice(solution['inventory_used'])
-        new_solution['inventory_used'].remove(node_to_swap)
-        # Example: Simulate delivering new inventory instead of using existing
-        return new_solution
 
     def route_change(self, solution):
         """
@@ -297,19 +283,24 @@ class TabuSearch:
         """
         new_solution = solution.copy()
         # Logic to swap nodes in the current route (example: swap two random nodes)
-        route = new_solution['vehicle_route']
-        if len(route) > 1:
-            idx1, idx2 = random.sample(range(len(route)), 2)
-            route[idx1], route[idx2] = route[idx2], route[idx1]
-        new_solution['vehicle_route'] = route
-        return new_solution
+        vIndex = 0
+        for vRoute in new_solution['vehicle_routes']: 
+            route = vRoute
+            if len(route) > 1:
+                lastNode = 0
+                for node in route:
+                    new_solution['profit'] = new_solution['profit'] - self.c[lastNode][node]
+                    lastNode = node 
+                idx1, idx2 = random.sample(range(len(route)), 2)
+                route[idx1], route[idx2] = route[idx2], route[idx1]
+                lastNode = 0
+                for node in route:
+                	new_solution['profit'] = new_solution['profit'] + self.c[lastNode][node]
+                	lastNode = node 
 
-    def evaluate_solution(self, solution):
-        """
-        Calculate the objective (profit or cost) for a solution.
-        """
-        # Placeholder for actual evaluation logic (replace with your cost calculation)
-        return random.uniform(0, 100)  # Example: random profit value
+            new_solution['vehicle_routes'][vIndex] = route
+            vIndex = vIndex + 1
+        return new_solution
 
     def is_tabu(self, move):
         """
@@ -322,7 +313,7 @@ class TabuSearch:
         Define when to accept a move despite it being tabu.
         Example: Accept if the solution is better than the current best.
         """
-        return self.evaluate_solution(solution) > self.evaluate_solution(self.best_solution)
+        return solution["profit"] > self.best_solution["profit"]
 
     def update_tabu_list(self, move):
         """
@@ -345,7 +336,7 @@ class TabuSearch:
             best_value = float('-inf')
             
             for neighbor in neighbors:
-                value = self.evaluate_solution(neighbor)
+                value = neighbor["profit"]
                 move = neighbor  # Simplified for demonstration
                 if (not self.is_tabu(move)) or self.aspiration_criteria(move, neighbor):
                     if value > best_value:
@@ -356,7 +347,7 @@ class TabuSearch:
             if best_neighbor is not None:
                 self.current_solution = best_neighbor
                 self.update_tabu_list(best_neighbor)
-                if best_value > self.evaluate_solution(self.best_solution):
+                if best_value > self.best_solution["profit"]:
                     self.best_solution = best_neighbor
             
             print(f"Iteration {iteration}: Best value = {best_value}")
@@ -369,7 +360,7 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
     depotInventory = I_total[0]
     
     for t in range(1, H + 1):
-        initial_solution = {"inventory_used":[],"vehicle_route":[]}
+        initial_solution = {"inventory_used":[],"vehicle_routes":[],"depotInventory":depotInventory,"inventory":inventory,}
         profit = 0
         print("\nPeriod # ", t, " started")
         
@@ -377,8 +368,8 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
         
         # Initialize covered nodes
         coveredNodes = [0]
-        totalTransported = 0
-        transportCost = 0
+        #totalTransported = 0
+        #transportCost = 0
         
         # Loop while demand of each node has not been met
         while n >= len(coveredNodes):
@@ -435,13 +426,13 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
 
 
                 # Print the complete profit_list and RCL for this vehicle and period
-                print(f"\nProfit List for Vehicle {v['vehicleId']} in Period {t}:")
-                for entry in profit_list:
-                    print(f"  Node ID: {entry['nodeId']}, Profit: {entry['profit']:.2f}, Inventory Type: {entry['inventory_type']}")
+                #print(f"\nProfit List for Vehicle {v['vehicleId']} in Period {t}:")
+                #for entry in profit_list:
+                    #print(f"  Node ID: {entry['nodeId']}, Profit: {entry['profit']:.2f}, Inventory Type: {entry['inventory_type']}")
                 
-                print(f"RCL for Vehicle {v['vehicleId']} in Period {t}:")
-                for entry in RCL:
-                    print(f"  Node ID: {entry['nodeId']}, Profit: {entry['profit']:.2f}, Inventory Type: {entry['inventory_type']}")
+                #print(f"RCL for Vehicle {v['vehicleId']} in Period {t}:")
+                #for entry in RCL:
+                    #print(f"  Node ID: {entry['nodeId']}, Profit: {entry['profit']:.2f}, Inventory Type: {entry['inventory_type']}")
 
 
 
@@ -457,19 +448,18 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
                     inventory[bestNode["nodeId"]]["quantity"] -= d_total[bestNode["nodeId"]][t]
                     profit += bestNode['profit']
                     initial_solution["inventory_used"].append(bestNode["nodeId"])
-                    print(f"Inventory used to meet demand of node # {bestNode['nodeId']}")
+                    #print(f"Inventory used to meet demand of node # {bestNode['nodeId']}")
                 else:
                     if v["quantity"] >= d_total[bestNode["nodeId"]][t]:
                         coveredNodes.append(bestNode["nodeId"])
-                        initial_solution["vehicle_route"].append(bestNode["nodeId"])
-                        print(f"Vehicle visited node # {bestNode['nodeId']}")
+                        #print(f"Vehicle visited node # {bestNode['nodeId']}")
                         v["currentNode"] = bestNode["nodeId"]
                         v["quantity"] -= d_total[bestNode["nodeId"]][t]
                         v["route"].append(bestNode["nodeId"])
                         depotInventory[0] -= d_total[bestNode["nodeId"]][t]
                         profit += bestNode['profit']
-                        transportCost += nodeStat["transportCost"]
-                        totalTransported += d_total[bestNode["nodeId"]][t]
+                        #transportCost += nodeStat["transportCost"]
+                        #totalTransported += d_total[bestNode["nodeId"]][t]
         
         for i in range(1, n + 1):
             inventory[i]["age"] += 1
@@ -479,7 +469,8 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
 
         # Print best route
         for v in vehicles:
-            print('Best route for vehicle ', v["vehicleId"], ' in period ', t, ': ', v["route"])
+            initial_solution["vehicle_routes"].append(v["route"])
+            #print('Best route for vehicle ', v["vehicleId"], ' in period ', t, ': ', v["route"])
 
         # Calculate holding costs at depot
         for i in range(H):
@@ -489,13 +480,14 @@ def greedy_randomized(n, s, K, H, Q, r, C, Xcoord, Ycoord, c, h, u, I_total, d_t
             depotInventory[i] = depotInventory[i - 1]
         depotInventory[0] = r[t]
 
-        print('Total profit for period ', t, ' = ', profit)
-        total_profit += profit
-
-        tabu_search = TabuSearch(initial_solution, max_iterations=10)
+        initial_solution["profit"] = profit;
+        tabu_search = TabuSearch(initial_solution, max_iterations=10, c=c)
         best_solution = tabu_search.run()
+        print('Total profit for period ', t, ' = ', best_solution['profit'])
+        total_profit += best_solution['profit']
         # Output the best solution found
         print(f"Best solution: {best_solution}")
+        print(f"Inventory: {inventory}")
     print('Total profit for all periods = ', total_profit)
 
 
