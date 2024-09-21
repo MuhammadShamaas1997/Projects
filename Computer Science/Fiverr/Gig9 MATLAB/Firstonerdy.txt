@@ -1,0 +1,344 @@
+%% Start
+clear;
+clc;
+ 
+%% Geräteeinstellungen
+device      = "Scarlett 4i4 USB"; % Name des Audiogerätes
+fs          = 48000; % Abtastrate (Hz)
+L           = 1024;     % Samples pro Frame (Anzahl der Samples)
+overlap     = 256;      % Länge der Überlappung (Anzahl der Samples)
+recChMap    = 1;        % Kanalzuordnung für Aufnahme
+playChMap   = 1;        % Kanalzuordnung für Wiedergabe
+nbPlayCh    = 1;        % Gesamtanzahl der Wiedergabekanäle
+nbRecCh     = 1;        % Gesamtanzahl der Aufnahmekanäle
+cal_reference = 0.015;    % 15 mV/Pa Herstellerangabe Behringer ECM8000 
+
+
+%% Methodeneinstellungen (Sinussweep)
+nbRunsTotal     = 2; % Anzahl der Durchläufe und Mittelungen (Sweeps)
+durationPerRun  = 4; % Dauer pro Durchlauf (s)
+outputLevel     = -6; % Anregungspegel (dBFS)
+sweepRange      = [20 20000]; % Sweep-Start-/Stoppfrequenz (Hz)
+sweepDur        = 3; % Sweep-Dauer (s)
+irDur           = durationPerRun - sweepDur; % Messdauer der Impulsantwort
+                                             % ab Sweepende
+ 
+%% Erzeugung des Messsignals
+exc = sweeptone( ...
+    sweepDur, irDur, fs, ...
+    ExcitationLevel=outputLevel, ...
+    SweepFrequencyRange=sweepRange);
+ 
+% Füge Erregungswiederholungen hinzu
+excSequence = repmat(exc, 1, nbPlayCh);
+ 
+% Verfolge, welche Teile der Anregung entsprechen (alle sind Erregungssignale)
+recIdx = true(size(excSequence, 1), 1);
+ 
+% Ein-/Ausgabepuffer zuweisen
+sequenceLength  = size(excSequence, 1);
+bufExc          = dsp.AsyncBuffer(sequenceLength + L);
+bufRec          = dsp.AsyncBuffer(sequenceLength + 2 * L);
+ 
+% Kopiere die Erregung in den Ausgabepuffer
+write(bufExc, excSequence);
+write(bufExc, zeros(L, nbPlayCh));
+ 
+%% Einrichtung des Aufnahmegeräts
+apr = audioPlayerRecorder( ...
+    fs, Device=device, ...
+    PlayerChannelMapping=playChMap, ...
+    RecorderChannelMapping=recChMap);
+setup(apr, zeros(L, nbPlayCh));
+ 
+% Speicher für alle Aufnahmen
+allRecordings = zeros(sequenceLength, nbRecCh, nbRunsTotal);
+ 
+% Hauptschleife über die Anzahl der Wiederholungen
+for run = 1:nbRunsTotal
+    % Wiedergabe- und Aufnahmeschleife
+    while bufExc.NumUnreadSamples > 0
+        x = read(bufExc, L);
+        [y, under, over] = apr(x);
+        write(bufRec, y);
+        if under > 0 || over > 0
+            error("Underrun oder Overrun aufgetreten. Stoppe Messung");
+        end
+    end
+   
+    % Aufnahme lesen
+    read(bufRec, L); % Ersten Frame wegwerfen, damit nur stabile und
+                     % repräsentativen Daten verwendet werden
+    rec = read(bufRec);
+   
+    % Sicherstellen, dass die Aufnahme die erwartete Länge hat
+    recLength = size(rec, 1);
+    if recLength > sequenceLength
+        rec = rec(1:sequenceLength, :); % Kürzen, wenn zu lang
+    elseif recLength < sequenceLength
+        rec = [rec; zeros(sequenceLength - recLength, nbRecCh)];
+        % Auffüllen, wenn zu kurz
+    end
+   
+    % Speichern der aktuellen Aufnahme
+    allRecordings(:, :, run) = rec;
+   
+    % Reset Puffer für die nächste Wiederholung
+    reset(bufExc);
+    reset(bufRec);
+    write(bufExc, excSequence);
+    write(bufExc, zeros(L, nbPlayCh));
+end
+ 
+% Freigabe des Audiogeräts
+release(apr);
+ 
+%% Mittelung der Aufnahmen
+averageRecording = mean(allRecordings, 3);
+ 
+% Entfernen der Pausen
+recWithoutPauses = averageRecording(recIdx, :);
+ 
+% Kürzen der Signale auf gleiche Länge
+minLength        = min(length(exc), length(recWithoutPauses));
+exc              = exc(1:minLength, :);
+recWithoutPauses = recWithoutPauses(1:minLength, :);
+ 
+% Berechne die Kreuzkorrelation und bestimme die Verzögerung
+[crossCorr, lags]   = xcorr(recWithoutPauses(:, 1), exc(:, 1));
+[~, maxIdx]         = max(crossCorr);
+latencySamples      = lags(maxIdx);
+latencyTime         = latencySamples / fs;
+ 
+% Korrigiere die Latenz in der Aufnahme
+if latencySamples > 0
+    recWithoutPauses = recWithoutPauses(latencySamples+1:end, :);
+    exc = exc(1:end-latencySamples, :);
+elseif latencySamples < 0
+    recWithoutPauses = [zeros(-latencySamples, nbRecCh); recWithoutPauses];
+    recWithoutPauses = recWithoutPauses(1:minLength, :);
+end
+ 
+% Berechnen der Impulsantwort der Aufnahme
+ir    = impzest(exc, recWithoutPauses);
+t_sec = (0:length(ir) - 1).' / fs; % Zeitvektor
+ 
+% Kalibrierungsfaktor anwenden
+ir_calibrated = ir / cal_reference; % Kalibrierte Impulsantwort
+ 
+% Ausgabe einstellen
+capture = struct(zeros(0, nbRecCh));
+for ii  = 1:nbRecCh
+    capture(ii).ImpulseResponse.Time = t_sec;
+    capture(ii).ImpulseResponse.Amplitude = ir_calibrated(:, ii);
+end
+ 
+%% Plot der Kreuzkorrelationsfunktion
+figure;
+ 
+% Berechne die Kreuzkorrelation und normiere sie
+crossCorrelation     = xcorr(recWithoutPauses(:, 1), exc(:, 1));
+normExc              = norm(exc(:, 1));
+normRecWithoutPauses = norm(recWithoutPauses(:, 1));
+crossCorrelationNorm = crossCorrelation / (normExc * normRecWithoutPauses);
+ 
+% Ändere die X-Achse auf Zeit anstatt auf Samples
+samplesDelay    = -(length(exc(:, 1))-1):(length(exc(:, 1))-1);
+timeDelay       = samplesDelay / fs;
+ 
+% Erhöhe die Auflösung der Zeitachse durch Interpolation
+timeDelayHighRes = linspace(min(timeDelay), max(timeDelay), ...
+                   numel(timeDelay)*10);
+crossCorrelationNormHighRes = interp1(timeDelay, crossCorrelationNorm, ...
+                              timeDelayHighRes, 'spline');
+plot(timeDelayHighRes, crossCorrelationNormHighRes);
+xlabel('Zeit (s)');
+ylabel('Korrelationsgrad');
+title('Kreuzkorrelations-Funktion');
+ 
+% Begrenze die X-Achse auf ±3 Sekunden
+xlim([-3, 3]);
+ 
+ 
+%% Plot der Impulsantwort
+figure;
+plot(t_sec, ir_calibrated(:, 1));
+xlabel('Zeit (s)');
+ylabel('Amplitude');
+title('Impulsantwort');
+xlim([0, 0.3]); % Begrenze die X-Achse auf 0 bis 0,3 Sekunden
+ 
+% Ausgabe der Latenzzeit
+disp(['Latenzzeit: ', num2str(latencyTime), ' Sekunden']);
+ 
+ 
+%% Plot der Kohärenz
+figure;
+ 
+% Berechnung der Kohärenz
+[pxx, ~]    = pwelch(exc(:, 1), [], [], [], fs);
+[pyy, ~]    = pwelch(recWithoutPauses(:, 1), [], [], [], fs);
+[p, f]      = cpsd(exc(:, 1), recWithoutPauses(:, 1), [], [], [], fs);
+coherence   = abs(p).^2 ./ (pxx .* pyy);
+ 
+plot(f, coherence);
+xlabel('Frequenz (Hz)');
+ylabel('Kohärenz');
+title('Kohärenz-Funktion');
+xlim([0,20000]); % Begrenzung der x-Achse (fu, fo bzw. Delta-f)
+ 
+ 
+%% Berechnung der STFT für die Campbell- und Waterfall-Diagramme
+windowLength = 512; % Fensterlänge
+ 
+% Setze die Fensterlänge und Überlappungslänge
+nfft      = 2048; % FFT-Länge
+[S, F, T] = stft(ir_calibrated(:, 1), fs, 'Window', hamming(windowLength), ...
+            'OverlapLength', overlap, 'FFTLength', nfft);
+ 
+% Frequenzbereich von 20 Hz bis 20000 Hz definieren
+freqRange   = F >= 20 & F <= 20000;
+F_filtered  = F(freqRange);
+S_filtered  = S(freqRange, :);
+ 
+% Frequenzachse logarithmisch skalieren
+F_log = logspace(log10(20), log10(20000), length(F_filtered));
+ 
+% Interpolation auf logarithmischer Frequenzachse
+S_log = interp1(F_filtered, abs(S_filtered), F_log, 'linear');
+ 
+ 
+%% Schröder-Rückwärtsintegration zur Berechnung der Nachhallzeit (RT60)
+% Normalisieren der Impulsantwort
+ir_norm = ir_calibrated(:, 1) / max(abs(ir_calibrated(:, 1)));
+ 
+% Schröder-Rückwärtsintegration
+energyDecay = flipud(cumsum(flipud(ir_norm.^2)));
+ 
+% Normalisieren des Energiepegels auf 0 dB
+energyDecay_dB = 10 * log10(energyDecay / max(energyDecay));
+ 
+ 
+%% Plot der Schröder Rückwärtsintegration
+figure;
+plot(t_sec, energyDecay_dB);
+xlabel('Zeit (s)');
+ylabel('Energiepegel (dB)');
+title('Schröder Rückwärtsintegration');
+grid on;
+ 
+% Berechnung der RT60
+% Finde den Punkt, an dem der Pegel -5 dB und -35 dB erreicht
+t_5dB   = interp1(energyDecay_dB, t_sec, -5);
+t_35dB  = interp1(energyDecay_dB, t_sec, -35);
+ 
+% Berechne RT60 (Zeitraum für einen Pegelabfall von 60 dB)
+RT60 = (t_35dB - t_5dB) * (60 / 30);
+ 
+% Ausgabe der Nachhallzeit
+fprintf('Einzahlwert Nachhallzeit (RT60): %.2f Sekunden\n', RT60);
+ 
+% Markiere die -5 dB und -35 dB Punkte auf dem Plot
+hold on;
+plot(t_5dB, -5, 'ro', 'MarkerFaceColor', 'r');
+plot(t_35dB, -35, 'ro', 'MarkerFaceColor', 'r');
+ 
+% Zeichne eine neue Gerade zwischen den roten Punkten in dunkelgrün
+plot([t_5dB, t_35dB], [-5, -35], 'Color', [0, 0.5, 0], ...
+     'LineStyle', '--', 'LineWidth', 2);
+legend('Energiezerfall', '-5 dB Punkt', '-35 dB Punkt', 'Neue Gerade');
+hold off;
+ 
+ 
+%% Berechnung der Nachhallzeit (RT60) für Oktavbänder
+octave_center_frequencies = [250, 500, 1000, 2000, 4000];
+RT60_octave = zeros(size(octave_center_frequencies));
+for i = 1:numel(octave_center_frequencies)
+ 
+% Bandpassfilter um die Oktavfrequenz
+[b, a]  = butter(2, [octave_center_frequencies(i)/sqrt(2), ...
+          octave_center_frequencies(i)*sqrt(2)] / (fs/2), 'bandpass');
+ir_band = filter(b, a, ir_calibrated);
+ 
+% Schröder-Rückwärtsintegration für das Bandpass-gefilterte Signal
+ir_norm_band        = ir_band(:, 1) / max(abs(ir_band(:, 1)));
+energyDecay_band    = flipud(cumsum(flipud(ir_norm_band.^2)));
+energyDecay_dB_band = 10 * log10(energyDecay_band / max(energyDecay_band));
+ 
+% Sicherstellen, dass die Punkte eindeutig sind
+[energyDecay_dB_band, unique_idx] = unique(energyDecay_dB_band);
+t_sec_unique = t_sec(unique_idx);
+ 
+% Finde den Punkt, an dem der Pegel -5 dB und -35 dB erreicht
+t_5dB_band  = interp1(energyDecay_dB_band, t_sec_unique, -5);
+t_35dB_band = interp1(energyDecay_dB_band, t_sec_unique, -35);
+ 
+% Berechne RT60 für das aktuelle Oktavband
+RT60_octave(i) = (t_35dB_band - t_5dB_band) * (60 / 30);
+end
+ 
+% Ausgabe der Nachhallzeiten für jede Oktave
+for i = 1:numel(octave_center_frequencies)
+fprintf('Nachhallzeit (RT60) für %d Hz Oktave: %.2f Sekunden\n', ...
+        octave_center_frequencies(i), RT60_octave(i));
+end
+ 
+% Plot der Nachhallzeit (RT60) für verschiedene Oktavbänder
+figure;
+plot(octave_center_frequencies, RT60_octave, '-o');
+set(gca, 'XScale', 'log');
+xlabel('Frequenz (Hz)');
+ylabel('RT60 (s)');
+title('Nachhallzeit (RT60) für Oktavbänder');
+xticks(octave_center_frequencies);
+grid on;
+ 
+%% Campbell-Diagramm (Betragsspektrum)
+figure;
+ 
+% Plot des Betragsspektrums der Impulsantwort über die Zeit
+imagesc(T, F_log, 20*log10(S_log));
+set(gca, 'YScale', 'log');
+axis xy;
+colormap(jet);
+colorbar;
+xlabel('Zeit (s)');
+ylabel('Frequenz (Hz)');
+title('Campbell-Diagramm der Impulsantwort');
+clim([-60, 0]);   % Farbskala auf -60 bis 0 dB begrenzen
+xlim([0, 0.9]);   % Begrenzung der x-Achse auf 0,9 sec
+ylim([50,20000]); % Begrenzung der y-Achse (fu, fo bzw. Delta-f)
+ 
+%% Waterfall-Plot
+figure;
+ 
+% Plot des Waterfall-Diagramms der Impulsantwort mit
+% logarithmischer Frequenzachse
+waterfall(F_log, T, 20*log10(S_log)');
+view(-45, 45);
+colormap(jet);
+colorbar;
+xlabel('Frequenz (Hz)');
+ylabel('Zeit (s)');
+zlabel('Amplitude (dB)');
+title('Waterfall-Diagramm der Impulsantwort');
+set(gca, 'XScale', 'log'); % Setze logarithmische Skalierung '
+                           % für die Frequenzachse
+xlim([20, 20000]); % Begrenzung der x-Achse (fu, fo bzw. Delta-f)
+ 
+%% Plot des Pegel-Zeit-Verlaufs der Nachhallzeit
+figure;
+ 
+% Berechnung des Energiepegelverlaufs der Impulsantwort
+energyLevel_dB = 20 * log10(abs(ir_norm));
+ 
+% Plotten des Pegel-Zeit-Verlaufs
+plot(t_sec, energyLevel_dB, 'LineWidth', 1.5);
+xlabel('Zeit (s)');
+ylabel('Energiepegel (dB)');
+title('Pegel-Zeit-Verlauf der Nachhallzeit (RT60)');
+grid on;
+ 
+% Begrenze die X-Achse, um den relevanten Bereich zu zeigen
+xlim([0, max(t_sec)]);
+
