@@ -289,13 +289,13 @@ class TabuSearch:
             if len(route) > 1:
                 lastNode = 0
                 for node in route:
-                    new_solution['profit'] = new_solution['profit'] - self.c[lastNode][node]
+                    new_solution['profit'] = new_solution['profit'] + self.c[lastNode][node]
                     lastNode = node 
                 idx1, idx2 = random.sample(range(len(route)), 2)
                 route[idx1], route[idx2] = route[idx2], route[idx1]
                 lastNode = 0
                 for node in route:
-                	new_solution['profit'] = new_solution['profit'] + self.c[lastNode][node]
+                	new_solution['profit'] = new_solution['profit'] - self.c[lastNode][node]
                 	lastNode = node 
 
             new_solution['vehicle_routes'][vIndex] = route
