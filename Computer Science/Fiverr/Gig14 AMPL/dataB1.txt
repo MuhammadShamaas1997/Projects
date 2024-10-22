@@ -1,0 +1,181 @@
+# euro2024.dat
+
+# Sets
+set T := Germany Scotland Hungary Switzerland Spain Croatia Italy Albania Slovenia Denmark Serbia England Poland Netherlands Austria France Romania Ukraine Belgium Slovakia Turkey Georgia Portugal Czechia;
+set G := A B C D E F;
+set V := BER MUN DOR STU GEL HAM DUS FRK COL LEI;
+set D := 14..26;
+set M := 1..36;
+
+# Parameters
+param MatchesPerVenue :=
+    BER 3
+    MUN 4
+    DOR 4
+    STU 4
+    GEL 3
+    HAM 4
+    DUS 3
+    FRK 4
+    COL 4
+    LEI 3;
+
+param Distance: BER MUN DOR STU GEL HAM DUS FRK COL LEI :=
+    BER     0   571 491 628 510 290 565 549 570 179
+    MUN   571     0   638 222 669 790 653 420 610 414
+    DOR   491 638     0   449    41   351    73   267    96   427
+    STU   628 222 449     0     454   676   421   202   378   471
+    GEL   510 669    41    454     0    347    60   272   102   490
+    HAM   290 790 351    676 347     0    403   508   425   399
+    DUS   565 653    73    421    60   403     0    238    60   544
+    FRK   549 420 267    202   272   508 238     0   196   389
+    COL   570 610    96    378   102   425    60   196     0   502
+    LEI   179 414   427   471   490   399   544   389   502     0;
+
+param MainSeededVenue :=
+    Germany MUN
+    Spain BER
+    England DUS
+    France GEL
+    Belgium HAM
+    Portugal LEI;
+
+param MatchDate :=
+    1 14
+    2 15
+    3 15
+    4 15
+    5 16
+    6 16
+    7 16
+    8 17
+    9 17
+    10 17
+    11 18
+    12 18
+    13 19
+    14 19
+    15 19
+    16 20
+    17 20
+    18 20
+    19 21
+    20 21
+    21 21
+    22 22
+    23 22
+    24 22
+    25 23
+    26 23
+    27 24
+    28 24
+    29 25
+    30 25
+    31 25
+    32 25
+    33 26
+    34 26
+    35 26
+    36 26;
+
+param TeamMatches: 1 2 3 :=
+    Germany 1 14 25
+    Scotland 1 15 26
+    Hungary 2 14 26
+    Switzerland 2 15 25
+    Spain 3 18 27
+    Croatia 3 13 28
+    Italy 4 18 28
+    Albania 4 13 27
+    Slovenia 5 16 29
+    Denmark 5 17 30
+    Serbia 6 16 30
+    England 6 17 29
+    Poland 7 19 31
+    Netherlands 7 20 32
+    Austria 8 19 32
+    France 8 20 31
+    Romania 9 22 34
+    Ukraine 9 21 33
+    Belgium 10 22 33
+    Slovakia 10 21 34
+    Turkey 11 24 35
+    Georgia 11 23 36
+    Portugal 12 24 36
+    Czechia 12 23 35;
+
+set MatchTeams :=
+    [1] {'Germany', 'Scotland'}
+    [2] {'Hungary', 'Switzerland'}
+    [3] {'Spain', 'Croatia'}
+    [4] {'Italy', 'Albania'}
+    [5] {'Slovenia', 'Denmark'}
+    [6] {'Serbia', 'England'}
+    [7] {'Poland', 'Netherlands'}
+    [8] {'Austria', 'France'}
+    [9] {'Romania', 'Ukraine'}
+    [10] {'Belgium', 'Slovakia'}
+    [11] {'Turkey', 'Georgia'}
+    [12] {'Portugal', 'Czechia'}
+    [13] {'Croatia', 'Albania'}
+    [14] {'Germany', 'Hungary'}
+    [15] {'Scotland', 'Switzerland'}
+    [16] {'Slovenia', 'Serbia'}
+    [17] {'Denmark', 'England'}
+    [18] {'Spain', 'Italy'}
+    [19] {'Poland', 'Austria'}
+    [20] {'Netherlands', 'France'}
+    [21] {'Slovakia', 'Ukraine'}
+    [22] {'Belgium', 'Romania'}
+    [23] {'Georgia', 'Czechia'}
+    [24] {'Turkey', 'Portugal'}
+    [25] {'Switzerland', 'Germany'}
+    [26] {'Scotland', 'Hungary'}
+    [27] {'Albania', 'Spain'}
+    [28] {'Croatia', 'Italy'}
+    [29] {'England', 'Slovenia'}
+    [30] {'Denmark', 'Serbia'}
+    [31] {'France', 'Poland'}
+    [32] {'Netherlands', 'Austria'}
+    [33] {'Ukraine', 'Belgium'}
+    [34] {'Slovakia', 'Romania'}
+    [35] {'Czechia', 'Turkey'}
+    [36] {'Georgia', 'Portugal'};
+
+param MatchGroup :=
+    1 A
+    2 A
+    3 B
+    4 B
+    5 C
+    6 C
+    7 D
+    8 D
+    9 E
+    10 E
+    11 F
+    12 F
+    13 B
+    14 A
+    15 A
+    16 C
+    17 C
+    18 B
+    19 D
+    20 D
+    21 E
+    22 E
+    23 F
+    24 F
+    25 A
+    26 A
+    27 B
+    28 B
+    29 C
+    30 C
+    31 D
+    32 D
+    33 E
+    34 E
+    35 F
+    36 F;

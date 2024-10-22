@@ -1,0 +1,220 @@
+param Distance:#distance from venue (row) to venue (column)
+	BER	MUN	DOR	STU	GEL	HAM	DUS	FRK	COL	LEI	:=
+BER	0	571	501	628	510	290	564	545	571	180
+MUN	570	0	632	220	664	790	654	421	613	412
+DOR	491	638	0	452	34	353	68	271	99	420
+STU	628	222	449	0	454	676	421	202	380	470
+GEL	510	669	41	455	0	348	59	273	101	451
+HAM	290	790	351	676	347	0	401	506	425	399
+DUS	565	653	73	421	60	403	0	239	61	481
+FRK	549	420	267	202	272	508	238	0	198	391
+COL	570	610	96	378	102	425	60	196	0	492
+LEI	179	414	427	471	490	399	544	389	502	0
+;
+
+set GroupTeams[A] := GER SCO HUN SUI;
+set GroupTeams[B] := ESP CRO ITA ALB;
+set GroupTeams[C] := SVN DEN SRB ENG;
+set GroupTeams[D] := POL NED AUT FRA;
+set GroupTeams[E] := BEL SVK ROU UKR;
+set GroupTeams[F] := TUR GEO POR CZE;
+
+set MatchTeams[1] = GER SCO;
+set MatchTeams[2] = HUN SUI;
+set MatchTeams[3] = ESP CRO;
+set MatchTeams[4] = ITA ALB;
+set MatchTeams[5] = SRB ENG;
+set MatchTeams[6] = SVN DEN;
+set MatchTeams[7] = POL NED;
+set MatchTeams[8] = AUT FRA;
+set MatchTeams[9] = BEL SVK;
+set MatchTeams[10] = ROU UKR;
+set MatchTeams[11] = TUR GEO;
+set MatchTeams[12] = POR CZE;
+set MatchTeams[13] = SCO SUI;
+set MatchTeams[14] = GER HUN;
+set MatchTeams[15] = CRO ALB;
+set MatchTeams[16] = ESP ITA;
+set MatchTeams[17] = DEN ENG;
+set MatchTeams[18] = SVN SRB;
+set MatchTeams[19] = POL AUT;
+set MatchTeams[20] = NED FRA;
+set MatchTeams[21] = SVK UKR;
+set MatchTeams[22] = BEL ROU;
+set MatchTeams[23] = TUR POR;
+set MatchTeams[24] = GEO CZE;
+set MatchTeams[25] = SUI GER;
+set MatchTeams[26] = SCO HUN;
+set MatchTeams[27] = ALB ESP;
+set MatchTeams[28] = CRO ITA;
+set MatchTeams[29] = ENG SVN;
+set MatchTeams[30] = DEN SRB;
+set MatchTeams[31] = NED AUT;
+set MatchTeams[32] = FRA POL;
+set MatchTeams[33] = SVK ROU;
+set MatchTeams[34] = UKR BEL;
+set MatchTeams[35] = GEO POR;
+set MatchTeams[36] = CZE TUR;
+
+param MatchesPerVenue :=
+BER 3
+LEI 3
+HAM 4
+DOR 4
+GEL 3
+DUS 3
+COL 4
+FRK 4
+STU 4
+MUN 4;
+
+param MatchDate :=
+1 14
+2 15
+3 15
+4 15
+5 16
+6 16
+7 16
+8 17
+9 17
+10 17
+11 18
+12 18
+13 19
+14 19
+15 19
+16 20
+17 20
+18 20
+19 21
+20 21
+21 21
+22 22
+23 22
+24 22
+25 23
+26 23
+27 24
+28 24
+29 25
+30 25
+31 25
+32 25
+33 26
+34 26
+35 26
+36 26;
+
+param MatchGroup :=
+1 A
+2 A
+3 B
+4 B
+5 C
+6 C
+7 D
+8 D
+9 E
+10 E
+11 F
+12 F
+13 A
+14 A
+15 B
+16 B
+17 C
+18 C
+19 D
+20 D
+21 E
+22 E
+23 F
+24 F
+25 A
+26 A
+27 B
+28 B
+29 C
+30 C
+31 D
+32 D
+33 E
+34 E
+35 F
+36 F;
+
+param TeamMatches :=
+  [GER, 1] 1
+  [GER, 2] 14
+  [GER, 3] 25
+  [SCO, 1] 1
+  [SCO, 2] 13
+  [SCO, 3] 26
+  [HUN, 1] 2
+  [HUN, 2] 14
+  [HUN, 3] 26
+  [SUI, 1] 2
+  [SUI, 2] 13
+  [SUI, 3] 25
+  [ESP, 1] 3
+  [ESP, 2] 16
+  [ESP, 3] 27
+  [CRO, 1] 3
+  [CRO, 2] 15
+  [CRO, 3] 28
+  [ITA, 1] 4
+  [ITA, 2] 16
+  [ITA, 3] 28
+  [ALB, 1] 4
+  [ALB, 2] 15
+  [ALB, 3] 27
+  [SVN, 1] 6
+  [SVN, 2] 18
+  [SVN, 3] 29
+  [DEN, 1] 6
+  [DEN, 2] 17
+  [DEN, 3] 30
+  [SRB, 1] 5
+  [SRB, 2] 18
+  [SRB, 3] 30
+  [ENG, 1] 5
+  [ENG, 2] 17
+  [ENG, 3] 29
+  [POL, 1] 7
+  [POL, 2] 19
+  [POL, 3] 32
+  [NED, 1] 7
+  [NED, 2] 20
+  [NED, 3] 31
+  [AUT, 1] 8
+  [AUT, 2] 19
+  [AUT, 3] 31
+  [FRA, 1] 8
+  [FRA, 2] 20
+  [FRA, 3] 32
+  [BEL, 1] 9
+  [BEL, 2] 22
+  [BEL, 3] 34
+  [SVK, 1] 9
+  [SVK, 2] 21
+  [SVK, 3] 33
+  [ROU, 1] 10
+  [ROU, 2] 22
+  [ROU, 3] 33
+  [UKR, 1] 10
+  [UKR, 2] 21
+  [UKR, 3] 34
+  [TUR, 1] 11
+  [TUR, 2] 23
+  [TUR, 3] 36
+  [GEO, 1] 11
+  [GEO, 2] 24
+  [GEO, 3] 35
+  [POR, 1] 12
+  [POR, 2] 23
+  [POR, 3] 35
+  [CZE, 1] 12
+  [CZE, 2] 24
+  [CZE, 3] 36;
+  

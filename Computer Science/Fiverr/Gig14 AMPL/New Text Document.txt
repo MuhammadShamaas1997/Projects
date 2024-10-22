@@ -1,0 +1,4 @@
+reset;
+mod partbtest.mod;
+data dataB.dat;
+solve;
