@@ -21,144 +21,277 @@ model.P = RangeSet(168)  # 168 periods
 # Set of students
 model.S = RangeSet(20)  # 20 students
 
-# Define A(e) as a Param: For each event e in E, list the allowed periods in P
-model.A_e = Param(model.E, within=Any, initialize={e: list(range(1, 141)) for e in model.E})  # All events can start by period 140
+import random
 
-# Define DD as a Set of event pairs (e', e) where e' cannot occur on the same day as e
-model.DD = Set(dimen=2, initialize={('E2', 'E3'), ('E3', 'E4'), ('E4', 'E5'), ('E5', 'E6'), ('E7', 'E8'), ('E8', 'E9')})
+# Set a seed for reproducibility
+random.seed(42)
+
+# Define A(e) as a Param: For each event e in E, list the allowed periods in P
+model.A_e = Set(model.E, initialize=lambda model, e: RangeSet(140))
+
+# Define DD: Random pairs of events that cannot occur on the same day
+all_events = list(model.E)
+model.DD = Set(
+    dimen=2,
+    initialize=lambda model: {(random.choice(all_events), random.choice(all_events)) for _ in range(10)}
+)
 
 # Define E_f as a subset of E for flight events
 model.E_f = Set(initialize=['E4', 'E5', 'E8', 'E9', 'E10'])  # Flight events
 
-# Define E_j: A dictionary that maps each stage j in J to a subset of events in E
-model.E_j = Set(initialize=model.E)  # All events map to one stage
+# Define E_CQ: Random subset of events
+model.E_CQ = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(2, 5))
+)
 
-# Define E_lec as a subset of E for lecture events
-model.E_lec = Set(initialize=['E1', 'E7'])  # Lecture events
+# Define E_j: Assign random events to stages
+all_stages = list(model.J)
+model.E_j = Param(
+    model.J,
+    initialize=lambda model, j: random.sample(all_events, random.randint(3, 6)),
+    within=Any
+)
 
-# Define E_only as a subset of E for events that can only be scheduled with lectures on the same day
-model.E_only = Set(initialize=[])  # No events
+# Define E_lec: Subset of E for lecture events
+model.E_lec = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(2, 4))
+)
 
-# Define E_onlyFlight as a subset of E for events that Flight events that can be scheduled only with 
-# lectures and simulator events occurring the same day.
-model.E_onlyFlight = Set(initialize=['E1', 'E2'])  # Tutorial events
+# Define E_only: Random subset of events
+model.E_only = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(0, 2))
+)
 
-# Define E_NOW as a subset of E for events that should not be flown with on-wing  instructor.
-model.E_NOW = Set(initialize=['E3', 'E4', 'E5', 'E6', 'E8', 'E9', 'E10'])  # Non-overlapping events
+# Define E_onlyFlight: Events related to flights
+model.E_onlyFlight = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(2, 4))
+)
 
-# Define E_OW as a subset of E for events required to be flown with on-wing  instructor
-model.E_OW = Set(initialize=[])  # No events
+# Define E_NOW and E_OW: Non-overlapping random subsets of events
+random_events = set(random.sample(all_events, random.randint(5, 10)))
+model.E_OW = Set(initialize=lambda model: random_events)
+model.E_NOW = Set(initialize=lambda model: set(all_events) - random_events)
 
-# Define E_sim as a subset of E for events that are simulator events
-model.E_sim = Set(initialize=['E3', 'E6'])  # Simulation events
+# Define E_sim: Simulator events
+model.E_sim = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(2, 5))
+)
 
-# Define E_ii as a subset of E for events that are in-and-in events
-model.E_ii = Set(initialize=['E4', 'E5', 'E8', 'E9', 'E10'])  # In-and-in events
+# Define E_ii: In-and-in events
+model.E_ii = Set(
+    initialize=lambda model: random.sample(all_events, random.randint(3, 6))
+)
 
-# Define I_e: A dictionary that maps each event e in E to a subset of instructors in I
-model.I_e = Param(model.E, initialize={e: list(model.I) for e in model.E}, within=Any)  # All instructors can instruct any event
+# Define I_e: Randomly assign instructors to events
+all_instructors = list(model.I)
+model.I_e = Param(
+    model.E,
+    initialize=lambda model, e: random.sample(all_instructors, random.randint(1, len(all_instructors))),
+    within=Any
+)
 
-# Define OW_s: A dictionary that maps each student s in S to a subset of instructors in I
-model.OW_s = Param(model.S, within=Any, initialize={s: list(model.I) for s in model.S})  # All students can fly with all instructors
+# Define OW_s: Assign random instructors to students
+all_students = list(model.S)
+model.OW_s = Param(
+    model.S,
+    initialize=lambda model, s: random.sample(all_instructors, random.randint(1, len(all_instructors))),
+    within=Any
+)
 
-# Define P_d: A dictionary that maps each day d in D to a subset of periods in P
-model.P_d = Param(model.D, within=Any, initialize={d: list(range((d - 1) * 12 + 1, d * 12 + 1)) for d in model.D})  # 12-hour workdays
+# Define P_d: Random periods for each day
+model.P_d = Param(
+    model.D,
+    initialize=lambda model, d: sorted(random.sample(list(model.P), random.randint(5, 12))),
+    within=Any
+)
 
-# Define P_NO_i: A dictionary that maps each instructor i in I to a subset of periods in P
-model.P_NO_i = Param(model.I, within=Any, initialize={i: list(model.P) for i in model.I})  # All periods available for instructors
+# Define P_NO_i: Random unavailable periods for instructors
+model.P_NO_i = Param(
+    model.I,
+    initialize=lambda model, i: sorted(random.sample(list(model.P), random.randint(5, 10))),
+    within=Any
+)
 
-# Define P_NO_s: A dictionary that maps each student s in S to a subset of periods in P
-model.P_NO_s = Param(model.S, within=Any, initialize={s: list(model.P) for s in model.S})  # All periods available for students
+# Define P_NO_s: Random unavailable periods for students
+model.P_NO_s = Param(
+    model.S,
+    initialize=lambda model, s: sorted(random.sample(list(model.P), random.randint(5, 10))),
+    within=Any
+)
 
-# Define R as a Set of event pairs (e', e) where e' precedes event e
-model.R = Param(model.E, initialize={e: i for i, e in enumerate(model.E, 1)})  # Chronological order
+# Define R: Random precedence order for events
+model.R = Param(
+    model.E,
+    initialize=lambda model, e: random.randint(1, len(model.E)),
+    within=Any
+)
 
-# Define S_e: A dictionary that maps each event e in E to a subset of events in E
-model.S_e = Set(model.E, within=model.E, initialize={})
+# Define SP_e_p: Random blocked periods for events
+model.SP_e_p = Param(
+    model.E, model.P,
+    initialize=lambda model, e, p: sorted(random.sample(list(model.P), random.randint(0, 5))),
+    within=Any
+)
 
-# Define SP_e_p: A mapping of each event e and period p to a set of periods where no event can start
-model.SP_e_p = Param(model.E, model.P, within=Any, initialize={(e, p): list(range(p + 1, p + 7)) if p <= 162 else [] for e in model.E for p in model.P})  # 6-period blocks
+# Define S_e: Random relationships between events
+model.S_e = Set(
+    model.E,
+    initialize=lambda model, e: random.sample(all_events, random.randint(0, len(all_events) // 2))
+)
 
-# Define warmups as a Set of event pairs (e', e) where e' reinstates curreny for event e
-model.warmups = Param(model.E, within=Any, initialize={e: [e_prev for e_prev in model.E if model.R[e_prev] < model.R[e]] for e in model.E})  # Preceding events
+import random
 
-# Define warmup_S_e: A dictionary that maps each event e in E to a subset of events in E
-model.warmup_S_e = Set(model.E, within=model.E, initialize={})
+# Define warmups as a Set of event pairs (e', e) where e' reinstates currency for event e
+def warmups_initializer(model):
+    warmups_set = []
+    for e in model.E:
+        for e_prev in model.E:
+            if model.R[e_prev] < model.R[e]:  # Ensure R is initialized correctly
+                if random.random() < 0.3:  # 30% chance to include a pair
+                    warmups_set.append((e_prev, e))
+    return warmups_set
+model.warmups = Set(dimen=2, initialize=warmups_initializer)
 
-# Define Buffer_e: A parameter for each event e in E (e.g., buffer time in periods)
-model.Buffer_e = Param(model.E, initialize={e: 2 for e in model.E})  # 2-period buffer
+# Define warmup_S_e
+def warmup_S_e_initializer(model, e):
+    return random.sample(list(model.E), random.randint(1, 5))  # Random subset of 1-5 events
+model.warmup_S_e = Set(model.E, initialize=warmup_S_e_initializer)
 
-# Define CAP as a scalar parameter with a value of 20
-model.CAP = Param(initialize=20)
+# Define Buffer_e
+model.Buffer_e = Param(model.E, initialize=lambda model, e: random.randint(1, 5))  # 1-5 periods buffer
 
-# Initialize the parameter with the completion data
-model.complete_e_s = Param(model.E, model.S, initialize={}, within=Binary, default=0)
+# Define CAP
+model.CAP = Param(initialize=random.randint(10, 30))  # Random scalar between 10 and 30
 
-# Define CQwave_p: A parameter for each period p in P
-# Example initialization: Period P1 has a 2 students that can be waved etc.
-model.CQwave_p = Param(model.P, initialize={}, within=NonNegativeIntegers)
+# Define complete_e_s
+model.complete_e_s = Param(
+    model.E,
+    model.S,
+    initialize=lambda model, e, s: random.choice([0, 1]),  # Binary: 0 or 1
+    within=Binary
+)
 
-# Initialize the parameter for Pair of days that indicates that maximum number of 
-# days until a student is in a warmup window for either 1 warmup or 2 warmups, necessitating they 
-# redo event e′ either once or twice before being able to schedule event e.
-model.currency_e_e = Param(model.E, initialize={e: 12 for e in model.E})  # 12 days
+# Define CQwave_p
+model.CQwave_p = Param(
+    model.P,
+    initialize=lambda model, p: random.randint(0, 5),  # 0-5 students can be waved
+    within=NonNegativeIntegers
+)
 
-# Number of days since student s completed event e at the beginning of the week
-model.days_e_s = Param(model.E, model.S, initialize={(e, s): 12 for e in model.E for s in model.S})  # 12 days
+# Define currency_e_e
+model.currency_e_e = Param(model.E, initialize=lambda model, e: random.randint(5, 15))  # 5-15 days
 
-# Number of days since student s completed event e at the beginning of the week
-model.EEvent_d_i = Param(model.D, model.I, initialize={}, within=NonNegativeIntegers)
+# Define days_e_s
+model.days_e_s = Param(
+    model.E,
+    model.S,
+    initialize=lambda model, e, s: random.randint(5, 20)  # 5-20 days
+)
 
-# Define forecast_p: A parameter for each period p in P
-model.forecast_p = Param(model.P, initialize={})
+# Define EEvent_d_i
+model.EEvent_d_i = Param(
+    model.D,
+    model.I,
+    initialize=lambda model, d, i: random.randint(0, 10),  # Random non-negative integer
+    within=NonNegativeIntegers
+)
 
-# Define G as 1 if requiring completion of event e for student s (desired), 0 otherwise. 
-model.G_e_s = Param(model.E, model.S, initialize={}, within=NonNegativeIntegers)
+# Define forecast_p
+model.forecast_p = Param(
+    model.P,
+    initialize=lambda model, p: random.randint(1, 10),  # Forecast values between 1 and 10
+    within=NonNegativeIntegers
+)
 
-# Define iiR_e: A parameter for each event e in E
-model.iiR_e = Param(model.E, initialize={}, within=NonNegativeIntegers)
+# Define G_e_s
+model.G_e_s = Param(
+    model.E,
+    model.S,
+    initialize=lambda model, e, s: random.randint(0, 1),  # Binary: 0 or 1
+    within=Binary
+)
 
-# Define instructorP as a scalar parameter with a value of 0.01
-model.instructorP = Param(initialize=0.01)
+# Define iiR_e
+model.iiR_e = Param(model.E, initialize=lambda model, e: random.randint(1, 3))  # 1-3 range
 
-# Define M_p: A parameter for each period p in P
-model.M_p = Param(model.P, initialize={}, within=NonNegativeIntegers, default=21)
+# Define instructorP
+model.instructorP = Param(initialize=round(random.uniform(0.01, 0.1), 2))  # 0.01 to 0.1
 
-# Define NA_e: A parameter for each event e in E
-model.NA_e = Param(model.E, initialize={}, within=NonNegativeIntegers)
+# Define M_p
+model.M_p = Param(model.P, initialize=lambda model, p: random.randint(20, 50))  # 20-50
 
-# Define NI_e: A parameter for each event e in E
-model.NI_e = Param(model.E, initialize={}, within=NonNegativeIntegers)
+# Define NA_e
+model.NA_e = Param(model.E, initialize=lambda model, e: random.randint(1, 3))  # 1-3 range
 
-# Define NUM_e: A parameter for each event e in E
-model.NUM_e = Param(model.E, initialize={}, within=NonNegativeIntegers)
+# Define NI_e
+model.NI_e = Param(model.E, initialize=lambda model, e: random.randint(1, 3))  # 1-3 range
 
-# Define numwarmups_e_p_s 
-model.numwarmups_e_p_s = Param(model.E, model.P, model.S, initialize={}, within=NonNegativeIntegers)
+# Define NUM_e
+model.NUM_e = Param(model.E, initialize=lambda model, e: random.randint(1, 4))  # 1-4 range
 
-# Define possible_e_s 
-model.possible_e_s = Param(model.E, model.S, initialize={}, within=NonNegativeIntegers)
+# Define numwarmups_e_p_s
+model.numwarmups_e_p_s = Param(
+    model.E,
+    model.P,
+    model.S,
+    initialize=lambda model, e, p, s: random.randint(0, 2),  # 0-2 warmups
+    within=NonNegativeIntegers
+)
 
-# Define Reward_e_p_s 
-model.Reward_e_p_s = Param(model.E, model.P, model.S, initialize={}, within=NonNegativeIntegers)
+# Define possible_e_s
+model.possible_e_s = Param(
+    model.E,
+    model.S,
+    initialize=lambda model, e, s: random.randint(0, 1),  # Binary: 0 or 1
+    within=Binary
+)
 
-# Define ScheduleP_p 
-model.ScheduleP_p = Param(model.P, initialize={}, within=NonNegativeIntegers)
+# Define Reward_e_p_s
+model.Reward_e_p_s = Param(
+    model.E,
+    model.P,
+    model.S,
+    initialize=lambda model, e, p, s: random.randint(0, 10),  # 0-10 reward
+    within=NonNegativeIntegers
+)
 
-# Define simCAP as a scalar parameter with a value of 5
-model.simCAP = Param(initialize=5)
+# Define ScheduleP_p
+model.ScheduleP_p = Param(
+    model.P,
+    initialize=lambda model, p: random.randint(0, 5),  # 0-5 scheduled
+    within=NonNegativeIntegers
+)
 
-# Define studentP_e_s 
-model.student_e_s = Param(model.E, model.S, initialize={}, within=NonNegativeIntegers)
+# Define simCAP
+model.simCAP = Param(initialize=random.randint(3, 7))  # Simulator capacity: 3-7
 
-# Define warmupR_e_p_s 
-model.warmupR_e_p_s = Param(model.E, model.P, model.S, initialize={}, within=NonNegativeIntegers)
+# Define studentP_e_s
+model.studentP_e_s = Param(
+    model.E,
+    model.S,
+    initialize=lambda model, e, s: random.randint(0, 10),  # 0-10 points
+    within=NonNegativeIntegers
+)
 
-# Define weather_e: A parameter for each event e in E
-model.weather_e = Param(model.E, initialize={})
+# Define warmupR_e_p_s
+model.warmupR_e_p_s = Param(
+    model.E,
+    model.P,
+    model.S,
+    initialize=lambda model, e, p, s: random.randint(0, 5),  # 0-5 warmups
+    within=NonNegativeIntegers
+)
 
-# Define weatherR_e_p 
-model.weatherR_e_p = Param(model.E, model.P, initialize={(e, p): 4 for e in model.E for p in model.P})  # 12 days  # Weather reward = 4
+# Define weather_e
+model.weather_e = Param(model.E, initialize=lambda model, e: random.randint(0, 2))  # 0-2 conditions
+
+# Define weatherR_e_p
+model.weatherR_e_p = Param(
+    model.E,
+    model.P,
+    initialize=lambda model, e, p: random.randint(0, 5),  # 0-5 weather rewards
+    within=NonNegativeIntegers
+)
 
 # Decision variables
 
@@ -184,209 +317,651 @@ model.X_e_p_s = Var(model.E, model.P, model.S, within=Binary)
 
 # The objective function based on the model description
 def objective_rule(model):
-    # Summing over all events, periods, and students for scheduling rewards/penalties
-    return (sum(model.X_e_p_s[e, p, s] for e in model.E for p in model.P for s in model.S) +
-            sum(model.L_e_i_p[e, i, p] for e in model.E for i in model.I for p in model.P) +
-            sum(model.ELAS_s[s] for s in model.S))
+    return sum(
+        (model.G_e_s[e, s] * model.studentP_e_s[e, s] - sum(model.X_e_p_s[e, p, s] for p in model.A_e[e]))
+        for e in model.E for s in model.S
+    ) 
+    + sum(
+        model.scheduleP * model.X_e_p_s[e, p, s] for e in model.E for p in model.A_e[e] for s in model.S
+    ) 
+    + sum(
+        model.Reward_e_p_s[e, p, s] * model.X_e_p_s[e, p, s] for e in model.E for p in model.A_e[e] for s in model.S
+    ) 
+    + sum(
+        model.instructorP * (model.Y_e_i_p[e, i, p] + model.L_e_i_p[e, i, p])
+        for e in model.E for i in model.I for p in model.P
+    ) 
+    + sum(
+        model.ELAS_s[s] for s in model.S
+    ) 
+    + sum(
+        model.iiR_e * model.X_e_p_s[e, p, s] for e in model.E for p in model.A_e[e] for s in model.S
+    ) 
+    + sum(
+        model.warmupR_e_p_s * model.X_e_p_s[e, p, s] for e in model.E for p in model.A_e[e] for s in model.S
+    ) 
+    + sum(
+        model.weatherR_e_p[e, p] * model.X_e_p_s[e, p, s] for e in model.E for p in model.P for s in model.S
+    )
 
 model.objective = Objective(rule=objective_rule, sense=minimize)  # Modify the sense as needed
 
 # Constraints
 
-# Constraint (1): Precedence relationship
-def precedence_constraint_rule(model, e, e_prime, s):
-    if (e, e_prime) in model.R:  # Define precedence_set as per your data
-        return sum(model.X_e_p_s[e_prime, p, s] for p in model.P) >= sum(model.X_e_p_s[e, p, s] for p in model.P)
-    return Constraint.Skip
-model.precedence_constraint = Constraint(model.E, model.E, model.S, rule=precedence_constraint_rule)
-
-# Constraint (2): Student currency guidelines
-def currency_guidelines_constraint_rule(model, e, s):
-    return sum(model.X_e_p_s[e, p, s] for p in model.P) >= model.complete_e_s[e, s]
-model.currency_guidelines_constraint = Constraint(model.E, model.S, rule=currency_guidelines_constraint_rule)
-
-# Constraint (3): Only one event completion per student
-def event_completion_constraint_rule(model, e, s):
-    return sum(model.X_e_p_s[e, p, s] for p in model.P) <= 1
-model.event_completion_constraint = Constraint(model.E, model.S, rule=event_completion_constraint_rule)
-
-# Constraint (4): Buffer periods between events
-def buffer_constraint_rule(model, e, p, s):
-    # Ensure no other event starts within the buffer period after event e starts
-    if p + model.Buffer_e[e] <= 168:  # Ensure buffer period stays within the range of periods
-        return sum(model.X_e_p_s[other_e, p_next, s] for other_e in model.E if other_e != e for p_next in range(p + 1, p + model.Buffer_e[e] + 1)) == 0
-    return Constraint.Skip
-model.buffer_constraint = Constraint(model.E, model.P, model.S, rule=buffer_constraint_rule)
+# Constraint (1) X_e_p_s(e,p,s) <= sum(p' <= p - NUM_e(e'') - Buffer_e(e''), p' in A_e(e''), e'' in S_e(e'), possible_e_s(e'',s)=1) [X_e_p_s(e'',p',s)] for (e',e) in R, possible_e_s(e,s)=1, complete_e_s(e',s)=1, possible_e_s(e',s)=1, p in A_e, s in S
+def scheduling_dependency_rule(model, e, p, s):
+    # Check if this event and student combination is valid
+    if model.possible_e_s[e, s] == 1:
+        # Create the RHS sum
+        rhs_sum = sum(
+            model.X_e_p_s[e_prime, p_prime, s]  # Corrected reference
+            for e_prime in model.S_e[e]  # Ensure e_prime comes from the valid set
+            for p_prime in model.P  # Iterate over all periods
+            if model.A_e[e_prime] == 1  # Check if period is valid (using p_prime)
+            and p_prime <= p - model.NUM_e[e_prime] - model.Buffer_e[e_prime]
+            and model.complete_e_s[e_prime, s] == 1
+            and model.possible_e_s[e_prime, s] == 1
+        )
+        # Return the constraint inequality
+        return model.X_e_p_s[e, p, s] <= rhs_sum
+    else:
+        # If the event-student combination is not valid, no constraint is needed
+        return Constraint.Skip
+model.scheduling_dependency = Constraint(
+    model.E, model.P, model.S, rule=scheduling_dependency_rule
+)
 
 
-# Constraint (5): Event scheduling limit per student per period
-def scheduling_limit_rule(model, e, s):
-    return sum(model.X_e_p_s[e, p, s] for p in model.P) <= model.CAP
-model.scheduling_limit_constraint = Constraint(model.E, model.S, rule=scheduling_limit_rule)
+# Constraint (2):  X_e_p_s(e,p,s) <= sum(p' <= p - NUM_e(e'') - Buffer_e(e''), p' in A_e(e''), e'' in S_e(e') where possible_e_s(e'',s)=1) [X_e_p_s(e'',p',s)] / numwarmups_e_p_s(e,p,s) for (e',e) in warmups, possible_e_s(e,s)=1, complete_e_s(e',s)=1, possible_e_s(e',s)=1, numwarmups_e_p_s(e,p,s)>0, p in A_e(e), s in S
+def warmup_constraint_rule(model, e, p, s):
+    # Check if numwarmups_e_p_s is greater than 0 to avoid division by zero
+    if model.numwarmups_e_p_s[e, p, s] > 0:
+        # Create the RHS sum for valid periods and events
+        rhs_sum = sum(
+            model.X_e_p_s[e_prime, p_prime, s]
+            for e_prime in model.S_e[e]  # Ensure e_prime comes from the valid set
+            for p_prime in model.P  # Iterate over periods
+            if (
+                p_prime <= p - model.NUM_e[e_prime] - model.Buffer_e[e_prime]
+                and model.A_e[e_prime] == 1  # Ensure valid period
+                and model.possible_e_s[e_prime, s] == 1
+                and model.complete_e_s[e_prime, s] == 1
+            )
+        )
+        
+        # Return the constraint: X_e_p_s(e, p, s) <= RHS / numwarmups_e_p_s
+        return model.X_e_p_s[e, p, s] <= rhs_sum / model.numwarmups_e_p_s[e, p, s]
+    else:
+        # Skip the constraint if numwarmups_e_p_s is 0
+        return Constraint.Skip
+model.warmup_constraint = Constraint(model.E, model.P, model.S, rule=warmup_constraint_rule)
 
-# Constraint (6): Instructor assignment to events
-def instructor_assignment_rule(model, e, i, p):
-    return model.L_e_i_p[e, i, p] <= model.CAP
-model.instructor_assignment_constraint = Constraint(model.E, model.I, model.P, rule=instructor_assignment_rule)
+# Constraint (3) sum(p in A_e(e'), e' in S_e(e)) [X_e_p_s(e',p,s)] <= 1 for e in E, possible_e_s(e,s)=1, s in S
+def constraint_rule(model, e, s):
+    # Check if event e is possible for student s
+    if model.possible_e_s[e, s] == 1:
+        
+        # Check if the set model.S_e[e] is non-empty
+        if model.S_e[e]:
+            # Initialize the expression for the constraint
+            expr = sum(
+                model.X_e_p_s[e_prime, p, s]  # Decision variable for event e_prime, period p, student s
+                for e_prime in model.S_e[e]   # Iterate over events related to e
+                for p in model.A_e[e_prime]   # Iterate over valid periods for event e_prime
+            )
+                        
+            # Return the constraint expression (sum of X_e_p_s must be <= 1)
+            return expr <= 1
+        else:
+            # If the set S_e[e] is empty, skip the constraint
+            return Constraint.Feasible
+    else:
+        # If event e is not possible for student s, return Constraint.Feasible to skip
+        return Constraint.Feasible
+model.event_student_constraint = Constraint(model.E, model.S, rule=constraint_rule)
 
-# Constraint (7): Flight event assignment per student
-def flight_event_assignment_constraint_rule(model, e, s):
-    if e in model.E_f:  # Define E_f as per your data
-        return sum(model.X_e_p_s[e, p, s] for p in model.P) >= 1
-    return Constraint.Skip
-model.flight_event_assignment_constraint = Constraint(model.E, model.S, rule=flight_event_assignment_constraint_rule)
+# Constraint (4) sum(p in A_e(e''), e'' in warmup_S_e(e')) [X_e_p_s(e'',p,s) <= numwarmups_e_p_s(e,p,s)] for (e',e) in warmups, possible_e_s(e,s)=1, numwarmups_e_p_s(e,p,s)>0, s in S
+def constraint_4_rule(model, e_prime, e, p, s):
+    if (e_prime, e) in model.warmups and model.possible_e_s[e, s] == 1 and model.numwarmups_e_p_s[e, p, s] > 0:
+        # Verify e_prime is a valid key and A_e[e_prime] is iterable
+        if e_prime in model.A_e:
+            lhs_sum = sum(
+                model.X_e_p_s[e_double_prime, p_prime, s]
+                for e_double_prime in model.warmup_S_e[e_prime]
+                for p_prime in model.A_e[e_double_prime]  # Ensure this is iterable
+            )
+            return lhs_sum <= model.numwarmups_e_p_s[e, p, s]
+    return Constraint.Feasible
+model.warmup_index = Set(
+    initialize=[
+        (e_prime, e, p, s)
+        for e_prime, e in model.warmups
+        for s in model.S
+        for p in model.A_e[e]
+        if model.possible_e_s[e, s] == 1 and model.numwarmups_e_p_s[e, p, s] > 0
+    ]
+)
+model.constraint4 = Constraint(model.warmup_index, rule=constraint_4_rule)
 
-# Constraint (8): Lecture and non-lecture events in a day
-def lec_non_lec_constraint_rule(model, e, d, s):
-    if e not in model.E_lec:  # Define non_lecture_events set
-        return sum(model.X_e_p_s[lec_e, p, s] for lec_e in model.E_lec for p in model.P if p in model.P_d[d]) >= sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d])
-    return Constraint.Skip
-model.lec_non_lec_constraint = Constraint(model.E, model.D, model.S, rule=lec_non_lec_constraint_rule)
+# Constraint (5) sum(e, possible_e_s(e,s)=1, p - NUM_e(e)  - Buffer_e(e) + 1 <= p' <= p, p' in A_e(e) ) [X_e_p_s(e,p',s)] <=1 for p in P, s in S
+def overlapping_events_rule(model, p, s):
+    # Build the summation only for valid events and periods
+    summation_terms = [
+        model.X_e_p_s[e, p_prime, s]
+        for e in model.E  # Iterate over all events
+        if model.possible_e_s[e, s] == 1  # Only include valid events for the student
+        for p_prime in model.A_e[e]  # Iterate over valid periods for the event
+        if p - model.NUM_e[e] - model.Buffer_e[e] + 1 <= p_prime <= p  # Ensure p_prime is in the range
+    ]
+    
+    # If there are no valid terms, skip this constraint
+    if not summation_terms:
+        return Constraint.Skip
 
-# Constraint (9): Flight event constraints
-def flight_event_constraint_rule(model, e, d, s):
-    if e in model.E_f:  # Define E_f set
-        return sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d]) >= 1
-    return Constraint.Skip
-#model.flight_event_constraint = Constraint(model.E, model.D, model.S, rule=flight_event_constraint_rule)
+    # Summation of valid terms
+    expr = sum(summation_terms)
+    
+    # Ensure the sum is less than or equal to 1
+    return expr <= 1
+model.overlapping_events_constraint = Constraint(model.P, model.S, rule=overlapping_events_rule)
 
-# Constraint (10): Number of lectures allowed per day
-def lecture_limit_constraint_rule(model, d, s):
-    return sum(model.X_e_p_s[e, p, s] for e in model.E_lec for p in model.P if p in model.P_d[d]) <= 4
-model.lecture_limit_constraint = Constraint(model.D, model.S, rule=lecture_limit_constraint_rule)
+# Constraint (6) sum(e, p - NUM_e(e) - Buffer_e(e) + 1 <= p' <= p, p' in A_e(e) ) [Y_e_i_p(e,i,p') + L_e_i_p(e,i,p')] <= 1 for i in I, p in P 
+def instructor_availability_rule(model, i, p):
+    # Build the summation terms for valid events and periods
+    summation_terms = [
+        model.Y_e_i_p[e, i, p_prime] + model.L_e_i_p[e, i, p_prime]
+        for e in model.E  # Iterate over all events
+        for p_prime in model.A_e[e]  # Iterate over valid periods for the event
+        if p - model.NUM_e[e] - model.Buffer_e[e] + 1 <= p_prime <= p  # Ensure p_prime is in range
+    ]
+    
+    # If there are no valid terms, skip this constraint
+    if not summation_terms:
+        return Constraint.Skip
 
-# Constraint (11): Only flight events per day limit
-def only_flight_constraint_rule(model, e, d, s):
-    if e in model.E_f:  # Define E_f set
-        return sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d]) <= 1
-    return Constraint.Skip
-model.only_flight_constraint = Constraint(model.E, model.D, model.S, rule=only_flight_constraint_rule)
+    # Summation of valid terms
+    expr = sum(summation_terms)
 
-# Constraint (12): Non-lecture events cannot be scheduled without lecture events
-def non_lec_schedule_constraint_rule(model, e, d, s):
-    if e in model.E_lec:  # Define non_lecture_events set
-        return sum(model.X_e_p_s[lec_e, p, s] for lec_e in model.E_lec for p in model.P if p in model.P_d[d]) >= sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d])
-    return Constraint.Skip
-model.non_lec_schedule_constraint = Constraint(model.E, model.D, model.S, rule=non_lec_schedule_constraint_rule)
+    # Ensure the sum is less than or equal to 1
+    return expr <= 1
+model.instructor_availability_constraint = Constraint(model.I, model.P, rule=instructor_availability_rule)
 
-# Constraint (13): Lecture and flight scheduling in combination
-def lec_flight_constraint_rule(model, e, d, s):
-    if e in model.E_f:  # Combine flight and lecture rules
-        return sum(model.X_e_p_s[lec_e, p, s] for lec_e in model.E_lec for p in model.P if p in model.P_d[d]) >= sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d])
-    return Constraint.Skip
-model.lec_flight_constraint = Constraint(model.E, model.D, model.S, rule=lec_flight_constraint_rule)
+# Constraint (7) sum(e in E_f, possible_e_s(e,s)=1, p in A_e(e)) [X_e_p_s(e,p,s)] >= 1- ELAS_s(s) for s in S, sum(e in E_f) [possible_e_s(e,s)] >= 1
+def elas_constraint_rule(model, s):
+    # Check if there is at least one possible event for the student
+    if sum(model.possible_e_s[e, s] for e in model.E_f) >= 1:
+        # Summation over valid events and periods
+        expr = sum(
+            model.X_e_p_s[e, p, s]
+            for e in model.E_f
+            if model.possible_e_s[e, s] == 1
+            for p in model.A_e[e]
+        )
+        # Ensure the summation is at least 1 - ELAS_s(s)
+        return expr >= 1 - model.ELAS_s[s]
+    else:
+        # If no events are possible, skip this constraint
+        return Constraint.Skip
+model.elas_constraint = Constraint(model.S, rule=elas_constraint_rule)
 
-# Constraint (14): Buffer constraint between events (constraint 14)
-def buffer_time_constraint_rule(model, e, e_prime, p, s):
-    if e != e_prime:
-        return sum(model.X_e_p_s[e, p, s] for p in model.P) + model.Buffer_e[e] <= sum(model.X_e_p_s[e_prime, p, s] for p in model.P)
-    return Constraint.Skip
-#model.buffer_time_constraint = Constraint(model.E, model.E, model.P, model.S, rule=buffer_time_constraint_rule)
+# Constraint (8) sum(e in (E_sim union E_f) but not in (E_CQ union E_only), possible_e_s(e,s)=1, p in (P_d(d) intersection A_e(e))) [X_e_p_s(e,p,s)] <= 2(1-Lec_d_s(d,s) - sum(e in E_only, possible_e_s=1, p in (P_d intersection A_e(e)))) [X_e_p_s(e,p,s)] for d in D, s in S
+def constraint_8_rule(model, d, s):
+    # Define the valid events (e in E_sim union E_f but not in E_CQ union E_only)
+    valid_events = [
+        e for e in model.E_sim.union(model.E_f) 
+        if e not in model.E_CQ and e not in model.E_only
+    ]
+    
+    # Convert P_d[d] and A_e[e] to sets for intersection operation
+    periods_for_d = set(model.P_d[d])  # Ensure this is a set
+    periods_for_e = {e: set(model.A_e[e]) for e in valid_events}  # Convert to set for each event
+    
+    # Left-hand side: Sum over valid events and periods
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in valid_events
+        for p in periods_for_e[e].intersection(periods_for_d)  # Intersection of sets
+        if model.possible_e_s[e, s] == 1
+    )
 
-# Constraint (15): Limit the number of lectures and other events
-def lecture_other_event_limit_rule(model, e, d, s):
-    # Limit the number of events scheduled on the same day
-    return sum(model.X_e_p_s[e, p, s] for p in model.P if p in model.P_d[d]) <= 1
-model.lecture_other_event_limit = Constraint(model.E, model.D, model.S, rule=lecture_other_event_limit_rule)
+    # Right-hand side: the expression with Lec_d_s and the summation term
+    rhs_expr = 2 * (1 - model.Lec_d_s[d, s] - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_only
+        if model.possible_e_s[e, s] == 1
+        for p in periods_for_d.intersection(model.A_e[e])  # Ensure this is a set intersection
+    ))
 
-# Constraint (16): No overlapping events for a student in the same period
-def no_overlap_constraint_rule(model, s, p):
-    # Ensure no student is assigned to multiple events in the same period
-    return sum(model.X_e_p_s[e, p, s] for e in model.E) <= 1
-#model.no_overlap_constraint = Constraint(model.S, model.P, rule=no_overlap_constraint_rule)
+    # Return the constraint expression
+    if lhs_expr == rhs_expr:
+        print(f"Trivial constraint for (d={d}, s={s}). Returning feasible.")
+        return Constraint.Feasible
+    return lhs_expr <= rhs_expr
+#model.constraint8 = Constraint(model.D, model.S, rule=constraint_8_rule)
 
-# Constraint (17): Instructor availability for events
-def instructor_availability_rule(model, e, i, p):
-    # Ensure that if an instructor is assigned to an event, they are not assigned elsewhere in the same period
-    return sum(model.L_e_i_p[e, i, p] for e in model.E) <= 1
-model.instructor_availability = Constraint(model.E, model.I, model.P, rule=instructor_availability_rule)
+# Constraint (9) sum(e in (E_f) but not in (E_CQ union E_onlyFlight), possible_e_s(e,s)=1, p in (P_d(d) intersection A_e(e))) [X_e_p_s(e,p,s)] <= 2(1- sum(e in E_onlyFlight, possible_e_s=1, p in (P_d intersection A_e(e)))) [X_e_p_s(e,p,s)] for d in D, s in S
+def constraint_9_rule(model, d, s):
+    # Define valid events: e in E_f but not in E_CQ union E_onlyFlight
+    valid_events = [
+        e for e in model.E_f
+        if e not in model.E_CQ and e not in model.E_onlyFlight
+    ]
+    
+    # Get periods for d and e, ensuring sets for intersection
+    periods_for_d = set(model.P_d[d])  # Ensure this is a set
+    periods_for_e = {e: set(model.A_e[e]) for e in valid_events}  # Convert to set for each event
+    
+    # Left-hand side: Sum over valid events and periods for e in valid_events
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in valid_events
+        for p in periods_for_e[e].intersection(periods_for_d)  # Intersection of sets
+        if model.possible_e_s[e, s] == 1
+    )
+    
+    # Right-hand side: The expression with Lec_d_s and the summation term
+    rhs_expr = 2 * (1 - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_onlyFlight
+        if model.possible_e_s[e, s] == 1
+        for p in periods_for_d.intersection(model.A_e[e])  # Ensure this is a set intersection
+    ))
 
-# Constraint (18): Instructor workload limit (e.g., max 4 events per day)
-def instructor_workload_limit_rule(model, i, d):
-    # Ensure an instructor isn't assigned to more than a set number of events in a single day
-    return sum(model.L_e_i_p[e, i, p] for e in model.E for p in model.P if p in model.P_d[d]) <= 4
-model.instructor_workload_limit = Constraint(model.I, model.D, rule=instructor_workload_limit_rule)
+    # Return the constraint expression
+    if lhs_expr == rhs_expr:
+        print(f"Trivial constraint for (d={d}, s={s}). Returning feasible.")
+        return Constraint.Feasible
+    return lhs_expr <= rhs_expr
+#model.constraint9 = Constraint(model.D, model.S, rule=constraint_9_rule)
 
-# Constraint (19): Student event participation restriction based on weather, etc.
-def event_restriction_rule(model, e, p, s):
-    # Example restriction for weather or other conditions
-    return sum(model.X_e_p_s[e, p, s] for p in model.P) <= model.CAP
-model.event_restriction = Constraint(model.E, model.P, model.S, rule=event_restriction_rule)
+# Constraint (10) sum(e in E_lec, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s) * NUM_e(e)] <= (4 + 4 * Lec_d_s(d,s)) fpr d in D, s in S
+def lec_constraint_rule(model, d, s):
+    # Sum over events in E_lec, possible_e_s(e,s)=1, p in the intersection of P_d(d) and A_e(e)
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s] * model.NUM_e[e]
+        for e in model.E_lec
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection of P_d(d) and A_e(e)
+        if model.possible_e_s[e, s] == 1
+    )
+    
+    # Right-hand side: 4 + 4 * Lec_d_s(d,s)
+    rhs_expr = 4 + 4 * model.Lec_d_s[d, s]
 
-# Constraint (20): Instructor-Student interaction limit (e.g., limit the number of times a student and instructor meet per day)
-def instructor_student_limit_rule(model, e, s, i):
-    # Ensure a student doesn't interact with the same instructor too many times in a day
-    return sum(model.L_e_i_p[e, i, p] * model.X_e_p_s[e, p, s] for p in model.P for e in model.E) <= 2
-#model.instructor_student_limit = Constraint(model.E, model.S, model.I, rule=instructor_student_limit_rule)
+    # Return the constraint expression
+    return lhs_expr <= rhs_expr
+model.lec_constraint = Constraint(model.D, model.S, rule=lec_constraint_rule)
 
-# Constraint (21): Flight event restriction based on student flight currency
-def flight_event_currency_rule(model, e, s):
-    # Ensure a student participates in at least one flight event to maintain currency
-    if e in model.E_f:  # Define E_f set
-        return sum(model.X_e_p_s[e, p, s] for p in model.P) >= 1
-    return Constraint.Skip
-model.flight_event_currency = Constraint(model.E, model.S, rule=flight_event_currency_rule)
+# Constraint (11) sum(e in E_onlyFlight, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s] <= 1 - Lec_d_s(d,s) for d in D, s in S
+def flight_constraint_rule(model, d, s):
+    # Sum over events in E_onlyFlight, possible_e_s(e,s)=1, p in the intersection of P_d(d) and A_e(e)
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_onlyFlight
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Convert lists to sets for intersection
+        if model.possible_e_s[e, s] == 1
+    )
 
-# Constraint (22): Warmup event requirement before regular events
-#def warmup_event_rule(model, e, s):
-#    if e in model.warmup_events:  # Define warmup_events set
-#        return sum(model.X_e_p_s[e, p, s] for p in model.P) >= 1
-#    return Constraint.Skip
-#model.warmup_event = Constraint(model.E, model.S, rule=warmup_event_rule)
+    # Right-hand side: 1 - Lec_d_s(d,s)
+    rhs_expr = 1 - model.Lec_d_s[d, s]
 
-# Constraint (23): Instructor flight event limit (e.g., no more than 3 flight events per day)
-def instructor_flight_limit_rule(model, i, d):
-    return sum(model.L_e_i_p[e, i, p] for e in model.E_f for p in model.P if p in model.P_d[d]) <= 3
-model.instructor_flight_limit = Constraint(model.I, model.D, rule=instructor_flight_limit_rule)
+    # Return the constraint expression
+    return lhs_expr <= rhs_expr
+model.flight_constraint = Constraint(model.D, model.S, rule=flight_constraint_rule)
 
-# Constraint (24): Event buffer time between conflicting events
-def event_buffer_time_rule(model, e, e_prime, p, s):
-    # Ensure a buffer between conflicting events
-    if e != e_prime:
-        return sum(model.X_e_p_s[e, p, s] for p in model.P) + model.Buffer_e[e] <= sum(model.X_e_p_s[e_prime, p, s] for p in model.P)
-    return Constraint.Skip
-#model.event_buffer_time = Constraint(model.E, model.E, model.P, model.S, rule=event_buffer_time_rule)
+# Constraint (12) sum(e in E_lec but not in E_only, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)] <= 8 (1- sum(e in E_only, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)]) for d in D, s in S
+def constraint_12_rule(model, d, s):
+    # Left-hand side: sum over events in E_lec but not in E_only, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_lec
+        if e not in model.E_only  # Exclude events in E_only
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection of P_d(d) and A_e(e)
+        if model.possible_e_s[e, s] == 1
+    )
 
-# Constraint (25): Ensure some events are scheduled in specific periods (e.g., certain lectures or exams)
-#def specific_period_constraint_rule(model, e, p):
-    # Ensure certain events (e.g., exams) are scheduled in specific periods
-#    if e in model.special_events:  # Define special events
-#        return model.X_e_p_s[e, p, s] == 1
-#    return Constraint.Skip
-#model.specific_period_constraint = Constraint(model.E, model.P, rule=specific_period_constraint_rule)
+    # Right-hand side: 8 * (1 - sum over events in E_only)
+    rhs_expr = 8 * (1 - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_only
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection of P_d(d) and A_e(e)
+        if model.possible_e_s[e, s] == 1
+    ))
 
-# Constraint (26): Ensure only specific instructors can teach certain events
-#def instructor_event_specific_rule(model, e, i, p):
-#    # Restrict event e to only specific instructors
-#    if e in model.specific_instructor_events:  # Define specific instructor events
-#        return model.L_e_i_p[e, i, p] == 1
-#    return Constraint.Skip
-#model.instructor_event_specific = Constraint(model.E, model.I, model.P, rule=instructor_event_specific_rule)
+    # Return the constraint expression
+    return lhs_expr <= rhs_expr
+model.constraint12 = Constraint(model.D, model.S, rule=constraint_12_rule)
 
-# Constraint (27): Ensure students complete a minimum number of events per week
-def minimum_event_completion_rule(model, s):
-    return sum(model.X_e_p_s[e, p, s] for e in model.E for p in model.P) >= 5
-model.minimum_event_completion = Constraint(model.S, rule=minimum_event_completion_rule)
+# Constraint (13) sum(e in E_lec, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)] <= 8 (2- sum(e in E_f and E_sim but not in E_CQ, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)]) for d in D, s in S
+def constraint_13_rule(model, d, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_lec
+        if model.possible_e_s[e, s] == 1
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    )
 
-# Constraint (28): Ensure certain events occur in sequence
-def event_sequence_rule(model, e, e_next, s):
-    # Event e_next can only occur if e has been completed first
-    return sum(model.X_e_p_s[e_next, p, s] for p in model.P) <= sum(model.X_e_p_s[e, p, s] for p in model.P)
-model.event_sequence = Constraint(model.E, model.E, model.S, rule=event_sequence_rule)
+    rhs_expr = 8 * (2 - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_f.union(model.E_sim)
+        if e not in model.E_CQ and model.possible_e_s[e, s] == 1
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    ))
 
-# Constraint (29): Ensure no event overlaps in consecutive periods
-def no_consecutive_event_overlap_rule(model, e, p, s):
-    # Ensure that no event is scheduled back-to-back in consecutive periods
-    return sum(model.X_e_p_s[e, p, s] for p in model.P) <= 1
-model.no_consecutive_event_overlap = Constraint(model.E, model.P, model.S, rule=no_consecutive_event_overlap_rule)
+    return lhs_expr <= rhs_expr
+model.constraint_13 = Constraint(model.D, model.S, rule=constraint_13_rule)
 
-# Constraint (30): Ensure no instructor is double-booked
-def instructor_double_booking_rule(model, i, p):
-    # Ensure an instructor isn't assigned to multiple events in the same period
-    return sum(model.L_e_i_p[e, i, p] for e in model.E) <= 1
-model.instructor_double_booking = Constraint(model.I, model.P, rule=instructor_double_booking_rule)
 
-# Constraints (31)-(35) are already enforced in parameter definitions
+# Constraint (14) sum(e in E_lec, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)] <= 8 (3- sum(e in E_CQ but not in E_lec, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)]) for d in D, s in S
+def constraint_14_rule(model, d, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_lec
+        if model.possible_e_s[e, s] == 1
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    )
+
+    rhs_expr = 8 * (3 - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_CQ
+        if e not in model.E_lec and model.possible_e_s[e, s] == 1
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    ))
+
+    if lhs_expr == rhs_expr:
+        print(f"Trivial constraint for (d={d}, s={s}). Returning feasible.")
+        return Constraint.Feasible
+    return lhs_expr <= rhs_expr
+#model.constraint_14 = Constraint(model.D, model.S, rule=constraint_14_rule)
+
+# Constraint (15) sum(e in E_CQ but not in E_lec, possible_e_s(e,s)=1, p in (P_d intersection A_e(e))) [X_e_p_s(e,p,s)] <= 3 (1- Lec_d_s(d,s)) for d in D, s in S
+def constraint_15_rule(model, d, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_CQ
+        if e not in model.E_lec and model.possible_e_s[e, s] == 1
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    )
+
+    rhs_expr = 3 * (1 - model.Lec_d_s[d, s])
+
+    return lhs_expr <= rhs_expr
+model.constraint_15 = Constraint(model.D, model.S, rule=constraint_15_rule)
+
+# Constraint (16) sum(e', possible_e_s(e',s)=1, p' in (SP_e_p(e',p) intersection A_e(e'))) [X_e_p_s(e',p',s)] <= 8 (1- sum(e, possible_e_s(e,s)=1) [X_e_p_s(e,p,s)]) for p in P, s in S
+def constraint_16_rule(model, p, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p_prime, s]
+        for e in model.E
+        for p_prime in set(model.SP_e_p[e, p]).intersection(set(model.A_e[e]))  # Intersection
+        if model.possible_e_s[e, s] == 1
+    )
+
+    rhs_expr = 8 * (1 - sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E
+        if model.possible_e_s[e, s] == 1
+    ))
+
+    return lhs_expr <= rhs_expr
+model.constraint_16 = Constraint(model.P, model.S, rule=constraint_16_rule)
+
+# Constraint (17) sum(e in E_f, p in (P_d intersection A_e(e))) [Y_e_i_p(e,i,p)] <= (2+EEvent_d_i(d,i))(1-LecI_d_i(d,i)) for d in D, i in I
+def constraint_17_rule(model, d, i):
+    lhs_expr = sum(
+        model.Y_e_i_p[e, i, p]
+        for e in model.E_f
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    )
+
+    rhs_expr = (2 + model.EEvent_d_i[d, i]) * (1 - model.LecI_d_i[d, i])
+
+    return lhs_expr <= rhs_expr
+
+model.constraint_17 = Constraint(model.D, model.I, rule=constraint_17_rule)
+
+# Constraint (18) sum(e in E_lec, p in (P_d intersection A_e(e))) [L_e_i_p(e,i,p)NUM_e(e)] <= 4+4LecI_d_i(d,i) for d in D, i in I
+def constraint_18_rule(model, d, i):
+    lhs_expr = sum(
+        model.L_e_i_p[e, i, p] * model.NUM_e[e]
+        for e in model.E_lec
+        for p in set(model.P_d[d]).intersection(set(model.A_e[e]))  # Intersection
+    )
+
+    rhs_expr = 4 + 4 * model.LecI_d_i[d, i]
+
+    return lhs_expr <= rhs_expr
+model.constraint_18 = Constraint(model.D, model.I, rule=constraint_18_rule)
+
+# Constraint (19) sum(e', p' in (SP_e_p(e',p) intersection A_e(e'))) [Y_e_i_p(e',i,p') + L_e_i_p(e',i,p')] <= 8(1-sum(e)[Y_e_i_p(e,i,p) + L_e_i_p(e,i,p)]) for i in I, p in P
+def constraint_19_rule(model, i, p):
+    lhs_expr = sum(
+        model.Y_e_i_p[e, i, p_prime] + model.L_e_i_p[e, i, p_prime]
+        for e in model.E
+        for p_prime in set(model.SP_e_p[e, p]).intersection(set(model.A_e[e]))  # Intersection
+    )
+
+    rhs_expr = 8 * (1 - sum(
+        model.Y_e_i_p[e, i, p] + model.L_e_i_p[e, i, p]
+        for e in model.E
+        for p in set(model.A_e[e])
+    ))
+
+    return lhs_expr <= rhs_expr
+model.constraint_19 = Constraint(model.I, model.P, rule=constraint_19_rule)
+
+# Constraint (20) sum(s, possible_e_s(e,s)=1) [X_e_p_s(e,p,s)] <= sum(i in I_e(e)) [L_e_i_p(e,i,p)CAP] for e in E_lec, p in A_e(e)
+def constraint_20_rule(model, e, p):
+    # Implement the logic for the constraint here
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s] for s in model.S if model.possible_e_s[e, s] == 1
+    )
+    rhs_expr = 1  # Example right-hand side of the constraint (adjust as needed)
+    return lhs_expr <= rhs_expr
+for e in model.E:
+    model.add_component(
+        f"constraint_20_e_{e}", 
+        Constraint(model.P, rule=lambda model, p: constraint_20_rule(model, e, p))
+    )
+
+
+# Constraint (21) sum(e in E_CQ intersection E_f, s given possible_e_s(e,s)=1) [X_e_p_s(e,p,s)] <= CQwave_p(p) for p in A_e(e) CQwave_p(p)>0
+def constraint_21_rule(model, p):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]  # Summing over X_e_p_s(e,p,s)
+        for e in model.E_f.union(model.E_sim)  # Union of E_f and E_sim
+        for s in model.S  # Loop over all students s
+        if model.possible_e_s[e, s] == 1  # Check if the event is possible for student s
+    )
+
+    rhs_expr = model.CQwave_p[p]  # Assuming CQwave_p(p) is a parameter
+
+    return lhs_expr <= rhs_expr
+model.constraint_21 = Constraint(model.P, rule=constraint_21_rule)
+
+
+# Constraint (22) sum(e| possible_e_s(e,s)=1, p - NUM_e(e) + 1 <= p' <= p | p' in A_e, s) [NA_e(e) X_e_p_s(e,p',s)] <= M_p(p) for p in P
+def constraint_22_rule(model, p, s):
+    # Left-hand side expression: sum of the weighted X_e_p_s values
+    lhs_expr = sum(
+        model.NA_e[e] * model.X_e_p_s[e, p_prime, s]
+        for e in model.E
+        for p_prime in range(model.NUM_e[e], p + 1)  # Handle the range
+        if p_prime in model.A_e[e] and model.possible_e_s[e, s] == 1
+    )
+
+    # Right-hand side expression
+    rhs_expr = model.M_p[p]  # Assuming M_p(p) is a parameter
+
+    # Check if both sides can be evaluated to a numerical value
+    try:
+        lhs_value = value(lhs_expr)  # Evaluate left-hand side
+    except ValueError:
+        lhs_value = None  # Handle the case where lhs_expr cannot be evaluated
+    
+    try:
+        rhs_value = value(rhs_expr)  # Evaluate right-hand side
+    except ValueError:
+        rhs_value = None  # Handle the case where rhs_expr cannot be evaluated
+
+    # If both sides can be evaluated and are equal, return a trivial feasible constraint
+    if lhs_value is not None and rhs_value is not None and lhs_value == rhs_value:
+        print(f"Trivial constraint for (p={p}, s={s}). Returning feasible.")
+        return Constraint.Feasible  # Return feasible if the constraint is trivially satisfied
+
+    # Return the actual constraint if not trivial (lhs_expr <= rhs_expr)
+    return lhs_expr <= rhs_expr  # Non-trivial constraint
+#model.constraint_22 = Constraint(model.P, model.S, rule=constraint_22_rule)
+
+
+
+# Constraint (23) sum(s|possible_e_s=1) [NI_e(e)X_e_p_s(e,p,s)] = sum(i in I_e(e)) [Y_e_i_p(e,i,p)] for e in E_f, p in A_e(e)
+def constraint_23_rule(model, e, p):
+    lhs_expr = sum(
+        model.NI_e[e] * model.X_e_p_s[e, p, s]
+        for s in model.S
+        if model.possible_e_s[e, s] == 1
+    )
+
+    rhs_expr = sum(
+        model.Y_e_i_p[e, i, p]
+        for i in model.I_e[e]
+    )
+
+    return lhs_expr == rhs_expr
+model.constraint_23 = Constraint(model.E_f, model.A_e[e], rule=constraint_23_rule)
+
+# Constraint (24) sum(p in P_d intersection A_e(e))[X_e_p_s(e,p,s)] + sum(p in P_d intersection A_e(e'))[X_e_p_s(e',p,s)] <=1 for d in D, (e',e) in DD | (possible_e,s(e,s)=1, possible_e,s(e',s)=1, complete_e_s(e,s)=0, complete_e_s(e',s)=0 ), s in S
+def constraint_24_rule(model, d, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E
+        for p in model.P_d[d]
+        if p in model.A_e[e]
+    ) + sum(
+        model.X_e_p_s[e_prime, p, s]
+        for e_prime in model.E
+        for p in model.P_d[d]
+        if p in model.A_e[e_prime]
+    )
+
+    rhs_expr = 1
+
+    return lhs_expr <= rhs_expr
+model.constraint_24 = Constraint(model.D, model.S, rule=constraint_24_rule)
+
+# Constraint (25) X_e_p_s(e,p,s) <= sum(i in I_e(e) intersection OW_s(s)) [Y_e_i_p(e,i,p)] for e in E_OW, p in A_e(e), s in S | possible_e_s(e,s)=1
+def constraint_25_rule(model, e, p, s):
+    lhs_expr = model.X_e_p_s[e, p, s]
+    rhs_expr = sum(
+        model.Y_e_i_p[e, i, p]
+        for i in model.I_e[e]
+        if i in model.OW_s[s]
+    )
+
+    return lhs_expr <= rhs_expr
+model.constraint_25 = Constraint(model.E_OW, model.A_e[e], model.S, rule=constraint_25_rule)
+
+# Constraint (26) X_e_p_s(e,p,s) <= sum(i in I_e(e) but not in OW_s(s)) [Y_e_i_p(e,i,p)] for e in E_NOW, p in A_e(e), s in S | possible_e_s(e,s)=1
+def constraint_26_rule(model, e, p, s):
+    lhs_expr = model.X_e_p_s[e, p, s]
+    rhs_expr = sum(
+        model.Y_e_i_p[e, i, p]
+        for i in model.I_e[e]
+        if i not in model.OW_s[s]
+    )
+
+    return lhs_expr <= rhs_expr
+model.constraint_26 = Constraint(model.E_NOW, model.A_e[e], model.S, rule=constraint_26_rule)
+
+# Constraint (27) sum(e in E_OW | p in A_e(e), s | possible_e_s(e,s)=1 and i in (I_e(e) intersection OW_s(s))) [X_e_p_s(e,p,s)] <= 1 for i in I, p in P
+def constraint_27_rule(model, i, p):
+    # Compute the LHS: Summation over X_e_p_s
+    lhs_expr = sum(
+        model.X_e_p_s[e, p, s]
+        for e in model.E_OW
+        for s in model.S
+        if model.possible_e_s[e, s] == 1 and i in model.I_e[e] and i in model.OW_s[s]
+    )
+
+    # Compute RHS: Simply 1
+    rhs_expr = 1
+
+    # Check for trivial cases
+    if lhs_expr is None or lhs_expr == 0:
+        return Constraint.Feasible  # Skip if no valid terms
+
+    return lhs_expr <= rhs_expr
+#model.constraint_27 = Constraint(model.I, model.P, rule=constraint_27_rule)
+
+# Constraint (28) sum(s,e in E_sim | possible_e_s(e,s)=1, p - NUM_e(e) + 1 <= p' <= p | p' in A_e(e)) [X_e_p_s(e,p',s)] <= simCAP for p in P
+def constraint_28_rule(model, p, s):
+    lhs_expr = sum(
+        model.X_e_p_s[e, p_prime, s]
+        for e in model.E_sim
+        for p_prime in range(model.NUM_e[e], p + 1)  # Handle the range
+        if p_prime in model.A_e[e] and model.possible_e_s[e, s] == 1
+    )
+
+    rhs_expr = model.simCAP  # Assuming simCAP is a parameter
+
+    if lhs_expr == rhs_expr:
+        print(f"Trivial constraint for (d={d}, s={s}). Returning feasible.")
+        return Constraint.Feasible
+    return lhs_expr <= rhs_expr
+#model.constraint_28 = Constraint(model.P, model.S, rule=constraint_28_rule)
+
+# Constraint (29) sum (p - NUM_e(e) + 1 <= p' <= p and p' in A_e(e)) [Y_e_i_p(e,i,p') + L_e_i_p(e,i,p')] = 0for e in E, i in I, p in P_NO_i(i)
+def constraint_29_rule(model, e, i, p):
+    # Collect valid periods
+    valid_periods = [
+        p_prime for p_prime in range(model.NUM_e[e], p + 1)
+        if p_prime in model.A_e[e]
+    ]
+
+    # If no valid periods, the constraint is trivially feasible
+    if not valid_periods:
+        return Constraint.Feasible
+
+    # Define the left-hand side expression
+    lhs_expr = sum(
+        model.Y_e_i_p[e, i, p_prime] + model.L_e_i_p[e, i, p_prime]
+        for p_prime in valid_periods
+    )
+
+    # Right-hand side expression
+    rhs_expr = 0
+
+    # Return the symbolic constraint
+    return lhs_expr == rhs_expr
+model.constraint_29 = Constraint(model.E, model.I, model.P, rule=constraint_29_rule)
+
+# Constraint (30) sum(p - NUM_e(e) + 1 <= p' <= p and p' in A_e(e)) [X_e_p_s(e,p',s)]=0 for e in E, p in P_NO_s(s), s in S
+def constraint_30_rule(model, e, p, s):
+    # Collect valid periods for the summation
+    valid_periods = [
+        p_prime for p_prime in range(model.NUM_e[e], p + 1)
+        if p_prime in model.A_e[e] and model.possible_e_s[e, s] == 1
+    ]
+
+    # If no valid periods, the constraint is trivially feasible
+    if not valid_periods:
+        return Constraint.Feasible
+
+    # Define the left-hand side expression (lhs_expr)
+    lhs_expr = sum(
+        model.X_e_p_s[e, p_prime, s]
+        for p_prime in valid_periods
+    )
+
+    # Right-hand side (rhs_expr)
+    rhs_expr = 0
+
+    # Return the constraint expression (lhs_expr == rhs_expr)
+    return lhs_expr == rhs_expr
+model.constraint_30 = Constraint(model.E, model.P, model.S, rule=constraint_30_rule)
+
+
+# Constraints (31)-(35) are already enforced in variable definitions
 
 print('Starting')
 
@@ -402,26 +977,29 @@ solver = SolverFactory('glpk')
 result = solver.solve(model, tee=True)
 
 # Display the results
-model.display()
+#model.display()
 
-# Check solver status
-if result.solver.status == 'ok' and result.solver.termination_condition == 'optimal':
-    print("Solution found!\n")
-    
-    # Iterate over all variables in the model
-    for var in model.component_objects(Var, active=True):
-        print(f"Variable: {var.name}")
-        var_object = getattr(model, var.name)
+# Open the file in write mode (it will overwrite the file if it already exists)
+with open('solver_output.txt', 'w') as f:
+    # Check solver status
+    if result.solver.status == 'ok' and result.solver.termination_condition == 'optimal':
+        print("Solution found!\n", file=f)  # Print to file
         
-        # Print the values for each index
-        for index in var_object:
-            val = var_object[index].value
-            print(f"  {index} : {val}")
-else:
-    print("No solution found.")
+        # Iterate over all variables in the model
+        for var in model.component_objects(Var, active=True):
+            print(f"Variable: {var.name}", file=f)  # Print to file
+            var_object = getattr(model, var.name)
+            
+            # Print the values for each index
+            for index in var_object:
+                val = var_object[index].value
+                print(f" {var.name} {index} : {val}", file=f)  # Print to file
+    else:
+        print("No solution found.", file=f)  # Print to file
 
-# Print the objective value
-print("Objective value:", value(model.objective))
+    # Print the objective value
+    print("Objective value:", value(model.objective), file=f)  # Print to file
+
 
 #print("x =", model.x())
 #print("y =", model.y())
