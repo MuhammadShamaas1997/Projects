@@ -4,9 +4,10 @@ clc;clear all;
 files = {'HC380LA_500_1_1.txt', 'HC380LA_500_1_2.txt', 'HC380LA_500_1_3.txt'};
 
 % Initial dimensions for the tests
-t0 = [0.983333333, 1.004333333, 1.012666667]; % Thickness (mm)
-b0 = [9.833333333, 9.76, 9.746666667]; % Width (mm)
-A0 = t0 .* b0; % Cross-sectional areas for the tests
+L0 = 20; % Initial Length (mm)
+t0 = 1; % Thickness (mm)
+w0 = 1; % Width (mm)
+A0 = t0 .* w0; % Cross-sectional areas for the tests
 
 % Preallocate arrays for results
 strain_data = {};
@@ -48,10 +49,29 @@ for i = 1:length(files)
     displacement = data(:, 2); % Assuming ZwickWeg is the 2nd column
     force = data(:, 3);        % Assuming ZwickKraft is the 3rd column
 
+    % Shift displacement to start at 0
+%     displacement = displacement - displacement(1);
+    
     % Calculate strain and stress
-    strain = displacement / t0(i); % Strain = displacement / initial gauge length
-    stress = force / A0(i);        % Stress = force / cross-sectional area
+    strain = displacement / L0; % Strain = displacement / initial gauge length
+    stress = force / A0;        % Stress = force / cross-sectional area
 
+    % Ensure displacement starts from >= 0
+    idx_displacement = find(displacement >= 0, 1)
+    if ~isempty(idx_displacement)
+        displacement = displacement(idx_displacement:end);
+        strain = strain(idx_displacement:end);
+        stress = stress(idx_displacement:end);
+    end
+
+    % Ensure the flow curve starts at the lower yield point
+    % Define the lower yield point as the first noticeable stress increase
+    idx_yield = find(diff(stress) > 0.0001, 1); % Change 0.1 based on your noise tolerance
+    if ~isempty(idx_yield)
+        strain = strain(idx_yield:end);
+        stress = stress(idx_yield:end);
+    end
+    
     % Store results
     strain_data{i} = strain;
     stress_data{i} = stress;
@@ -60,14 +80,18 @@ end
 % Plot Stress-Strain Curves
 figure;
 hold on;
+maxStress = 0;
 for i = 1:length(files)
+    maxStress = max(maxStress,max(stress_data{i}));
     plot(strain_data{i}, stress_data{i}, 'LineWidth', 2, 'DisplayName', ['Speed = ', num2str(i)]);
 end
 hold off;
 
 % Format Plot
-title('Stress-Strain Curves at temperature = 500');
+title('Stress-Strain Curves at temperature of 500');
 xlabel('Strain (\epsilon)');
 ylabel('Stress (\sigma) [MPa]');
 legend('Location', 'Best');
+ylim([0 4000]);
+xlim([0.2 0.5]);
 grid on;
