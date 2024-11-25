@@ -12,6 +12,8 @@ A0 = t0 .* w0; % Cross-sectional areas for the tests
 % Preallocate arrays for results
 strain_data = {};
 stress_data = {};
+real_strain_data = {};
+real_stress_data = {};
 
 % Loop through each file and process the data
 for i = 1:length(files)
@@ -75,6 +77,8 @@ for i = 1:length(files)
     % Store results
     strain_data{i} = strain;
     stress_data{i} = stress;
+    real_strain_data{i} = log(1+strain);
+    real_stress_data{i} = stress .* (1+strain);
 end
 
 % Plot Stress-Strain Curves
@@ -83,15 +87,15 @@ hold on;
 maxStress = 0;
 for i = 1:length(files)
     maxStress = max(maxStress,max(stress_data{i}));
-    plot(strain_data{i}, stress_data{i}, 'LineWidth', 2, 'DisplayName', ['Speed = ', num2str(i)]);
+    plot(real_strain_data{i}, real_stress_data{i}, 'LineWidth', 2, 'DisplayName', ['Speed = ', num2str(i)]);
 end
 hold off;
 
 % Format Plot
-title('Stress-Strain Curves at temperature of 500');
-xlabel('Strain (\epsilon)');
-ylabel('Stress (\sigma) [MPa]');
+title('Real Stress-Strain Curves at temperature of 500');
+xlabel('Real Strain (\epsilon)');
+ylabel('Real Stress (\sigma) [MPa]');
 legend('Location', 'Best');
-ylim([0 4000]);
-xlim([0.2 0.5]);
+ylim([0 5000]);
+xlim([0.2 0.4]);
 grid on;
