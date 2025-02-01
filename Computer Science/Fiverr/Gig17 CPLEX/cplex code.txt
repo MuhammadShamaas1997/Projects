@@ -1,0 +1,161 @@
+/*********************************************
+ * OPL 22.1.1.0 Model
+ * Author: maroua.sbiti
+ * Creation Date: 16 déc. 2024 at 16:37:54
+ *********************************************/
+ //paramètres                      						// Nombre de mois
+range t=0..11;
+//int i; 
+float f1[t] = [60, 50, 60, 60, 60, 40, 80, 60, 60, 60, 80, 60]; // Setup cost
+float fr[t] = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]; // Setup cost
+float f2[t] = [60, 50, 60, 60, 60, 40, 80, 60, 60, 60, 80, 60]; // Setup cost
+float p1[t] = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]; // Production cost
+float pr[t]= [5,5,5,5,5,5,5,5,5,5,5,5]; // Production cost
+float p2[t] = [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]; // Production cost
+float c1[t] = [300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300]; // Capacity
+float cr[t] = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]; // Capacity
+float c2[t] = [500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500]; // Capacity
+float em1[t] = [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4]; // Emission
+float emr[t] = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005, 0.005]; // Emission
+float em2[t] = [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15]; // Emission
+float h1[t] = [5,5,5,5,5,5,5,5,5,5,5,5]; // Holding cost
+float hr[t] = [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4]; // Holding cost
+float h2[t] = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]; // Holding cost
+float Imax1[t] = [300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300]; // Capacity
+float Imaxr[t] = [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150]; // Capacity
+float Imax2[t] = [400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400]; // Capacity
+float emi1[t] = [3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3]; // Emission
+float emir[t] = [2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3, 2e-3]; // Emission
+float emi2[t] = [3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3, 3e-3]; // Emission
+float d1[t] = [200, 300, 400, 200, 100, 100, 500, 200, 300, 400, 200, 400]; // Demand
+float d2[t] = [350, 400, 400, 600, 500, 400, 350, 350, 350, 400, 400, 450]; // Demand
+float a1[t] = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]; // Price
+float a2[t] = [700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700]; // Price
+float ah[t] = [500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500]; // Price
+float ae[t] = [350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350]; // Price
+float wh[t] = [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]; // Durability awareness
+float we[t] = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]; // Durability awareness
+float cl1[t] = [40,40,40,40,40,40,40,40,40,40,40,40]; // Cost
+float cl2[t] = [25, 25,25,25,25,25,25,25,25,25,25,25]; // Cost
+float eml1[t] = [1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3]; // Emission
+float eml2[t] = [1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3]; // Emission
+float br[t] = [15, 15,15,15,15,15,15,15,15,15,15,15];
+float bv[t] = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+float r1=0.1;
+float r2=0.05;
+float rr=0.01;
+float alpha=0.3;
+float tax=50; //Carbon tax (€/ton)       
+float cap1=1500;
+float cap2=1000;							
+/*float f1[t];float fr[t]=...; float f2[t]=...; 					// setup costs
+float p1[t]=...; float pr[t]=...; float p2[t]=...; 					//conversion costs
+float c1[t]=...; float cr[t]=...; float c2[t]=...; 					//production capacities
+float em1[t]=...; float emr[t]=...; float em2[t]=...; 				//production emissions
+float h1[t]=...; float hr[t]=...; float h2[t]=...; 					// inventory holding costs
+float Imax1[t]=...; float Imaxr[t]=...; float Imax2[t]=...; 		//inventory capacities
+float emi1[t]=...; float emir[t]=...; float emi2[t]=...; 			//inventory emissions per unit (ton)
+float d1[t]=...; float d2[t]=... ; 								//customer demands
+float a1[t]=... ; float a2[t]=... ; float ah[t]=... ; float ae[t]=... ; // final products prices (ton)
+float wh[t]=... ; float we[t]=...; 								// customer sensitivity to ecofriendly products
+float cl1[t]=...; float cl2[t]=...; 							//landfilling costs per unit (ton)
+float eml1[t]=...; float eml2[t]=... ; 							//landfilling emissions per unit (ton)
+float bv[t]=... ; float br[t]=...; 								//Purchasing prices of raw materials
+float r1=...; float r2=...; float rr=...;
+float alpha=...; float tax=...; */
+
+//variables de décisions
+dvar float+ R[t]; // Non recyclabe waste amount
+dvar float+ B[t]; // Transferred by products
+dvar float+ V[t]; // Virgin raw materials amount
+dvar float+ x1[t]; // Production amount 
+dvar float+ x2[t]; // Production amount
+dvar float+ xh[t]; // Production amount 
+dvar float+ xe[t]; // Production amount
+dvar boolean y1[t]; // Production (Yes/No) 
+dvar boolean y2[t]; // Production (Yes/No)
+dvar boolean yh[t]; // Production (Yes/No) 
+dvar boolean ye[t]; // Production (Yes/No)
+dvar float+ I1[t]; // Inventory amount
+dvar float+ I2[t]; // Inventory amount 
+dvar float+ Ir[t]; // Inventory amount 
+dvar float+ Ih[t]; // Inventory amount 
+dvar float+ Ie[t]; // Inventory amount
+
+//fonctions de profits
+dexpr float profit1=sum(i in t)
+(a1[i]*(x1[i]+I1[i])+
+br[i]*B[i]-
+(f1[i]+fr[i])*y1[i]-
+p1[i]*x1[i]*(1+r1)-
+h1[i]*I1[i]-
+(pr[i]*(1+rr)+cl1[i]*rr)*R[i]-
+hr[i]*Ir[i]);
+dexpr float profit2=sum(i in t) 
+(a2[i]*(1-wh[i]-we[i])*(x2[i]+I2[i])+
+ah[i]*wh[i]*(xh[i]+Ih[i])+
+ae[i]*we[i]*(xe[i]+Ie[i])-
+br[i]*B[i]-
+bv[i]*V[i]-
+f2[i]*(y2[i]+yh[i]+ye[i])-
+(p2[i]*(1+r2)+cl2[i]*r2)*(x2[i]+xh[i]+xe[i])-
+h2[i]*(I2[i]+Ih[i]+Ie[i]));
+
+//fonctions des emissions
+dexpr float emission1=sum(i in t) 
+(em1[i]*x1[i]*(1+r1)+
+emi1[i]*I1[i]+
+emr[i]*R[i]*(1+rr)+
+emir[i]*Ir[i]+
+eml1[i]*rr*R[i]);
+dexpr float emission2=sum(i in t) 
+((em2[i]*(1+r2)+eml2[i]*r2)*(x2[i]+xh[i]+xe[i])+
+emi2[i]*(I2[i]+Ih[i]+Ie[i]));
+
+//fonction objectif 
+maximize (profit1+profit2-tax*emission1-tax*emission2);
+
+//contraintes
+subject to{
+  //emission1<=cap1;
+  //emission2<=cap2;
+  I1[0]==0;
+  I2[0]==0;
+  Ir[0]==0;
+  Ih[0]==0;
+  Ie[0]==0;
+  Ir[1]==0;
+  forall(i in t) {
+      //Production limits
+      x1[i] <= c1[i]*y1[i];
+      x2[i] <= c2[i]*y2[i];
+      xh[i] <= c2[i]*yh[i];
+      xe[i] <= c2[i]*ye[i];
+      y2[i]+yh[i]+ye[i] <= 1;
+
+	  // Inventory limits
+      I1[i] <= Imax1[i];
+      Ir[i] <= Imaxr[i];
+      I2[i]+Ih[i]+Ie[i] <= Imax2[i];
+      
+      // 
+      if (i>=1){
+          x1[i]+I1[i-1] == d1[i]+I1[i];
+          R[i]+Ir[i-1] == Ir[i]+B[i];
+          xh[i]+Ih[i-1] == Ih[i]+wh[i]*d2[i];
+          xe[i]+Ie[i-1] == Ie[i]+we[i]*d2[i];
+          x2[i]+I2[i-1] == I2[i]+(1-wh[i]-we[i])*d2[i]; 
+      } 
+      
+      // Recycle limits       
+      R[i] <= cr[i]*y1[i];
+      r1*x1[i] == (1+rr)*R[i];
+      
+      // Raw material limit
+      V[i] == (1+r2)*x2[i];
+      
+      // By product limits
+      alpha*V[i]+(1-alpha)*B[i] == (1+r2)*xh[i];
+      B[i] == (1+r2)*xe[i]; 
+    }      
+  }
