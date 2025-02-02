@@ -8,7 +8,7 @@ drawing_flag = 1;
 TestProblem='UF1';
 nVar=4;
 fobj = cec09(TestProblem);
-xrange = xboundary(TestProblem, nVar);
+%xrange = xboundary(TestProblem, nVar);
 % Lower bound and upper bound
 %lb=xrange(:,1)';
 %ub=xrange(:,2)';
@@ -151,8 +151,7 @@ rep3(counter,1)=rep2(newi);
  
  end
  
- disp(['In iteration ' num2str(it) ': Number of solutions in the archive = ' 
-num2str(numel(Archive))]);
+ disp(['In iteration ' num2str(it) ': Number of solutions in the archive = ' num2str(numel(Archive))]);
  save results
  % Results
  
