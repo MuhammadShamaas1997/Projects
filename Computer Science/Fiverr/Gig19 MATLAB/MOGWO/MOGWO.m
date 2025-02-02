@@ -6,7 +6,7 @@
 tic;
 drawing_flag = 1;
 TestProblem='UF1';
-nVar=4;
+nVar=10;
 fobj = cec09(TestProblem);
 %xrange = xboundary(TestProblem, nVar);
 % Lower bound and upper bound
@@ -22,11 +22,14 @@ Clb = [1520];
 Cub = [1520];
 Dlb = [850];
 Dub = [950];
-lb=[Alb Blb Clb Dlb];
-ub=[Aub Bub Cub Dub];
+%lb=[Alb Blb Clb Dlb];
+%ub=[Aub Bub Cub Dub];
+lb=[[65] [22] [10] [0.8] [0.8] [0.2] [0.8] [2000] [2000] [10000]];
+ub=[[95] [36] [20] [2.2] [2.2] [1.4] [2.2] [10000] [10000] [10000]];
+
 VarSize=[1 nVar];
 GreyWolves_num=100;
-MaxIt=100; % Maximum Number of Iterations
+MaxIt=10; % Maximum Number of Iterations
 Archive_size=100; % Repository Size
 %alpha=0.1; % Grid Inflation Parameter
 alpha=0.1;
@@ -165,9 +168,9 @@ rep3(counter,1)=rep2(newi);
  hold on
  plot(Archive_costs(1,:),Archive_costs(3,:),'bd');
  legend('Grey wolves','Non-dominated solutions');
- title('Pareto Front for Exergy Efficiency vs Net Power')
- xlabel('Net Power (MW)');
- ylabel('Exergy Efficiency (%)');
+ title('COP vs Qcc')
+ xlabel('COP');
+ ylabel('Qcc');
  grid on
  
  
