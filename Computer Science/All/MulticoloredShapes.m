@@ -1,4 +1,6 @@
 hold on;
+clc;
+clear all;
 
 % Create the first polygon for the left half of the plot
 x_left = [-1.5, 0, 0, -1.5]; % x coordinates for the left half
@@ -21,8 +23,8 @@ y_left = [0, 0, 1.5, 1.5]; % y coordinates for the left half
 fill(x_left, y_left, 'k', 'FaceAlpha', 0.3, 'EdgeColor', 'none');
 
 % Set the axis limits
-xlim([-1.5 1.5]);
-ylim([-1.5 1.5]);
+xlim([-1 1]);
+ylim([-1 1]);
 
 % Show grid
 grid off;
@@ -30,35 +32,50 @@ axis off;
 axis equal
 
 t = linspace(0, 2*pi, 100); % Parameter t
-x0=0;
-y0=0;
-xV=rand()/10;
-yV=rand()/10;
+R = 0.3;
+for i=1:3
+    x0{i}=0;
+    y0{i}=0;
+    xV{i}=rand()/10-0.05;
+    yV{i}=rand()/10-0.05;
+    if (i==1)
+    color{i} = [1 0 0];
+    elseif (i==2)
+    color{i} = [0 1 0];
+    else 
+    color{i} = [0 0 1];
+    end
+end
 for iter=1:120
-    if (x0>0.5)
-        xV = -xV;
-        x0 = x0 - (x0-0.5);
+xlim([-1 1]);
+ylim([-1 1]);
+    for i=1:3
+    if (x0{i}+R>1)
+        xV{i} = -xV{i};
+        x0{i} = x0{i} - (x0{i}+R-1);
     end
-    if (x0<-0.5)
-        xV = -xV;
-        x0 = x0 - (x0+0.5);
+    if (x0{i}-R<-1)
+        xV{i} = -xV{i};
+        x0{i} = x0{i} - (x0{i}-R+1);
     end
-    if (y0>0.5)
-        yV = -yV;
-        y0 = y0 - (y0-0.5);
+    if (y0{i}+R>1)
+        yV{i} = -yV{i};
+        y0{i} = y0{i} - (y0{i}+R-1);
     end
-    if (y0<-0.5)
-        yV = -yV;
-        y0 = y0 - (y0+0.5);
+    if (y0{i}-R<-1)
+        yV{i} = -yV{i};
+        y0{i} = y0{i} - (y0{i}-R+1);
     end
-    x = x0+cos(t);
-    y = y0+sin(t);
-    x0=x0+xV;
-    y0=y0+yV;
-    p = fill(x, y, 'k', 'FaceAlpha', 1, 'EdgeColor', 'none', 'LineWidth', 1);
+    x{i} = x0{i}+R*cos(t);
+    y{i} = y0{i}+R*sin(t);
+    x0{i}=x0{i}+xV{i};
+    y0{i}=y0{i}+yV{i};
+    p{i} = fill(x{i}, y{i}, color{i}, 'FaceAlpha', 0.3, 'EdgeColor', 'none', 'LineWidth', 1);
     saveas(gcf,['Plot' num2str(iter) '.png']);
+    end
     fclose('all');
     pause(1);
-
-    delete(p);
+    for i=1:3
+        delete(p{i});
+    end
 end
