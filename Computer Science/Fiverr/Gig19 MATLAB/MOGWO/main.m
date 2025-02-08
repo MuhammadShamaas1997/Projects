@@ -10,20 +10,6 @@ nVar=10;
 fobj = cec09(TestProblem);
 %xrange = xboundary(TestProblem, nVar);
 % Lower bound and upper bound
-%lb=xrange(:,1)';
-%ub=xrange(:,2)';
-%lb=10*ones(1,nVar);
-%ub=1520*ones(1,nVar);
-Alb = [10];
-Aub = [15];
-Blb = [10];
-Bub = [30];
-Clb = [1520];
-Cub = [1520];
-Dlb = [850];
-Dub = [950];
-%lb=[Alb Blb Clb Dlb];
-%ub=[Aub Bub Cub Dub];
 lb=[[65] [22] [10] [0.8] [0.8] [0.2] [0.8] [2000] [2000] [10000]];
 ub=[[95] [36] [20] [2.2] [2.2] [1.4] [2.2] [10000] [10000] [10000]];
 
@@ -104,6 +90,7 @@ rep3(counter,1)=rep2(newi);
  A=2.*a.*rand(1, nVar)-a;
  % Eq.(3.24) in the paper
  X1=Delta.Position-A.*abs(D);
+ 
  % Eq.(3.20) in the paper
  c=2.*rand(1, nVar);
  % Eq.(3.22) in the paper
@@ -112,7 +99,6 @@ rep3(counter,1)=rep2(newi);
  A=2.*a.*rand()-a;
  % Eq.(3.25) in the paper
  X2=Beta.Position-A.*abs(D);
- 
  
  % Eq.(3.20) in the paper
  c=2.*rand(1, nVar);
@@ -178,6 +164,10 @@ rep3(counter,1)=rep2(newi);
  end
  
 end
+
+% Plot pareto surface
+PathPlot;
+
 % Stop the timer
 elapsedTime = toc;
 % Display the elapsed time
