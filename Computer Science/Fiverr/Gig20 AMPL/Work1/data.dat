@@ -1,0 +1,43 @@
+set EMPLOYEES := C1 C2 C3 C4 C5;
+set TASKS := T1 T2 T3 T4 T5 T6;
+
+# Maximum tasks each employee can handle
+param h := 
+C1 3
+C2 2
+C3 2
+C4 3
+C5 2;
+
+# Minimum employees required for each task
+param d := 
+T1 1
+T2 1
+T3 2
+T4 1
+T5 1
+T6 2;
+
+# Compatibility matrix (1 if compatible, 0 otherwise)
+param a :=
+[C1, T1] 1  [C1, T2] 1  [C1, T3] 0  [C1, T4] 1  [C1, T5] 0  [C1, T6] 1
+[C2, T1] 1  [C2, T2] 0  [C2, T3] 1  [C2, T4] 1  [C2, T5] 1  [C2, T6] 0
+[C3, T1] 0  [C3, T2] 1  [C3, T3] 1  [C3, T4] 0  [C3, T5] 1  [C3, T6] 1
+[C4, T1] 1  [C4, T2] 1  [C4, T3] 0  [C4, T4] 1  [C4, T5] 0  [C4, T6] 1
+[C5, T1] 0  [C5, T2] 0  [C5, T3] 1  [C5, T4] 0  [C5, T5] 1  [C5, T6] 1;
+
+# Cost of assignment per employee-task
+param c :=
+[C1, T1] 8  [C1, T2] 6  [C1, T3] 0  [C1, T4] 5  [C1, T5] 0  [C1, T6] 7
+[C2, T1] 7  [C2, T2] 0  [C2, T3] 8  [C2, T4] 6  [C2, T5] 9  [C2, T6] 0
+[C3, T1] 0  [C3, T2] 5  [C3, T3] 7  [C3, T4] 0  [C3, T5] 6  [C3, T6] 8
+[C4, T1] 6  [C4, T2] 7  [C4, T3] 0  [C4, T4] 6  [C4, T5] 0  [C4, T6] 5
+[C5, T1] 0  [C5, T2] 0  [C5, T3] 9  [C5, T4] 0  [C5, T5] 7  [C5, T6] 6;
+
+# Employee preferences for tasks
+param p :=
+[C1, T1] 20  [C1, T2] 13  [C1, T3] 0  [C1, T4] 12  [C1, T5] 0  [C1, T6] 13
+[C2, T1] 14  [C2, T2] 0  [C2, T3] 17  [C2, T4] 12  [C2, T5] 18  [C2, T6] 0
+[C3, T1] 0  [C3, T2] 10  [C3, T3] 15  [C3, T4] 0  [C3, T5] 12  [C3, T6] 19
+[C4, T1] 12  [C4, T2] 13  [C4, T3] 0  [C4, T4] 11  [C4, T5] 0  [C4, T6] 9
+[C5, T1] 0  [C5, T2] 0  [C5, T3] 20  [C5, T4] 0  [C5, T5] 14  [C5, T6] 11;

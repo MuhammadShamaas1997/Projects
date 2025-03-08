@@ -1,0 +1,23 @@
+# Load Model and Data
+reset;
+model model.mod;
+data data.dat;
+
+# Solve for cost minimization
+option solver gurobi;
+solve;
+display TotalCost;
+
+param z1_opt;
+let z1_opt := TotalCost;
+
+# Solve for preference maximization
+objective TotalPreference;
+solve;
+display TotalPreference;
+
+param z2_opt;
+let z2_opt := TotalPreference;
+
+# Display optimal values
+display z1_opt, z2_opt;
