@@ -1,0 +1,206 @@
+ampl: include run.run;
+Gurobi 11.0.3:                Gurobi 11.0.3: optimal solution; objective 83193.68838
+568 simplex iterations
+23 branching nodes
+:           X     Y     S     :=
+i1 k1 j1     0    .     .
+i1 k1 j2     0    .     .
+i1 k1 j3     0    .     .
+i1 k2 j1     0    .     .
+i1 k2 j2     0    .     .
+i1 k2 j3     0    .     .
+i1 k3 j1     0    .     .
+i1 k3 j2     0    .     .
+i1 k3 j3     0    .     .
+i1 k4 j1     0    .     .
+i1 k4 j2     0    .     .
+i1 k4 j3     0    .     .
+i1 k5 j1     0    .     .
+i1 k5 j2     0    .     .
+i1 k5 j3     0    .     .
+i2 k1 j1     0    .     .
+i2 k1 j2     0    .     .
+i2 k1 j3   145    .     .
+i2 k2 j1     0    .     .
+i2 k2 j2     0    .     .
+i2 k2 j3     0    .     .
+i2 k3 j1   300    .     .
+i2 k3 j2   300    .     .
+i2 k3 j3   300    .     .
+i2 k4 j1   300    .     .
+i2 k4 j2   300    .     .
+i2 k4 j3   300    .     .
+i2 k5 j1     0    .     .
+i2 k5 j2     0    .     .
+i2 k5 j3     0    .     .
+i3 k1 j1     0    .     .
+i3 k1 j2     0    .     .
+i3 k1 j3     0    .     .
+i3 k2 j1     0    .     .
+i3 k2 j2     0    .     .
+i3 k2 j3     0    .     .
+i3 k3 j1     0    .     .
+i3 k3 j2     0    .     .
+i3 k3 j3     0    .     .
+i3 k4 j1     0    .     .
+i3 k4 j2     0    .     .
+i3 k4 j3     0    .     .
+i3 k5 j1     0    .     .
+i3 k5 j2     0    .     .
+i3 k5 j3     0    .     .
+i4 k1 j1   300    .     .
+i4 k1 j2   300    .     .
+i4 k1 j3   155    .     .
+i4 k2 j1   300    .     .
+i4 k2 j2   300    .     .
+i4 k2 j3   300    .     .
+i4 k3 j1     0    .     .
+i4 k3 j2     0    .     .
+i4 k3 j3     0    .     .
+i4 k4 j1     0    .     .
+i4 k4 j2     0    .     .
+i4 k4 j3     0    .     .
+i4 k5 j1   300    .     .
+i4 k5 j2   300    .     .
+i4 k5 j3   300    .     .
+k1 l1 j1    .      0    .
+k1 l1 j2    .     59    .
+k1 l1 j3    .      0    .
+k1 l2 j1    .      0    .
+k1 l2 j2    .      0    .
+k1 l2 j3    .      0    .
+k1 l3 j1    .    100    .
+k1 l3 j2    .     41    .
+k1 l3 j3    .    100    .
+k1 l4 j1    .      0    .
+k1 l4 j2    .      0    .
+k1 l4 j3    .      0    .
+k2 l1 j1    .    100    .
+k2 l1 j2    .    100    .
+k2 l1 j3    .    100    .
+k2 l2 j1    .      0    .
+k2 l2 j2    .      0    .
+k2 l2 j3    .      0    .
+k2 l3 j1    .      0    .
+k2 l3 j2    .      0    .
+k2 l3 j3    .      0    .
+k2 l4 j1    .      0    .
+k2 l4 j2    .      0    .
+k2 l4 j3    .      0    .
+k3 l1 j1    .    100    .
+k3 l1 j2    .    100    .
+k3 l1 j3    .    100    .
+k3 l2 j1    .      0    .
+k3 l2 j2    .      0    .
+k3 l2 j3    .      0    .
+k3 l3 j1    .      0    .
+k3 l3 j2    .      0    .
+k3 l3 j3    .      0    .
+k3 l4 j1    .      0    .
+k3 l4 j2    .      0    .
+k3 l4 j3    .      0    .
+k4 l1 j1    .    100    .
+k4 l1 j2    .    100    .
+k4 l1 j3    .    100    .
+k4 l2 j1    .      0    .
+k4 l2 j2    .      0    .
+k4 l2 j3    .      0    .
+k4 l3 j1    .      0    .
+k4 l3 j2    .      0    .
+k4 l3 j3    .      0    .
+k4 l4 j1    .      0    .
+k4 l4 j2    .      0    .
+k4 l4 j3    .      0    .
+k5 l1 j1    .      0    .
+k5 l1 j2    .      0    .
+k5 l1 j3    .      0    .
+k5 l2 j1    .      0    .
+k5 l2 j2    .      0    .
+k5 l2 j3    .      0    .
+k5 l3 j1    .    100    .
+k5 l3 j2    .    100    .
+k5 l3 j3    .    100    .
+k5 l4 j1    .      0    .
+k5 l4 j2    .      0    .
+k5 l4 j3    .      0    .
+l1 i1 j1    .     .      0
+l1 i1 j2    .     .      0
+l1 i1 j3    .     .      0
+l1 i2 j1    .     .    137
+l1 i2 j2    .     .      0
+l1 i2 j3    .     .    207
+l1 i3 j1    .     .      0
+l1 i3 j2    .     .      0
+l1 i3 j3    .     .      0
+l1 i4 j1    .     .      0
+l1 i4 j2    .     .      0
+l1 i4 j3    .     .      0
+l2 i1 j1    .     .      0
+l2 i1 j2    .     .      0
+l2 i1 j3    .     .      0
+l2 i2 j1    .     .      0
+l2 i2 j2    .     .      0
+l2 i2 j3    .     .      0
+l2 i3 j1    .     .      0
+l2 i3 j2    .     .      0
+l2 i3 j3    .     .      0
+l2 i4 j1    .     .      0
+l2 i4 j2    .     .      0
+l2 i4 j3    .     .      0
+l3 i1 j1    .     .      0
+l3 i1 j2    .     .      0
+l3 i1 j3    .     .      0
+l3 i2 j1    .     .    136
+l3 i2 j2    .     .      0
+l3 i2 j3    .     .    138
+l3 i3 j1    .     .      0
+l3 i3 j2    .     .      0
+l3 i3 j3    .     .      0
+l3 i4 j1    .     .      0
+l3 i4 j2    .     .      0
+l3 i4 j3    .     .      0
+l4 i1 j1    .     .      0
+l4 i1 j2    .     .      0
+l4 i1 j3    .     .      0
+l4 i2 j1    .     .      0
+l4 i2 j2    .     .      0
+l4 i2 j3    .     .      0
+l4 i3 j1    .     .      0
+l4 i3 j2    .     .      0
+l4 i3 j3    .     .      0
+l4 i4 j1    .     .      0
+l4 i4 j2    .     .      0
+l4 i4 j3    .     .      0
+;
+
+T :=
+l1 j1   163
+l1 j2   359
+l1 j3    93
+l2 j1     0
+l2 j2     0
+l2 j3     0
+l3 j1    64
+l3 j2   141
+l3 j3    62
+l4 j1     0
+l4 j2     0
+l4 j3     0
+;
+
+:    Z   W    :=
+i1   0   .
+i2   1   .
+i3   0   .
+i4   1   .
+l1   .   1
+l2   .   0
+l3   .   1
+l4   .   0
+;
+
+z1 = 83193.7
+
+z2 = 3833.7
+
+ampl: 

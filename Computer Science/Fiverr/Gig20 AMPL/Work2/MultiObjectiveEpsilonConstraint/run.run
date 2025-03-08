@@ -9,7 +9,7 @@ option solver gurobi;
 solve;
 
 # Display results
-display T, Z;
+display X, Y, S, T, Z, W;
 
 # Display objective function value
 display z1;
