@@ -40,14 +40,32 @@ var T {L, J} >= 0;     # Variable T(l,j)
 var Z {I} binary;      # Variable Z(i) (binary)
 var W {L} binary;      # Variable W(l) (binary)
 
+var z1;
 # Define objective function
-minimize z1: 
+subject to Definez1:
+z1= 
     sum {i in I} (E[i] * Z[i]) + 
     sum {l in L} (F[l] * W[l]) + 
     sum {i in I, k in K, j in J} ((A[j] + B[j] * t_ik[i,k]) * X[i,k,j]) + 
     sum {k in K, l in L, j in J} (C[j] * t_kl[k,l] * Y[k,l,j]) + 
     sum {l in L, i in I, j in J} ((-G[j] + D[j] * t_li[l,i]) * S[l,i,j]) + 
     sum {l in L, j in J} ((H[j] + O[j] * t_l[l]) * T[l,j]);
+
+var z2;
+subject to Definez2:
+z2= 
+    sum {i in I, j in J} (M[i, j] * (sum {k in K} X[i, k, j] + sum {l in L} S[l, i, j])) +
+    sum {l in L, j in J} (N[l, j] * (sum {k in K} Y[k, l, j] + sum {i in I} S[l, i, j] + T[l, j]));
+
+# New objective function: Minimize Z1
+minimize z: z1;
+
+# Set ε-constraint
+param Limit := 5000 * 1.1;
+
+# Constraint to enforce z2 <= Limit
+subject to EConstraint:  
+    z2 <= Limit;
 
 # Constraint: Ensure X(i,k,j) satisfies demand d(k,j)
 subject to DemandConstraint {k in K, j in J}:  

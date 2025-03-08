@@ -1,0 +1,16 @@
+# Load Model and Data
+reset;
+model model.mod;
+data data.dat;
+
+
+# Solve for cost minimization
+option solver gurobi;
+solve;
+
+# Display results
+display T, Z;
+
+# Display objective function value
+display z1;
+display z2;

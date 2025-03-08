@@ -13,3 +13,4 @@ display T, Z;
 
 # Display objective function value
 display z1;
+display z2;
